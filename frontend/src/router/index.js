@@ -34,7 +34,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory('/jobpro'),
+  history: createWebHistory('/j'),
   routes,
 })
 
