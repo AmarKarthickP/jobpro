@@ -1,36 +1,41 @@
-import { fileURLToPath, URL } from 'node:url'
-
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import vueDevTools from 'vite-plugin-vue-devtools'
+import path from 'path'
+import { getProxyOptions } from 'frappe-ui/src/utils/vite-dev-server'
+import { webserver_port } from '../../../sites/common_site_config.json'
 
-// https://vite.dev/config/
-export default defineConfig({
-	base: process.env.NODE_ENV === "development"
-	? "/"
-	: "/assets/jobpro/frontend/",
-	server: {
-		port: 8000, // Change this to your desired port
-		proxy: {
-			"/api": {
-				target: "http://localhost:8002",
+export default defineConfig(({ mode }) => {
+  return {
+    base:
+      mode === 'development'
+        ? '/'
+        : '/assets/jobpro/frontend/',
+
+  plugins: [
+    vue(),
+  ],
+  server: {
+    port: 8080,
+    proxy: {
+			'^/(api|app|assets|files)': {
+				target: "https://jobpro.teamprohr.com",
 				changeOrigin: true,
 				secure: false
 			},
 		},
-	allowedHosts: ["jobpro.teamprohr.com"]
-	},
-	plugins: [
-		vue(),
-		vueDevTools(),
-	],
-	resolve: {
-		alias: {
-			'@': fileURLToPath(new URL('./src', import.meta.url))
-		},
-	},
-	build: {
-		outDir: "../jobpro/public/frontend",  // 🔥 direct output
-		emptyOutDir: true,
-	}
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
+  build: {
+    outDir: `../jobpro/public/frontend`,
+    emptyOutDir: true,
+    target: 'es2015',
+  },
+  optimizeDeps: {
+    include: ['frappe-ui > feather-icons', 'showdown', 'engine.io-client'],
+  },
+}
 })

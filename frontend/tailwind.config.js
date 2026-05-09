@@ -1,8 +1,11 @@
-/** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
+  presets: [
+    require('frappe-ui/src/utils/tailwind.config')
+  ],
   content: [
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
+    "./node_modules/frappe-ui/src/components/**/*.{vue,js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -13,7 +16,7 @@ export default {
         background: '#f4f2ee',
         hoverbg: '#f3f3f3',
       }
-    }
+    },
   },
   plugins: [],
 }

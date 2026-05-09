@@ -81,9 +81,10 @@ import { ref } from 'vue';
 import CommentIcon from '@/components/icons/CommentIcon.vue';
 import SendIcon from '@/components/icons/SendIcon.vue';
 import SavedIcon from '@/components/icons/SavedIcon.vue';
+import { auth } from '../data/auth';
 
 const userData = {
-    name: 'Amar Karthick P',
+    name: auth.fullName,
     headline: 'Software Developer | Frappe Framework | ERPNext | Vue JS',
     location: 'Chennai, Tamil Nadu',
     company: 'TEAMPRO HR & IT Services Pvt. Ltd.',

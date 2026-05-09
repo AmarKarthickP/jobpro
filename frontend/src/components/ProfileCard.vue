@@ -1,6 +1,6 @@
 <template>
     <div class="bg-white shadow-sm rounded-lg pb-4">
-        <div class="bg-black min-h-14 rounded-t-lg">
+        <div class="bg-black h-14 rounded-t-lg">
         </div>
         <avatar :img="user" class="w-20 border-2 border-white -mt-8 ml-5"/>
         <div class="px-5 mt-2">

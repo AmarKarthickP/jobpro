@@ -1,13 +1,19 @@
+import './index.css'
+
 import { createApp } from 'vue'
-import { createPinia } from 'pinia';
-import App from './App.vue'
 import router from './router'
 import clickOutside from './directives/clickOutside';
-import './assets/main.css'
+import App from './App.vue'
 
-const app = createApp(App)
+import { Button, setConfig, frappeRequest, resourcesPlugin } from 'frappe-ui'
+
+let app = createApp(App)
+
+setConfig('resourceFetcher', frappeRequest)
 
 app.use(router)
 app.directive('click-outside', clickOutside);
-app.use(createPinia());
+app.use(resourcesPlugin)
+
+app.component('Button', Button)
 app.mount('#app')

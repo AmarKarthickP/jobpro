@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="en">
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- <link rel="icon" href="/jobpro.png"> -->
-    <link rel="icon" href="/jobpro-title.png"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/jobpro-title.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JOBRPO</title>
-    
-
   </head>
   <body>
     <div id="app"></div>
+    <div id="modals"></div>
+    <div id="popovers"></div>
+
+    <script> window.csrf_token = '{{ csrf_token }}'; </script>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

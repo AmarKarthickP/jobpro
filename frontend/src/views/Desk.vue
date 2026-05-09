@@ -85,5 +85,7 @@ const goToLogin = () => {
   window.location.replace('/login')
 }
 
+import { auth } from '@/data/auth'
+
 
 </script>
