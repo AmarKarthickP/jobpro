@@ -12,7 +12,7 @@
             <create-post :user="userData"/>
             <!-- Separator -->
             <div class="my-5 relative">
-                <div class="border-t border-gray-300 flex">
+                <div class="border-t border-gray-300 flex z-0">
                 </div>
                 <p class="absolute bg-background -mt-2.5 right-0 px-5 text-xs text-gray-600">
                     sort by:
@@ -27,7 +27,7 @@
                         <p class="text-xs text-gray-500">Product Engineer @ Frappe</p>
                     </div>
                 </div>
-                <p class="mt-3 text-sm opacity-75">
+                <p class="mt-3 text-[14px] opacity-75">
                     <p>Robust Webhook Integrations in Frappe</p>
                     <p class="mt-2">In this tutorial, we take a naive implementation of a webhook handler in Frappe and use the Webhook Log pattern to make it robust and clean! Learn once, use it across different scenarios. Wait for the bonus tip at the end</p>
                     <p class="mt-2">Let me know your thoughts in comments. Also, check out my upcoming cohort [only 13 seats left] to learn about building integrations for Frappe/ERPNext even more in-depth!</p>
