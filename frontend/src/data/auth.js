@@ -14,17 +14,16 @@ function getCookie(name) {
   return null
 }
 
-// Development mock cookies
-if (import.meta.env.DEV) {
-  document.cookie =
-    'user_id=amar.p%40groupteampro.com; path=/'
+const devUser = import.meta.env.DEV
+  ? 'amar.p@groupteampro.com'
+  : null
 
-  document.cookie =
-    'full_name=Amar%20Karthick%20P; path=/'
-}
+const devFullName = import.meta.env.DEV
+  ? 'Amar Karthick P'
+  : null 
 
-const user = getCookie('user_id')
-const fullName = getCookie('full_name')
+const user = getCookie('user_id') || devUser
+const fullName = getCookie('full_name') || devFullName
 
 export const auth = reactive({
   user: user && user !== 'Guest' ? user : null,

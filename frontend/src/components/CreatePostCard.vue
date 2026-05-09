@@ -8,15 +8,15 @@
         </div>
         <div class="flex justify-evenly mt-2">
             <button class="hover:bg-hoverbg transition-all duration-500 rounded-md flex gap-2 px-3 pt-2 pb-1">
-                <video-icon class="h-5 w-5 text-green-800" />
+                <video-icon class="h-5 w-5 text-green-700" />
                 <p class="">Video</p>
             </button>
             <button class="hover:bg-hoverbg transition-all duration-500 rounded-md flex gap-2 px-3 pt-2 pb-1">
-                <photo-icon class="h-5 w-5 text-blue-800" />
+                <photo-icon class="h-5 w-5 text-blue-700" />
                 <p class="">Photo</p>
             </button>
             <button class="hover:bg-hoverbg transition-all duration-500 rounded-md flex gap-2 px-3 pt-2 pb-1">
-                <article-icon class="h-5 w-5 text-red-800" />
+                <article-icon class="h-5 w-5 text-red-700" />
                 <p class="">Write article</p>
             </button>
         </div>

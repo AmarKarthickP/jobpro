@@ -77,20 +77,21 @@ import LikeIcon from '@/components/icons/LikeIcon.vue';
 
 import farisImage from '@/assets/defaults/faris-ansari.jpg';
 import defaultImage from '@/assets/defaults/profile-image.jpeg';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import CommentIcon from '@/components/icons/CommentIcon.vue';
 import SendIcon from '@/components/icons/SendIcon.vue';
 import SavedIcon from '@/components/icons/SavedIcon.vue';
 import { auth } from '../data/auth';
+import { user } from '@/data/user';
 
-const userData = {
-    name: auth.fullName,
+const userData = computed(() => ({
+    name: user.fullName,
     headline: 'Software Developer | Frappe Framework | ERPNext | Vue JS',
     location: 'Chennai, Tamil Nadu',
     company: 'TEAMPRO HR & IT Services Pvt. Ltd.',
-    src: defaultImage,
+    src: user.image,
     alt: 'profile',
-}
+}))
 
 const imageData = {
     src: farisImage,

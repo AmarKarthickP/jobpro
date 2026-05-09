@@ -22,13 +22,14 @@
             <home-icon class="h-7 w-7"/>
             <p class="text-[12px] font-medium">Home</p>
         </router-link>
-        <!-- <router-link to="/dashboard"
+        <router-link to="/dashboard"
+            v-if="auth.isLoggedIn"
             class="flex flex-col items-center text-default hover:text-primary transition-all duration-500 ease-in-out"
             exact-active-class="text-primary"
         >
             <dasboard-icon class="h-7 w-7 pt-1" />
             <p class="text-[12px] font-medium">Dashboard</p>
-        </router-link> -->
+        </router-link>
         <router-link to="/jobs"
             class="flex flex-col items-center text-default hover:text-primary transition-all duration-500 ease-in-out"
             exact-active-class="text-primary"
@@ -50,15 +51,19 @@
             <notification-icon class="h-7 w-7 pt-1" />
             <p class="text-[12px] font-medium">Notifications</p>
         </router-link>
-        <!-- <router-link to="/profile">
+        <button to="/profile"
+            v-if="auth.isLoggedIn"
+        >
             <div class="flex flex-col items-center text-primary pr-10">
-                <img src="../assets/defaults/profile-image.jpeg" alt="user-image"
-                    class="h-7 w-7 rounded-full"
-                />
+                <avatar :img="userData" class="h-7 w-7 rounded-full" />
                 <p class="text-[12px] font-medium">Me</p>
             </div>
-        </router-link> -->
-        <button @click="goToLogin" class="bg-primary rounded-xl text-white text-sm px-8 py-2 hover:opacity-50">
+        </button>
+        <button
+            v-if="!auth.isLoggedIn"
+            @click="goToLogin" 
+            class="bg-primary rounded-xl text-white text-sm px-8 py-2 hover:opacity-50"
+        >
             Sign In
         </button>
         <router-link to="/home">
@@ -81,11 +86,19 @@ import HomeIcon from '@/components/icons/HomeIcon.vue'
 import JobIcon from '@/components/icons/JobIcon.vue';
 import MessagingIcon from '@/components/icons/MessagingIcon.vue';
 import NotificationIcon from '@/components/icons/NotificationIcon.vue';
+import Avatar from '@/components/Avatar.vue';
+
 const goToLogin = () => {
   window.location.replace('/login')
 }
 
+import { computed } from 'vue'
 import { auth } from '@/data/auth'
+import { user } from '@/data/user'
 
+const userData = computed(() => ({
+    src: user.image,
+    alt: 'profile',
+}))
 
 </script>
