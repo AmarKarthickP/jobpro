@@ -1,6 +1,6 @@
 <template>
     <!-- Navabar -->
-    <div class="bg-white py-2 flex justify-center w-full shadow-sm">
+    <div class="bg-white py-2 flex justify-center w-full shadow-sm sticky top-0 z-30">
         <div class="flex gap-10 items-center justify-center">
             <img src="@/assets/logo/teampro.png" class="h-6" />
             <!-- Search-box -->
@@ -61,9 +61,7 @@
                     <avatar :img="userData" class="h-7 w-7 rounded-full" />
                     <div class="flex">
                         <p class="text-[12px] font-medium">Me</p>
-                        <svg class="h-4 w-4 mt-0.5"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  
-                            <polyline points="6 9 12 15 18 9" />
-                        </svg>
+                        <down-icon class="h-4 w-4 mt-0.5" />
                     </div>
                 </div>
             </button>
@@ -103,7 +101,7 @@
             v-click-outside="() => viewProfileMenu = false"
             @mouseenter="viewProfileMenu = true"
             @mouseleave="viewProfileMenu = false"
-            class="bg-white absolute top-[80px] right-[200px] w-[300px] px-5 pt-5 pb-3 rounded-lg shadow-md shadow-gray-400"
+            class="bg-white absolute fixed top-[80px] right-[200px] w-[300px] px-5 pt-5 pb-3 rounded-lg shadow-md shadow-gray-400"
         >
             <div class="flex gap-2 mb-3">
                 <avatar :img="userData" class="h-10 w-10 rounded-full" />
@@ -123,7 +121,7 @@
             </div>
             <button 
                 @click="handleSignOut"
-                class="text-gray-600 hover:text-red-700 text-[14px] transition-all duration-300 ease-in-out"
+                class="text-gray-600 hover:text-red-600 text-[14px] transition-all duration-300 ease-in-out"
             >
                 Sign out
             </button>
@@ -163,6 +161,7 @@ function handleSignOut() {
 const viewProfileMenu = ref(false)
 
 import clickOutside from '@/directives/clickOutside'
+import DownIcon from '../components/icons/DownIcon.vue';
 const vClickOutside = clickOutside
 
 </script>
