@@ -101,7 +101,7 @@
             v-click-outside="() => viewProfileMenu = false"
             @mouseenter="viewProfileMenu = true"
             @mouseleave="viewProfileMenu = false"
-            class="bg-white absolute fixed top-[80px] right-[200px] w-[300px] px-5 pt-5 pb-3 rounded-lg shadow-md shadow-gray-400"
+            class="bg-white fixed top-[80px] right-[200px] w-[300px] px-5 pt-5 pb-3 rounded-lg shadow-md shadow-gray-400"
         >
             <div class="flex gap-2 mb-3">
                 <avatar :img="userData" class="h-10 w-10 rounded-full" />

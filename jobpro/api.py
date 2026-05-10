@@ -21,6 +21,9 @@ def get_tasks(filters=None):
         "name","subject","territory","created_on", "currency", 
         "amount","custom_country_flag", "customer", "custom_free_recruitment",
         "food", "accommodation", "joining_ticket", "transportation",
+        "custom_customer_location_image", "qualification_type", "specialization", "minimum_experience",
+        "maximum_experience", "gulf_experience", "description", "custom_about_customer", 
+        "custom_customer_website"
     ]   
     count = 0
 
