@@ -2,11 +2,13 @@ module.exports = {
   presets: [
     require('frappe-ui/src/utils/tailwind.config')
   ],
+
   content: [
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
     "./node_modules/frappe-ui/src/components/**/*.{vue,js,ts,jsx,tsx}",
   ],
+
   theme: {
     extend: {
       colors: {
@@ -15,8 +17,24 @@ module.exports = {
         default: '#b2b2b2',
         background: '#f4f2ee',
         hoverbg: '#f3f3f3',
-      }
+      },
+
+      keyframes: {
+        shimmer: {
+          '0%': {
+            transform: 'translateX(-150%)',
+          },
+          '100%': {
+            transform: 'translateX(400%)',
+          },
+        },
+      },
+
+      animation: {
+        shimmer: 'shimmer 2s linear infinite',
+      },
     },
   },
+
   plugins: [],
 }
