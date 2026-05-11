@@ -11,12 +11,17 @@ api_secret = frappe.conf.get("teampro_api_secret")
 
 
 @frappe.whitelist()
-def get_tasks(filters=None):
-
+def get_tasks(additional_filters=None):
+    frappe.log_error("API HIT", "HIT")
     filters = [
         ["status", "in", ["Open", "Overdue", "Pending Review", "Working"]],
         ["service", "in", ["REC-I", "REC-D"]]
     ]
+    if additional_filters:
+        if isinstance(additional_filters, str):
+            additional_filters = json.loads(additional_filters)
+        filters.extend(additional_filters)
+    frappe.log_error("wenfewkfnewk", additional_filters)
     fields = [
         "name","subject","territory","created_on", "currency", 
         "amount","custom_country_flag", "customer", "custom_free_recruitment",
@@ -32,15 +37,16 @@ def get_tasks(filters=None):
             f"{base_url}/api/resource/Task",
             params={
                 "fields": json.dumps(fields),
-                "filters": json.dumps(filters)
+                "filters": json.dumps(filters),
+                "limit_page_length": 1000
             },
             headers={
                 "Authorization": f"token {api_key}:{api_secret}"
             },
-            timeout=10
         )
         response.raise_for_status()
         data = response.json()
+        print(data)
         # INR conversion
         # for row in data["data"]:
         #     count += 1
@@ -67,3 +73,34 @@ def get_inr_price(currency, amount):
     conversion = get_exchange_rate(currency, "INR")
     amt = round(conversion * amount, 0)
     return fmt_money(amount=amt, precision=0)
+
+def test_check():
+    additional_filters = [
+        ["name", "like", "%cable%"]
+    ]
+    get_tasks()
+    
+@frappe.whitelist()
+def get_options(doctype, fields):
+    try:
+        response = requests.get(
+            f"{base_url}/api/method/teampro.api.get_options",
+            params={
+                "doctype": doctype,
+                "fields": json.dumps(fields)
+            },
+            headers={
+                "Authorization": f"token {api_key}:{api_secret}"
+            },
+            timeout=10
+        )
+        response.raise_for_status()
+        data = response.json()
+        return data
+
+    except requests.exceptions.RequestException as e:
+        frappe.log_error(
+            title="External Task API Error",
+            message=frappe.get_traceback()
+        )
+        frappe.throw("Unable to fetch options from tasks from external server")

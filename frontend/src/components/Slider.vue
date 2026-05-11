@@ -46,6 +46,9 @@
   :step="step"
   class="slider"
   :class="localMin > max - 100 ? 'z-50' : 'z-30'"
+  @mouseup="emitChange"
+  @touchend="emitChange"
+  @change="emitChange"
 />
 
 <!-- Max Slider -->
@@ -56,6 +59,9 @@
   :max="max"
   :step="step"
   class="slider z-40"
+  @mouseup="emitChange"
+  @touchend="emitChange"
+  @change="emitChange"
 />
     </div>
   </div>
@@ -131,10 +137,6 @@ watch(localMin, (val) => {
 
   emit("update:minValue", Number(localMin.value))
 
-  emit("change", {
-    min: Number(localMin.value),
-    max: Number(localMax.value),
-  })
 })
 
 watch(localMax, (val) => {
@@ -143,11 +145,6 @@ watch(localMax, (val) => {
   }
 
   emit("update:maxValue", Number(localMax.value))
-
-  emit("change", {
-    min: Number(localMin.value),
-    max: Number(localMax.value),
-  })
 })
 
 const rangeStyle = computed(() => {
@@ -166,6 +163,22 @@ const rangeStyle = computed(() => {
     width: `${width}%`,
   }
 })
+let emitTimeout = null
+
+function emitChange() {
+
+  clearTimeout(emitTimeout)
+
+  emitTimeout = setTimeout(() => {
+
+    emit("change", {
+      min: Number(localMin.value),
+      max: Number(localMax.value),
+    })
+
+  }, 50)
+
+}
 </script>
 
 <style scoped>
