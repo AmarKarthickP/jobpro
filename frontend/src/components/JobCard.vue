@@ -10,8 +10,6 @@
           <span class="relative z-10 font-normal"
             >• {{ timeAgo(data.created_on) }}</span
           >
-
-          <span class="absolute inset-0 -translate-x-full"></span>
         </badge>
 
         <p class="text-xl font-medium text-primary mt-2 capitalize">
@@ -208,9 +206,15 @@
   <!-- Overlay -->
   <div
     v-if="showJobDetails"
-    class="fixed inset-0 bg-black/40 z-40"
+    class="fixed inset-0 z-40"
+    @click="showJobDetails = false"
+  >
+    <!-- Backdrop -->
+  <div
+    class="absolute inset-0 bg-black/40"
     @click="showJobDetails = false"
   ></div>
+  </div>
   <!-- Sidebar -->
   <transition
     enter-active-class="transform transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
@@ -464,11 +468,11 @@
           >
             Apply Now
           </button>
-          <button
+          <!-- <button
             class="text-center w-full bg-primary py-2 rounded-xl text-white text-[14px] font-medium"
           >
             Refer Friend
-          </button>
+          </button> -->
         </div>
       </div>
     </div>
