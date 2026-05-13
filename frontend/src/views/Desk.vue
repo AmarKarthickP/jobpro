@@ -2,7 +2,9 @@
     <!-- Navabar -->
     <div class="bg-white py-2 flex justify-center w-full shadow-sm sticky top-0 z-30">
         <div class="flex gap-10 items-center justify-center">
-            <img src="@/assets/logo/teampro.png" class="h-6" />
+            <router-link to="/home">
+                <img src="@/assets/logo/teampro.png" class="h-6" />
+            </router-link>
             <!-- Search-box -->
             <div class="w-[350px]">
                 <div class="flex border-2 border-default hover:bg-hoverbg rounded-full px-3 w-[200px] focus-within:w-full transition-all duration-500 ease-in-out">
@@ -55,7 +57,8 @@
         <div 
             v-if="auth.isLoggedIn"
             class="relative"
-            @mouseenter="viewProfileMenu = true"
+            @click="viewProfileMenu = true"
+            v-click-outside="() => viewProfileMenu = false"
         >
             <button to="/profile">
                 <div class="flex flex-col items-center text-primary pr-10">
@@ -99,10 +102,7 @@
         leave-to-class="opacity-0 -translate-y-2 scale-100"
     >
         <div v-show="viewProfileMenu"
-            v-click-outside="() => viewProfileMenu = false"
-            @mouseenter="viewProfileMenu = true"
-            @mouseleave="viewProfileMenu = false"
-            class="bg-white fixed top-[80px] right-[200px] w-[300px] px-5 pt-5 pb-3 rounded-lg shadow-md shadow-gray-400"
+            class="bg-white fixed top-[80px] right-[200px] w-[300px] px-5 pt-5 pb-3 rounded-lg shadow-md shadow-gray-400 z-50"
         >
             <div class="flex gap-2 mb-3">
                 <avatar :img="userData" class="h-10 w-10 rounded-full" />
@@ -112,7 +112,7 @@
                 </div>
             </div>
             <router-link
-                to="/#"
+                to="/profile"
                 class="border border-primary rounded-full w-full text-center flex items-center py-1 box-border hover:bg-[#ebf4fd] hover:ring-1 hover:ring-primary transition-all duration-500 ease-in-out"
             >
                 <p class="text-[14px] text-primary font-medium w-full">View Profile</p>
@@ -163,6 +163,7 @@ const viewProfileMenu = ref(false)
 
 import clickOutside from '@/directives/clickOutside'
 import DownIcon from '../components/icons/DownIcon.vue';
+import router from '../router';
 const vClickOutside = clickOutside
 
 </script>

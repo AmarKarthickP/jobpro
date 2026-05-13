@@ -25,5 +25,6 @@ createResource({
         user.fullName = data.message.full_name
         user.email = data.message.email
         user.image = image
+        user.mobileNo = data.message.mobile_no
     }
 })

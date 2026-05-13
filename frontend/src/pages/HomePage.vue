@@ -126,7 +126,7 @@
     
 
     <!-- Hriring Companies -->
-    <section class="text-center mt-16">
+    <section class="text-center mt-12">
         <h1 class="font-bold text-primary text-[25px]">Our Hiring Companies</h1>
         <customer-carousel class="-mt-10" />
     </section>

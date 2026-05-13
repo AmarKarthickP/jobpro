@@ -17,6 +17,7 @@ module.exports = {
         default: '#b2b2b2',
         background: '#f4f2ee',
         hoverbg: '#f3f3f3',
+        highlight: '#275df5',
       },
 
       keyframes: {

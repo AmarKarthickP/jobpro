@@ -4,6 +4,7 @@ import Desk from '@/views/Desk.vue'
 import Test from '@/views/TestView.vue'
 import HomePage from '@/pages/HomePage.vue'
 import JobsPage from '@/pages/JobsPage.vue'
+import ProfilePage from '@/pages/ProfilePage.vue'
 
 const routes = [
   {
@@ -28,6 +29,11 @@ const routes = [
         path: 'jobs',
         name: 'jobs',
         component: JobsPage
+      },
+      {
+        path: 'profile',
+        name: 'profile',
+        component: ProfilePage
       },
     ]
   }
