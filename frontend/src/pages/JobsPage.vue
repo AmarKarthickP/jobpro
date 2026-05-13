@@ -735,8 +735,6 @@ async function getFilteredJobs() {
         maxSalary.value
     ])
 
-    console.log([minSalary.value, maxSalary.value])
-
     jobs.value = await getJobs(additionalFilters)
 
 }

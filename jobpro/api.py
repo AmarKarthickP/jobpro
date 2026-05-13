@@ -10,7 +10,7 @@ api_key = frappe.conf.get("teampro_api_key")
 api_secret = frappe.conf.get("teampro_api_secret")
 
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def get_tasks(additional_filters=None):
     frappe.log_error("API HIT", "HIT")
     filters = [
@@ -75,13 +75,7 @@ def get_inr_price(currency, amount):
     amt = round(conversion * amount, 0)
     return fmt_money(amount=amt, precision=0)
 
-def test_check():
-    additional_filters = [
-        ["name", "like", "%cable%"]
-    ]
-    get_tasks()
-    
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def get_options(doctype, fields):
     try:
         response = requests.get(
@@ -105,3 +99,32 @@ def get_options(doctype, fields):
             message=frappe.get_traceback()
         )
         frappe.throw("Unable to fetch options from tasks from external server")
+ 
+def test_check():
+    email = "pavimani42@gmail.com"
+    get_candidates(email)
+           
+@frappe.whitelist(allow_guest=True)
+def get_candidates(email):
+    try:
+        response = requests.get(
+            f"{base_url}/api/method/teampro.api.get_candidate",
+            params={
+                "email": email
+            },
+            headers={
+                "Authorization": f"token {api_key}:{api_secret}"
+            },
+            timeout=10
+        )
+        response.raise_for_status()
+        data = response.json()
+        frappe.log_error("Candidate Data", data)
+        return data.get("message")
+
+    except requests.exceptions.RequestException as e:
+        frappe.log_error(
+            title="External Candidate API Error",
+            message=frappe.get_traceback()
+        )
+        frappe.throw("Unable to fetch candidates from external server")

@@ -1,6 +1,6 @@
 <template>
     <div class="grid grid-cols-12 gap-6">
-        <div class="col-span-12 bg-white rounded-xl shadow-sm relative">
+        <div class="col-span-9 bg-white rounded-xl shadow-sm relative">
             <div ref="profileCard" class="relative rounded-t-xl overflow-hidden">
                 <div class="absolute inset-x-0 top-0 h-2/5 bg-primary text-white pr-10 pt-5">
                     <!-- Background -->
@@ -44,9 +44,9 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="col-span-3 bg-white rounded-xl shadow-sm p-5">
+        <div class="col-span-3 bg-white rounded-xl shadow-sm p-5">
             hi
-        </div> -->
+        </div>
     </div>
 
     <div class="grid grid-cols-12 gap-6 mt-6">
@@ -131,13 +131,14 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 // vue
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
+import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue';
 
 // Data
 import { user } from '@/data/user'
-console.log(user)
+import { getCandidate } from '@/data/candidate'
+
 // Icons
 import Avatar from '../components/Avatar.vue';
 import EditIcon from '../components/icons/EditIcon.vue';
@@ -154,6 +155,7 @@ import QuickLinkCard from '../components/QuickLinkCard.vue';
 // Declarations
 const showProfile = ref(false)
 const profileCard = ref(null)
+const candidate = ref(null)
 
 // Dynamic data
 const userData = computed(() => ({
@@ -164,9 +166,10 @@ const userData = computed(() => ({
     mobile_no: user.mobileNo,
 }))
 
+
 let observer = null
 
-onMounted(() => {
+onMounted(async () => {
     observer = new IntersectionObserver(
         ([entry]) => {
             // If div is NOT visible
@@ -187,4 +190,14 @@ onBeforeUnmount(() => {
         observer.unobserve(profileCard.value)
     }
 })
+
+watch(
+    () => user.email,
+    async (email) => {
+        if (!email) return
+
+        candidate.value = await getCandidate(email)
+    },
+    { immediate: true }
+)
 </script>
