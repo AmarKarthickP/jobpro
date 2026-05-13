@@ -172,7 +172,7 @@ const handleSearch = () => {
         path: '/jobs',
         query: {
             position: position.value || '',
-            // experience: experience.value || '',
+            experience: experience.value || '',
             location: location.value || ''
         }
     })
@@ -322,14 +322,5 @@ function selectOption(model, value, showRef) {
     background: #9ca3af;
     border: 2px solid transparent;
     background-clip: padding-box;
-}
-
-.hide-scrollbar {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and old Edge */
-}
-
-.hide-scrollbar::-webkit-scrollbar {
-    display: none; /* Chrome, Safari */
 }
 </style>

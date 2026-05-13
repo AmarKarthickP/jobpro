@@ -11,19 +11,19 @@
           />
           <div class="text-right -mt-8 mr-5">
             <button
-              @click=""
+              @click="removeFilters"
               class="text-gray-500 text-[13px] font-medium hover:text-red-600 transition-all duration-300 ease-in-out"
             >
               Clear all
             </button>
           </div>
-          <div class="mt-8 px-5">
+          <div class="mt-5 px-5">
             <h1 class="text-center font-medium text-primary">
               <span class="text-[#0770e4]">{{ animatedJobsCount }} Jobs</span>
               Available Now
             </h1>
             <!-- Position -->
-            <p class="text-gray-600 mt-5 text-[15px] font-medium">Position</p>
+            <p class="text-gray-600 mt-3 text-[15px] font-medium">Position</p>
             <input
               type="text"
               placeholder="Position"
@@ -35,12 +35,35 @@
             />
             <div
               v-if="showPositionSuggestions && filteredPositionOptions.length"
-              class="absolute z-50 mt-2 top-[235px] max-h-[200px] overflow-y-auto left-[5%] w-[90%] bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+              class="z-50 mt-2 max-h-[200px] hide-scrollbar overflow-y-auto left-[5%] w-full bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
             >
               <div
                 v-for="option in filteredPositionOptions"
                 :key="option"
                 @mousedown="selectPositionOption(option)"
+                class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-gray-100 transition-all duration-200"
+              >
+                {{ option }}
+              </div>
+            </div>
+            <!-- Experience -->
+            <input
+              type="text"
+              placeholder="Experience"
+              v-model="experience"
+              @change="getFilteredJobs"
+              @focus="showExperienceSuggestions = true"
+              @blur="hideExperienceSuggestions"
+              class="bg-background w-full border-0 mt-3 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+            />
+            <div
+              v-if="showExperienceSuggestions && filteredExperienceOptions.length"
+              class="z-50 mt-2 max-h-[200px] overflow-y-auto left-[5%] w-full hide-scrollbar bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+            >
+              <div
+                v-for="option in filteredExperienceOptions"
+                :key="option"
+                @mousedown="selectExperienceOption(option)"
                 class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-gray-100 transition-all duration-200"
               >
                 {{ option }}
@@ -371,6 +394,7 @@ const salaryType = ref("")
 const qualification = ref("")
 const currency = ref("")
 const selectedLocation = ref("")
+const experience = ref("")
 
 
 
@@ -379,6 +403,7 @@ const showPositionSuggestions = ref(false)
 const showSalaryTypeSuggestions = ref(false)
 const showQualificationSuggestions = ref(false)
 const showCurrencySuggestions = ref(false)
+const showExperienceSuggestions = ref(false)
 
 
 
@@ -402,12 +427,17 @@ const qualificationOptions = [
     "ITI / Diploma"
 ]
 
+const experienceOptions = [
+  "Fresher",
+  ...Array.from({ length: 30 }, (_, i) => `${i + 1} Year${i + 1 > 1 ? "s" : ""}`)
+]
+
 
 
 // Fetch Jobs
 onMounted(async () => {
     position.value = route.query.position || ''
-    // experience.value = route.query.experience || ''
+    experience.value = route.query.experience || ''
     selectedLocation.value = route.query.location || ''
 
     getFilteredJobs()
@@ -505,6 +535,9 @@ const filteredQualificationOptions =
 
 const filteredSalaryTypeOptions =
     createFilteredOptions(salaryTypeOptions, salaryType)
+    
+const filteredExperienceOptions =
+    createFilteredOptions(experienceOptions, experience)
 
 
 
@@ -610,6 +643,23 @@ function hideCurrencySuggestions() {
         currency,
         currencyOptions,
         showCurrencySuggestions
+    )
+}
+
+// Currency
+function selectExperienceOption(option) {
+    selectOption(
+        experience,
+        option,
+        showExperienceSuggestions
+    )
+}
+
+function hideExperienceSuggestions() {
+    hideSuggestions(
+        experience,
+        experienceOptions,
+        showExperienceSuggestions
     )
 }
 
@@ -786,6 +836,17 @@ function sortJobs() {
 
 }
 
+function removeFilters() {
+    position.value = ""
+    salaryType.value = ""
+    qualification.value = ""
+    currency.value = ""
+    selectedLocation.value = ""
+    experience.value = ""
+
+    getFilteredJobs()
+}
+
 // Filter Watch
 watch(
     [
@@ -813,7 +874,7 @@ watch(
     () => route.query,
     (query) => {
         position.value = query.position || ''
-        // experience.value = query.experience || ''
+        experience.value = query.experience || ''
         location.value = query.location || ''
 
         getFilteredJobs()
