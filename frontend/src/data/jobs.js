@@ -1,23 +1,17 @@
-const CACHE_DURATION = 1000 * 60 * 1 // 1 min
+let memoryCache = {}
+const CACHE_DURATION = 1000 * 60 * 10
 
 export async function getJobs(additionalFilters = []) {
 
-    const cacheKey =
-        "jobs_cache_" + JSON.stringify(additionalFilters)
+    const key = JSON.stringify(additionalFilters)
 
-    const cacheTimeKey =
-        "jobs_cache_time_" + JSON.stringify(additionalFilters)
+    const cached = memoryCache[key]
 
-    const cachedJobs = localStorage.getItem(cacheKey)
-    const cacheTime = localStorage.getItem(cacheTimeKey)
-
-    const isValid =
-        cachedJobs &&
-        cacheTime &&
-        Date.now() - Number(cacheTime) < CACHE_DURATION
-
-    if (isValid) {
-        return JSON.parse(cachedJobs)
+    if (
+        cached &&
+        Date.now() - cached.time < CACHE_DURATION
+    ) {
+        return cached.data
     }
 
     const params = new URLSearchParams({
@@ -32,8 +26,6 @@ export async function getJobs(additionalFilters = []) {
 
         const result = await response.json()
 
-        console.log(result)
-
         if (!response.ok) {
             console.error("API Error:", result)
             return []
@@ -44,15 +36,10 @@ export async function getJobs(additionalFilters = []) {
             result.data ||
             []
 
-        localStorage.setItem(
-            cacheKey,
-            JSON.stringify(jobs)
-        )
-
-        localStorage.setItem(
-            cacheTimeKey,
-            Date.now().toString()
-        )
+        memoryCache[key] = {
+            data: jobs,
+            time: Date.now()
+        }
 
         return jobs
 
@@ -63,7 +50,6 @@ export async function getJobs(additionalFilters = []) {
         return []
 
     }
-
 }
 export async function getOptions(doctype, fields) {
     const params = new URLSearchParams({

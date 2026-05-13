@@ -38,6 +38,7 @@
             <p class="text-[12px] font-medium">Jobs</p>
         </router-link>
         <router-link to="/messaging"
+            v-if="auth.isLoggedIn"
             class="flex flex-col items-center text-default hover:text-primary transition-all duration-500 ease-in-out"
             exact-active-class="text-primary"
         >

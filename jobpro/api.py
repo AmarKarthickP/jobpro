@@ -21,14 +21,14 @@ def get_tasks(additional_filters=None):
         if isinstance(additional_filters, str):
             additional_filters = json.loads(additional_filters)
         filters.extend(additional_filters)
-    frappe.log_error("wenfewkfnewk", additional_filters)
+        
     fields = [
         "name","subject","territory","created_on", "currency", 
         "amount","custom_country_flag", "customer", "custom_free_recruitment",
         "food", "accommodation", "joining_ticket", "transportation",
         "custom_customer_location_image", "qualification_type", "specialization", "minimum_experience",
         "maximum_experience", "gulf_experience", "description", "custom_about_customer", 
-        "custom_customer_website"
+        "custom_customer_website", "custom_major_key_skills", "vac", "total_experience"
     ]   
     count = 0
 
@@ -38,7 +38,8 @@ def get_tasks(additional_filters=None):
             params={
                 "fields": json.dumps(fields),
                 "filters": json.dumps(filters),
-                "limit_page_length": 1000
+                "limit_page_length": 1000,
+                "order_by": "created_on desc"
             },
             headers={
                 "Authorization": f"token {api_key}:{api_secret}"
@@ -46,7 +47,7 @@ def get_tasks(additional_filters=None):
         )
         response.raise_for_status()
         data = response.json()
-        print(data)
+        frappe.log_error("data", data)
         # INR conversion
         # for row in data["data"]:
         #     count += 1

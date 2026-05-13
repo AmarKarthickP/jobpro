@@ -2,14 +2,13 @@
   <div
     class="mt-5 bg-white shadow-sm rounded-lg hover:shadow-md transition-all duration-300 ease-in-out px-5 py-3"
   >
-    <div class="grid grid-cols-12">
+    <div v-if="view=='list'" class="grid grid-cols-12">
       <div class="col-span-10">
         <badge
           class="relative overflow-hidden text-xs bg-[#ffebdb] rounded-lg px-3 py-1 text-[#e56700]"
         >
           <span class="relative z-10 font-normal"
-            >• {{ timeAgo(data.created_on) }}</span
-          >
+            >• {{ timeAgo(data.created_on) }}</span>
         </badge>
 
         <p class="text-xl font-medium text-primary mt-2 capitalize">
@@ -201,7 +200,199 @@
         </div>
       </div>
     </div>
+
+    <div v-else class="">
+      <badge
+        class="relative overflow-hidden text-xs bg-[#ffebdb] rounded-lg px-2 py-0.5 text-[#e56700]"
+      >
+        <span class="relative z-10 font-normal"
+          >• {{ timeAgo(data.created_on) }}</span>
+      </badge>
+      <p class="text-[13px] font-medium text-primary mt-2 capitalize truncate">
+          {{ data.subject }}
+        </p>
+        <p class="text-[12px] text-gray-600 font-medium capitalize truncate">
+          {{ data.customer }}
+        </p>
+        <div class="text-[12px] mt-2 text-gray-600 font-medium flex items-center gap-1">
+          <img :src="data.custom_country_flag" class="h-4" />
+          <p>{{ data.territory }}</p>
+        </div>
+        <p
+            class="pt-2 text-gray-600 text-[13px] md:text-[11px] font-medium text-left min-h-[100px]"
+            
+          >{{ truncateText(data.custom_major_key_skills, 200) }}</p>
+        <div class="flex items-center gap-3 mt-3 h-6">
+          <badge
+            v-if="data.custom_free_recruitment == 'Yes'"
+            class="group relative inline-flex items-center overflow-hidden bg-[#eef6fd] rounded-full px-2 py-1 text-[#0770e4] cursor-pointer"
+          >
+            <!-- Shimmer -->
+            <span
+              class="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white to-transparent"
+            ></span>
+
+            <!-- Icon -->
+            <suitcase-icon class="relative z-10 h-4 w-4 shrink-0" />
+
+            <!-- Hidden Text -->
+            <span
+              class="relative z-10 whitespace-nowrap text-sm font-medium w-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out group-hover:w-[120px] group-hover:opacity-100"
+            >
+              &nbsp;Free Recruitment
+            </span>
+          </badge>
+          <badge
+            v-if="data.food == 'Free'"
+            class="group relative inline-flex items-center overflow-hidden bg-[#eef6fd] rounded-full px-2 py-1 text-[#0770e4] cursor-pointer"
+          >
+            <!-- Shimmer -->
+            <span
+              class="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white to-transparent"
+            ></span>
+
+            <!-- Icon -->
+            <food-icon class="relative z-10 h-4 w-4 shrink-0" />
+
+            <!-- Hidden Text -->
+            <span
+              class="relative z-10 whitespace-nowrap text-sm font-medium w-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out group-hover:w-[80px] group-hover:opacity-100"
+            >
+              &nbsp;&nbsp;Free Food
+            </span>
+          </badge>
+          <badge
+            v-if="data.food == 'Allowance'"
+            class="group relative inline-flex items-center overflow-hidden bg-[#eef6fd] rounded-full px-2 py-1 text-[#0770e4] cursor-pointer"
+          >
+            <!-- Shimmer -->
+            <span
+              class="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white to-transparent"
+            ></span>
+
+            <!-- Icon -->
+            <food-icon class="relative z-10 h-4 w-4 shrink-0" />
+
+            <!-- Hidden Text -->
+            <span
+              class="relative z-10 whitespace-nowrap text-sm font-medium w-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out group-hover:w-[125px] group-hover:opacity-100"
+            >
+              &nbsp;Food Allowance
+            </span>
+          </badge>
+          <badge
+            v-if="data.accommodation == 'Free'"
+            class="group relative inline-flex items-center overflow-hidden bg-[#eef6fd] rounded-full px-2 py-1 text-[#0770e4] cursor-pointer"
+          >
+            <!-- Shimmer -->
+            <span
+              class="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white to-transparent"
+            ></span>
+
+            <!-- Icon -->
+            <accommodation-icon class="relative z-10 h-4 w-4 shrink-0" />
+
+            <!-- Hidden Text -->
+            <span
+              class="relative z-10 whitespace-nowrap text-sm font-medium w-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out group-hover:w-[140px] group-hover:opacity-100"
+            >
+              &nbsp;Free Accommodation
+            </span>
+          </badge>
+          <badge
+            v-if="data.accommodation == 'Allowance'"
+            class="group relative inline-flex items-center overflow-hidden bg-[#eef6fd] rounded-full px-2 py-1 text-[#0770e4] cursor-pointer"
+          >
+            <!-- Shimmer -->
+            <span
+              class="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white to-transparent"
+            ></span>
+
+            <!-- Icon -->
+            <accommodation-icon class="relative z-10 h-4 w-4 shrink-0" />
+
+            <!-- Hidden Text -->
+            <span
+              class="relative z-10 whitespace-nowrap text-sm font-medium w-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out group-hover:w-[180px] group-hover:opacity-100"
+            >
+              &nbsp;Accommodation Allowance
+            </span>
+          </badge>
+          <badge
+            v-if="data.transportation == 'Free'"
+            class="group relative inline-flex items-center overflow-hidden bg-[#eef6fd] rounded-full px-2 py-1 text-[#0770e4] cursor-pointer"
+          >
+            <!-- Shimmer -->
+            <span
+              class="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white to-transparent"
+            ></span>
+
+            <!-- Icon -->
+            <bus-icon class="relative z-10 h-4 w-4 shrink-0" />
+
+            <!-- Hidden Text -->
+            <span
+              class="relative z-10 whitespace-nowrap text-sm font-medium w-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out group-hover:w-[95px] group-hover:opacity-100"
+            >
+              &nbsp;Free Transport
+            </span>
+          </badge>
+          <badge
+            v-if="data.transportation == 'Allowance'"
+            class="group relative inline-flex items-center overflow-hidden bg-[#eef6fd] rounded-full px-2 py-1 text-[#0770e4] cursor-pointer"
+          >
+            <!-- Shimmer -->
+            <span
+              class="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white to-transparent"
+            ></span>
+
+            <!-- Icon -->
+            <bus-icon class="relative z-10 h-4 w-4 shrink-0" />
+
+            <!-- Hidden Text -->
+            <span
+              class="relative z-10 whitespace-nowrap text-sm font-medium w-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out group-hover:w-[175px] group-hover:opacity-100"
+            >
+              &nbsp;Transport Allowance
+            </span>
+          </badge>
+          <badge
+            v-if="data.joining_ticket == 'Company'"
+            class="group relative inline-flex items-center overflow-hidden bg-[#eef6fd] rounded-full px-2 py-1 text-[#0770e4] cursor-pointer"
+          >
+            <!-- Shimmer -->
+            <span
+              class="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white to-transparent"
+            ></span>
+
+            <!-- Icon -->
+            <flight-ticket-icon class="relative z-10 h-4 w-4 shrink-0" />
+
+            <!-- Hidden Text -->
+            <span
+              class="relative z-10 whitespace-nowrap text-sm font-medium w-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out group-hover:w-[70px] group-hover:opacity-100"
+            >
+              &nbsp;Free Ticket
+            </span>
+          </badge>
+        </div>
+        <div class="flex gap-3 mb-2">
+        <button
+            @click="showJobDetails=true"
+            class="text-center mt-3 w-full border border-primary py-1.5 rounded-xl text-primary text-[11px] font-medium"
+          >
+            Job Details
+          </button>
+        <button
+            class="text-center mt-3 w-full bg-primary py-1.5 rounded-xl text-white text-[11px] font-medium"
+          >
+            Apply Now
+          </button>
+        </div>
+    </div>
   </div>
+
+
 
   <!-- Overlay -->
   <div
@@ -487,6 +678,10 @@ defineProps({
     data: {
         type: Object,
         required: true
+    },
+    view: {
+      type: String,
+      default: 'grid'
     }
 })
 
@@ -504,4 +699,9 @@ watch(showJobDetails, (value) => {
 onUnmounted(() => {
     document.body.style.overflow = ''
 })
+function truncateText(text, length) {
+    return text && text.length > length
+      ? text.substring(0, length) + "..."
+      : text;
+}
 </script>
