@@ -10,7 +10,7 @@
     <div
       v-if="show"
       :class="[
-        'fixed bottom-5 right-5 z-[9999] min-w-[300px] max-w-[400px] rounded-2xl shadow-2xl px-4 py-3 flex items-center gap-3 border backdrop-blur-md',
+        'fixed bottom-10 right-5 z-[9999] min-w-[300px] max-w-[400px] rounded-2xl shadow-2xl px-4 py-3 flex items-center gap-3 backdrop-blur-md',
         toastStyles
       ]"
     >
@@ -30,14 +30,14 @@
           {{ title }}
         </p>
 
-        <p class="text-[13px] font-medium mt-0.5 opacity-80">
+        <p class="text-[13px] font-medium mt-0.5 opacity-80 whitespace-pre-line">
           {{ message }}
         </p>
       </div>
 
       <!-- Close -->
       <button
-        class="text-gray-400 hover:text-gray-600 transition"
+        class="text-gray-400 right-5 top-2 absolute hover:text-gray-600 transition"
         @click="closeToast"
       >
         ✕

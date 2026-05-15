@@ -80,7 +80,7 @@ def get_options(doctype, fields):
     frappe.errprint(fields)
     try:
         response = requests.get(
-            f"{base_url}/api/method/teampro.api.get_options",
+            f"{base_url}/api/method/teampro.jobpro_api.get_options",
             params={
                 "doctype": doctype,
                 "fields": json.dumps(fields)
@@ -106,7 +106,7 @@ def get_options(doctype, fields):
 def get_candidates(email):
     try:
         response = requests.get(
-            f"{base_url}/api/method/teampro.api.get_candidate",
+            f"{base_url}/api/method/teampro.jobpro_api.get_candidate",
             params={
                 "email": email
             },
@@ -132,7 +132,7 @@ def get_candidates(email):
 def get_nationality():
     try:
         response = requests.get(
-            f"{base_url}/api/method/teampro.api.get_nationality",
+            f"{base_url}/api/method/teampro.jobpro_api.get_nationality",
             headers={
                 "Authorization": f"token {api_key}:{api_secret}"
             },
@@ -154,7 +154,7 @@ def get_nationality():
 def get_districts():
     try:
         response = requests.get(
-            f"{base_url}/api/method/teampro.api.get_districts",
+            f"{base_url}/api/method/teampro.jobpro_api.get_districts",
             headers={
                 "Authorization": f"token {api_key}:{api_secret}"
             },
@@ -176,7 +176,7 @@ def get_districts():
 def get_state():
     try:
         response = requests.get(
-            f"{base_url}/api/method/teampro.api.get_states",
+            f"{base_url}/api/method/teampro.jobpro_api.get_states",
             headers={
                 "Authorization": f"token {api_key}:{api_secret}"
             },
@@ -198,7 +198,7 @@ def get_state():
 def get_country():
     try:
         response = requests.get(
-            f"{base_url}/api/method/teampro.api.get_country",
+            f"{base_url}/api/method/teampro.jobpro_api.get_country",
             headers={
                 "Authorization": f"token {api_key}:{api_secret}"
             },
@@ -220,7 +220,7 @@ def get_country():
 def get_currency():
     try:
         response = requests.get(
-            f"{base_url}/api/method/teampro.api.get_currency",
+            f"{base_url}/api/method/teampro.jobpro_api.get_currency",
             headers={
                 "Authorization": f"token {api_key}:{api_secret}"
             },
@@ -237,6 +237,102 @@ def get_currency():
             message=frappe.get_traceback()
         )
         frappe.throw("Unable to fetch currency from external server")
+        
+@frappe.whitelist(allow_guest=True)
+def get_highest_degree():
+    try:
+        response = requests.get(
+            f"{base_url}/api/method/teampro.jobpro_api.get_highest_degree",
+            headers={
+                "Authorization": f"token {api_key}:{api_secret}"
+            },
+            timeout=10
+        )
+        response.raise_for_status()
+        data = response.json()
+        frappe.log_error("Highest Degree Data", data)
+        return data.get("message")
 
-def test_check():
-    return get_country()
+    except requests.exceptions.RequestException as e:
+        frappe.log_error(
+            title="External Highest Degree API Error",
+            message=frappe.get_traceback()
+        )
+        frappe.throw("Unable to fetch highest degree from external server")
+
+@frappe.whitelist(allow_guest=True)
+def get_specialization():
+    try:
+        response = requests.get(
+            f"{base_url}/api/method/teampro.jobpro_api.get_specialization",
+            headers={
+                "Authorization": f"token {api_key}:{api_secret}"
+            },
+            timeout=10
+        )
+        response.raise_for_status()
+        data = response.json()
+        frappe.log_error("Specialization Data", data)
+        return data.get("message")
+
+    except requests.exceptions.RequestException as e:
+        frappe.log_error(
+            title="External Specialization API Error",
+            message=frappe.get_traceback()
+        )
+        frappe.throw("Unable to fetch specialization from external server")
+
+@frappe.whitelist()
+def update_candidate_details():
+    try:
+        # Incoming frontend payload
+        data = frappe.request.get_json()
+
+        frappe.log_error(
+            title="Incoming Candidate Data",
+            message=frappe.as_json(data)
+        )
+
+        response = requests.post(
+            f"{base_url}/api/method/teampro.jobpro_api.update_candidate_details",
+
+            json=data,
+
+            headers={
+                "Authorization": f"token {api_key}:{api_secret}"
+            },
+
+            timeout=15
+        )
+
+        response.raise_for_status()
+
+        response_data = response.json()
+
+        frappe.log_error(
+            title="External API Response",
+            message=frappe.as_json(response_data)
+        )
+
+        return {
+            "status": "success",
+            "message": response_data
+        }
+
+    except requests.exceptions.RequestException:
+        frappe.log_error(
+            title="External Candidate API Error",
+            message=frappe.get_traceback()
+        )
+
+        frappe.throw(
+            "Unable to update candidate details on external server"
+        )
+
+    except Exception:
+        frappe.log_error(
+            title="Update Candidate Details Error",
+            message=frappe.get_traceback()
+        )
+
+        frappe.throw("Something went wrong")

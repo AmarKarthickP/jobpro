@@ -402,7 +402,7 @@
   >
     <!-- Backdrop -->
   <div
-    class="absolute inset-0 bg-black/40"
+    class="absolute inset-0 bg-background/20 backdrop-blur-[0.25rem]"
     @click="showJobDetails = false"
   ></div>
   </div>
@@ -417,7 +417,7 @@
   >
     <div
       v-if="showJobDetails"
-      class="fixed top-0 right-0 h-full w-[500px] bg-white shadow-2xl z-50 rounded-l-xl transform-gpu"
+      class="fixed top-0 right-0 h-full w-[500px] bg-white shadow-2xl z-50 rounded-l-2xl transform-gpu"
     >
       <!-- Header -->
       <div class="flex items-center px-5 gap-5 py-4 border-b">

@@ -1,3 +1,6 @@
+const API_KEY = import.meta.env.VITE_FRAPPE_API_KEY
+const API_SECRET = import.meta.env.VITE_FRAPPE_API_SECRET
+
 export const handleSave = async ({
     endpoint,
     payload = {},
@@ -6,43 +9,48 @@ export const handleSave = async ({
     onError = null,
     onFinally = null,
 }) => {
+
     try {
 
-        if (onStart) {
-            onStart()
-        }
+        onStart?.()
 
         const response = await fetch(endpoint, {
             method: 'POST',
+
+            mode: 'cors',
+
+            credentials: 'omit',
+
             headers: {
                 'Content-Type': 'application/json',
+
+                Authorization:
+                    `token ${API_KEY}:${API_SECRET}`,
             },
+
             body: JSON.stringify(payload),
         })
 
         const data = await response.json()
 
         if (!response.ok) {
-            throw new Error(data.message || 'Failed to save')
+            throw new Error(
+                data?.message || 'Failed to save'
+            )
         }
 
-        if (onSuccess) {
-            onSuccess(data)
-        }
+        onSuccess?.(data)
 
         return data
 
     } catch (error) {
+
         console.error(error)
 
-        if (onError) {
-            onError(error)
-        }
+        onError?.(error)
 
     } finally {
 
-        if (onFinally) {
-            onFinally()
-        }
+        onFinally?.()
     }
 }

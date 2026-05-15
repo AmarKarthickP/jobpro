@@ -14,7 +14,7 @@
           />
           <div class="text-white absolute top-6 left-[240px]">
             <div class="flex">
-              <p class="font-semibold text-[25px]">{{ fullName }}</p>
+              <p class="font-semibold text-[25px] uppercase">{{ fullName }}</p>
               <!-- <button>
                 <edit-icon class="h5 w-5 ml-4 mt-1" />
               </button> -->
@@ -55,8 +55,8 @@
               >
                 <wallet-icon class="h-4 w-4 text-gray-500" />
                 <span v-if="candidate.current_ctc">
-                  {{ candidate.currency_ctc }} {{ candidate.current_ctc }} -
-                  {{ candidate.ctc_mentioned_in }}
+                  {{ ctcCurrency }} {{ currentCtc }} -
+                  {{ ctcMentionedIn }}
                 </span>
                 <span v-else class="text-default"> Current CTC </span>
               </p>
@@ -299,7 +299,7 @@
           type="text"
           v-model="fullName"
           placeholder="Enter full name"
-          class="bg-background w-full mb-2 border-0 mt-2 font-medium text-[13px] rounded-lg text-primary outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+          class="bg-background uppercase w-full mb-2 border-0 mt-2 font-medium text-[13px] rounded-lg text-primary outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
         />
         <label class="text-[13px] font-medium">Date of Birth</label>
         <input
@@ -425,8 +425,23 @@
           type="text"
           v-model="country"
           placeholder="Select country"
+          @focus="showCountrySuggestions = true"
+          @blur="hideCountrySuggestions"
           class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
         />
+        <div
+          v-if="showCountrySuggestions && filteredCountryOptions.length"
+          class="z-60 mt-1 w-[300px] max-h-[200px] absolute hide-scrollbar overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+        >
+          <div
+            v-for="option in filteredCountryOptions"
+            :key="option"
+            @mousedown="selectCountryOption(option)"
+            class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-hoverbg transition-all duration-200"
+          >
+            {{ option }}
+          </div>
+        </div>
       </div>
     </div>
 
@@ -451,17 +466,19 @@
       <div class="">
         <label class="text-[13px] font-medium">Email</label>
         <input
+          readonly
           type="email"
           v-model="email"
           placeholder="Enter email"
-          class="bg-background w-full mb-2 border-0 mt-2 font-medium text-[13px] rounded-lg text-primary outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+          class="bg-hoverbg hover:cursor-not-allowed w-full mb-2 border-0 mt-2 font-medium text-[13px] rounded-lg text-primary outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
         />
         <label class="text-[13px] font-medium">Mobile Number</label>
         <input
+          readonly
           type="telephone"
           v-model="mobileNumber"
           placeholder="Enter mobile number"
-          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+          class="bg-hoverbg hover:cursor-not-allowed w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
         />
         <label class="text-[13px] font-medium">Alternate Number</label>
         <input
@@ -481,8 +498,104 @@
     </div>
 
     <template #footer>
-      <button class="px-4 py-1 font-medium rounded-lg bg-primary text-white">
-        Save
+      <button
+        class="px-4 font-medium rounded-lg bg-primary text-white min-w-[90px] max-w-[90px] h-8 flex items-center justify-center gap-2 disabled:opacity-70"
+        @click="saveContactDetails"
+        :disabled="isSaving"
+      >
+        <Loader v-if="isSaving" class="text-[24px]" />
+
+        <span>
+          {{ saveStatus }}
+        </span>
+      </button>
+    </template>
+  </Dialog>
+
+  <!-- Education Details Dialog -->
+  <Dialog v-model="showEducationDetailsDialog" title="Education Details" width="max-w-md">
+    <div class="text-gray-600 flex gap-6">
+      <div class="">
+        <label class="text-[13px] font-medium">Highest Degree</label>
+        <input
+          type="text"
+          v-model="highestDegree"
+          placeholder="Select highest degree"
+          @focus="showHighestDegreeSuggestions = true"
+          @blur="hideHighestDegreeSuggestions"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <div
+          v-if="showHighestDegreeSuggestions && filteredHighestDegreeOptions.length"
+          class="z-60 mt-1 w-[400px] max-h-[200px] absolute hide-scrollbar overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+        >
+          <div
+            v-for="option in filteredHighestDegreeOptions"
+            :key="option"
+            @mousedown="selectHighestDegreeOption(option)"
+            class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-hoverbg transition-all duration-200"
+          >
+            {{ option }}
+          </div>
+        </div>
+        <label class="text-[13px] font-medium">Specialization</label>
+        <input
+          type="text"
+          v-model="specialization"
+          placeholder="Select specialization"
+          @focus="showSpecializationSuggestions = true"
+          @blur="hideSpecializationSuggestions"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <div
+          v-if="showSpecializationSuggestions && filteredSpecializationOptions.length"
+          class="z-60 mt-1 w-[400px] max-h-[200px] absolute hide-scrollbar overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+        >
+          <div
+            v-for="option in filteredSpecializationOptions"
+            :key="option"
+            @mousedown="selectSpecializationOption(option)"
+            class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-hoverbg transition-all duration-200"
+          >
+            {{ option }}
+          </div>
+        </div>
+        <label class="text-[13px] font-medium">Year of Passing</label>
+        <input
+          type="text"
+          v-model="yearOfPassing"
+          placeholder="Select year of passing"
+          @focus="showYearOfPassingSuggestions = true"
+          @blur="hideYearOfPassingSuggestions"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <div
+          v-if="showYearOfPassingSuggestions && filteredYearOfPassingOptions.length"
+          class="z-60 mt-1 w-[400px] max-h-[200px] absolute hide-scrollbar overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+        >
+          <div
+            v-for="option in filteredYearOfPassingOptions"
+            :key="option"
+            @mousedown="selectYearOfPassingOption(option)"
+            class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-hoverbg transition-all duration-200"
+          >
+            {{ option }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <template #footer>
+      <button
+        class="px-4 font-medium rounded-lg bg-primary text-white min-w-[90px] max-w-[90px] h-8 flex items-center justify-center gap-2 disabled:opacity-70"
+        @click="saveEducationDetails"
+        :disabled="isSaving"
+      >
+        <Loader v-if="isSaving" class="text-[24px]" />
+
+        <span>
+          {{ saveStatus }}
+        </span>
       </button>
     </template>
   </Dialog>
@@ -583,8 +696,16 @@
     </div>
 
     <template #footer>
-      <button class="px-4 py-1 font-medium rounded-lg bg-primary text-white">
-        Save
+      <button
+        class="px-4 font-medium rounded-lg bg-primary text-white min-w-[90px] max-w-[90px] h-8 flex items-center justify-center gap-2 disabled:opacity-70"
+        @click="saveExperienceDetails"
+        :disabled="isSaving"
+      >
+        <Loader v-if="isSaving" class="text-[24px]" />
+
+        <span>
+          {{ saveStatus }}
+        </span>
       </button>
     </template>
   </Dialog>
@@ -599,13 +720,6 @@
           v-model="passportNumber"
           placeholder="Enter passport number"
           class="bg-background w-full mb-2 border-0 mt-2 font-medium text-[13px] rounded-lg text-primary outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
-        />
-        <label class="text-[13px] font-medium">Old Passport Number</label>
-        <input
-          type="text"
-          v-model="oldPassportNumber"
-          placeholder="Enter old passport number"
-          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
         />
         <label class="text-[13px] font-medium">Expiry Date</label>
         <input
@@ -653,8 +767,16 @@
     </div>
 
     <template #footer>
-      <button class="px-4 py-1 font-medium rounded-lg bg-primary text-white">
-        Save
+      <button
+        class="px-4 font-medium rounded-lg bg-primary text-white min-w-[90px] max-w-[90px] h-8 flex items-center justify-center gap-2 disabled:opacity-70"
+        @click="savePassportDetails"
+        :disabled="isSaving"
+      >
+        <Loader v-if="isSaving" class="text-[24px]" />
+
+        <span>
+          {{ saveStatus }}
+        </span>
       </button>
     </template>
   </Dialog>
@@ -681,7 +803,7 @@ import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue'
 // Data
 import { user } from '@/data/user'
 import { getCandidate } from '@/data/candidate'
-import { getNationality, getDistricts, getState, getCurrency } from '@/data/doctype'
+import { getNationality, getDistricts, getState, getCurrency, getCountry, getHighestDegree, getSpecialization } from '@/data/doctype'
 
 // Utils
 import { handleSave } from '@/utils/document'
@@ -755,6 +877,9 @@ const passportNumber = ref('')
 const oldPassportNumber = ref('')
 const expiryDate = ref('')
 const passportCategory = ref('')
+const highestDegree = ref('')
+const specialization = ref('')
+const yearOfPassing = ref('')
 
 // Suggestion Dropdown States
 const showVaccinationSuggestions = ref(false)
@@ -762,9 +887,13 @@ const showGenderSuggestions = ref(false)
 const showNationalitySuggestions = ref(false)
 const showDistrictSuggestions = ref(false)
 const showStateSuggestions = ref(false)
+const showCountrySuggestions = ref(false)
 const showCTCMentionedInSuggestions = ref(false)
 const showCTCCurrencySuggestions = ref(false)
 const showPassportCategorySuggestions = ref(false)
+const showHighestDegreeSuggestions = ref(false)
+const showSpecializationSuggestions = ref(false)
+const showYearOfPassingSuggestions = ref(false)
 
 // Options
 const vaccinationOptions = [
@@ -781,6 +910,7 @@ const genderOptions = [
 const nationalityOptions = ref([])
 const districtOptions = ref([])
 const stateOptions = ref([])
+const countryOptions = ref([])
 const CTCMentionedInOptions = [
   "Monthly",
   "Yearly"
@@ -790,6 +920,12 @@ const passportCategoryOptions = [
   "ECR",
   "ECNR"
 ]
+const highestDegreeOptions = ref([])
+const specializationOptions = ref([])
+const yearOfPassingOptions = Array.from(
+  { length: new Date().getFullYear() - 1960 + 1 },
+  (_, index) => String(new Date().getFullYear() - index)
+)
 
 // Reusable smooth scroll
 const scrollToSection = (sectionRef) => {
@@ -851,7 +987,10 @@ onMounted(async () => {
     nationalityOptions.value = await getNationality()
     districtOptions.value = await getDistricts()
     stateOptions.value = await getState()
+    countryOptions.value = await getCountry()
     CTCCurrencyOptions.value = await getCurrency()
+    highestDegreeOptions.value = await getHighestDegree()
+    specializationOptions.value = await getSpecialization()
 })
 
 onBeforeUnmount(() => {
@@ -888,6 +1027,9 @@ watch(candidate, (val) => {
     alternateNumber.value = val?.mobile || ''
     whatsappNumber.value = val?.whatsapp_number || ''
     // Education Details
+    highestDegree.value = val?.highest_degree || ''
+    specialization.value = val?.specialization || ''
+    yearOfPassing.value = val?.year_of_passing || ''
     // Experience Details
     indiaExperience.value = val?.india_experience || ''
     overseasExperience.value = val?.overseas_experience || ''
@@ -961,6 +1103,34 @@ function selectPassportCategoryOption(option) {
         showPassportCategorySuggestions
     )
 }
+function selectCountryOption(option) {
+    selectOption(
+        country,
+        option,
+        showCountrySuggestions
+    )
+}
+function selectHighestDegreeOption(option) {
+    selectOption(
+        highestDegree,
+        option,
+        showHighestDegreeSuggestions
+    )
+}
+function selectSpecializationOption(option) {
+    selectOption(
+        specialization,
+        option,
+        showSpecializationSuggestions
+    )
+}
+function selectYearOfPassingOption(option) {
+    selectOption(
+        yearOfPassing,
+        option,
+        showYearOfPassingSuggestions
+    )
+}
 
 function hideVaccinationSuggestions() {
     hideSuggestions(
@@ -1016,6 +1186,34 @@ function hidePassportCategorySuggestions() {
         passportCategory,
         passportCategoryOptions,
         showPassportCategorySuggestions
+    )
+}
+function hideCountrySuggestions() {
+    hideSuggestions(
+        country,
+        countryOptions,
+        showCountrySuggestions
+    )
+}
+function hideHighestDegreeSuggestions() {
+    hideSuggestions(
+        highestDegree,
+        highestDegreeOptions,
+        showHighestDegreeSuggestions
+    )
+}
+function hideSpecializationSuggestions() {
+    hideSuggestions(
+        specialization,
+        specializationOptions,
+        showSpecializationSuggestions
+    )
+}
+function hideYearOfPassingSuggestions() {
+    hideSuggestions(
+        yearOfPassing,
+        yearOfPassingOptions,
+        showYearOfPassingSuggestions
     )
 }
 
@@ -1074,6 +1272,34 @@ const filteredPassportCategoryOptions = computed(() => {
     option.toLowerCase().includes(passportCategory.value.toLowerCase())
   )
 })
+const filteredCountryOptions = computed(() => {
+    return countryOptions.value.filter(option =>
+        option.toLowerCase().includes(
+            country.value.toLowerCase()
+        )
+    )
+})
+const filteredHighestDegreeOptions = computed(() => {
+    return highestDegreeOptions.value.filter(option =>
+        option.toLowerCase().includes(
+            highestDegree.value.toLowerCase()
+        )
+    )
+})
+const filteredSpecializationOptions = computed(() => {
+    return specializationOptions.value.filter(option =>
+        option.toLowerCase().includes(
+            specialization.value.toLowerCase()
+        )
+    )
+})
+const filteredYearOfPassingOptions = computed(() => {
+    return yearOfPassingOptions.filter(option =>
+        option.toLowerCase().includes(
+            yearOfPassing.value.toLowerCase()
+        )
+    )
+})
 
 // Reusable Hide Helper
 function hideSuggestions(model, options, showRef) {
@@ -1106,11 +1332,8 @@ function selectOption(model, value, showRef) {
 
 // Save Dialog
 const savePersonalDetails = async () => {
-
     await handleSave({
-
-        endpoint: '/api/methods/jobpro.api.update_candidate_details',
-
+      endpoint: '/api/method/jobpro.api.update_candidate_details',
         payload: {
             given_name: fullName.value,
             date_of_birth: dateOfBirth.value,
@@ -1119,25 +1342,27 @@ const savePersonalDetails = async () => {
             nationality: nationality.value,
             location: district.value,
             temp_state: state.value,
-            country: country.value
+            country: country.value,
+            name: candidate.value.name
         },
 
         onStart: () => {
             isSaving.value = true
-            saveStatus.value = 'Saving...'
+            saveStatus.value = ''
         },
 
         onSuccess: () => {
             showPersonalDetailsDialog.value = false
             toastType.value = 'success'
             toastTitle.value = 'Saved Successfully'
-            toastMessage.value = 'Your personal details have been saved successfully.'
+            toastMessage.value = 'Your personal details have been updated.'
             showToast.value = true
         },
 
         onError: () => {
             toastType.value = 'error'
-            toastMessage.value = 'There was an error saving your details. Please try again.'
+            toastTitle.value = 'Save Failed'
+            toastMessage.value = 'There was an error saving your details'
             showToast.value = true
         },
 
@@ -1147,5 +1372,155 @@ const savePersonalDetails = async () => {
         }
     })
 }
+const saveContactDetails = async () => {
+    await handleSave({
+      endpoint: '/api/method/jobpro.api.update_candidate_details',
+        payload: {
+            mail_id: email.value,
+            mobile_number: mobileNumber.value,
+            mobile: alternateNumber.value,
+            whatsapp_number: whatsappNumber.value,
+            name: candidate.value.name,
+        },
 
+        onStart: () => {
+            isSaving.value = true
+            saveStatus.value = ''
+        },
+
+        onSuccess: () => {
+            showContactDetailsDialog.value = false
+            toastType.value = 'success'
+            toastTitle.value = 'Saved Successfully'
+            toastMessage.value = 'Your contact details have been updated.'
+            showToast.value = true
+        },
+
+        onError: () => {
+            toastType.value = 'error'
+            toastTitle.value = 'Save Failed'
+            toastMessage.value = 'There was an error saving your details'
+            showToast.value = true
+        },
+
+        onFinally: () => {
+            isSaving.value = false
+            saveStatus.value = 'Save'
+        }
+    })
+}
+const saveEducationDetails = async () => {
+    await handleSave({
+      endpoint: '/api/method/jobpro.api.update_candidate_details',
+        payload: {
+            highest_degree: highestDegree.value,
+            specialization: specialization.value,
+            year_of_passing: yearOfPassing.value,
+            name: candidate.value.name,
+        },
+
+        onStart: () => {
+            isSaving.value = true
+            saveStatus.value = ''
+        },
+
+        onSuccess: () => {
+            showEducationDetailsDialog.value = false
+            toastType.value = 'success'
+            toastTitle.value = 'Saved Successfully'
+            toastMessage.value = 'Your education details have been updated.'
+            showToast.value = true
+        },
+
+        onError: () => {
+            toastType.value = 'error'
+            toastTitle.value = 'Save Failed'
+            toastMessage.value = 'There was an error saving your details'
+            showToast.value = true
+        },
+
+        onFinally: () => {
+            isSaving.value = false
+            saveStatus.value = 'Save'
+        }
+    })
+}
+const saveExperienceDetails = async () => {
+    await handleSave({
+      endpoint: '/api/method/jobpro.api.update_candidate_details',
+        payload: {
+            india_experience: indiaExperience.value || 0,
+            overseas_experience: overseasExperience.value || 0,
+            current_employer: currentEmployer.value,
+            notice_period_months: noticePeriod.value || 0,
+            ctc_mentioned_in: ctcMentionedIn.value,
+            currency_ctc: ctcCurrency.value,
+            current_ctc: currentCtc.value || 0,
+            expected_ctc: expectedCtc.value || 0,
+            name: candidate.value.name,
+        },
+
+        onStart: () => {
+            isSaving.value = true
+            saveStatus.value = ''
+        },
+
+        onSuccess: () => {
+            showExperienceDetailsDialog.value = false
+            toastType.value = 'success'
+            toastTitle.value = 'Saved Successfully'
+            toastMessage.value = 'Your experience details have been updated.'
+            showToast.value = true
+        },
+
+        onError: () => {
+            toastType.value = 'error'
+            toastTitle.value = 'Save Failed'
+            toastMessage.value = 'There was an error saving your details'
+            showToast.value = true
+        },
+
+        onFinally: () => {
+            isSaving.value = false
+            saveStatus.value = 'Save'
+        }
+    })
+}
+const savePassportDetails = async () => {
+    await handleSave({
+      endpoint: '/api/method/jobpro.api.update_candidate_details',
+        payload: {
+            passport_number: passportNumber.value,
+            passport_expiry_date: expiryDate.value,
+            ecr_status_candidate: passportCategory.value,
+            ecr_status: passportCategory.value,
+            name: candidate.value.name,
+        },
+
+        onStart: () => {
+            isSaving.value = true
+            saveStatus.value = ''
+        },
+
+        onSuccess: () => {
+            showPassportDetailsDialog.value = false
+            toastType.value = 'success'
+            toastTitle.value = 'Saved Successfully'
+            toastMessage.value = 'Your passport details have been updated.'
+            showToast.value = true
+        },
+
+        onError: () => {
+            toastType.value = 'error'
+            toastTitle.value = 'Save Failed'
+            toastMessage.value = 'There was an error saving your details'
+            showToast.value = true
+        },
+
+        onFinally: () => {
+            isSaving.value = false
+            saveStatus.value = 'Save'
+        }
+    })
+}
 </script>

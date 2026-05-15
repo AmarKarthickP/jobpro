@@ -77,3 +77,17 @@ export async function getCurrency() {
         '/api/method/jobpro.api.get_currency'
     )
 }
+
+export async function getHighestDegree() {
+    return fetchWithCache(
+        'highest_degree_cache',
+        '/api/method/jobpro.api.get_highest_degree'
+    )
+}
+
+export async function getSpecialization() {
+    return fetchWithCache(
+        'specialization_cache',
+        '/api/method/jobpro.api.get_specialization'
+    )
+}
