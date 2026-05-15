@@ -51,16 +51,3 @@ export async function getJobs(additionalFilters = []) {
 
     }
 }
-export async function getOptions(doctype, fields) {
-    const params = new URLSearchParams({
-        doctype,
-        fields: JSON.stringify(fields)
-    })
-
-    const response = await fetch(
-        `/api/method/jobpro.api.get_options?${params}`,
-    )
-
-    const result = await response.json()
-    return result.message.data
-}

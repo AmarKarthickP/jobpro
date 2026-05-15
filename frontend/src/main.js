@@ -7,6 +7,9 @@ import App from './App.vue'
 
 import { Button, setConfig, frappeRequest, resourcesPlugin } from 'frappe-ui'
 
+import { VueDatePicker } from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+
 let app = createApp(App)
 
 setConfig('resourceFetcher', frappeRequest)
@@ -16,4 +19,5 @@ app.directive('click-outside', clickOutside);
 app.use(resourcesPlugin)
 
 app.component('Button', Button)
+app.component('VueDatePicker', VueDatePicker)
 app.mount('#app')

@@ -1,178 +1,842 @@
 <template>
-    <div class="grid grid-cols-12 gap-6">
-        <div class="col-span-9 bg-white rounded-xl shadow-sm relative">
-            <div ref="profileCard" class="relative rounded-t-xl overflow-hidden">
-                <div class="absolute inset-x-0 top-0 h-2/5 bg-primary text-white pr-10 pt-5">
-                    <!-- Background -->
-                </div>
-                <div class="relative flex items-center py-10">
-                    <Avatar :img="userData" class="h-40 w-40 border-4 border-white ml-10 " />
-                    <div class="flex  text-white absolute top-12 left-[240px]">
-                        <p class="font-semibold text-[25px]">{{ userData.fullName }}</p>
-                        <edit-icon class="h5 w-5 ml-4 mt-1" />
-                    </div>
-                    <div class="flex justify-start items-center gap-10 ml-10 mt-20">
-                        <div>
-                            <p class="text-[15px] mt-1.5 text-primary font-medium flex gap-3 items-center">
-                                <location-icon class="h-4 w-4 text-gray-500" />
-                                Tamil Nadu, India
-                            </p>
-                            <p class="text-[15px] mt-1.5 text-primary font-medium flex gap-3 items-center">
-                                <suitcase-icon class="h-4 w-4 text-gray-500" />
-                                2 Years
-                            </p>
-                            <p class="text-[15px] mt-1.5 text-primary font-medium flex gap-3 items-center">
-                                <wallet-icon class="h-4 w-4 text-gray-500" />
-                                20,000
-                            </p>
-                        </div>
-                        <div class="border-l border-gray-500 pl-10">
-                            <p class="text-[15px] mt-1.5 text-primary font-medium flex gap-3 items-center">
-                                <phone-icon class="h-4 w-4 text-gray-500" />
-                                {{ userData.mobile_no }}
-                            </p>
-                            <p class="text-[15px] mt-1.5 text-primary font-medium flex gap-3 items-center">
-                                <mail-icon class="h-4 w-4 text-gray-500" />
-                                {{ userData.email }}
-                            </p>
-                            <p class="text-[15px] mt-1.5 text-primary font-medium flex gap-3 items-center">
-                                <calendar-icon class="h-4 w-4 text-gray-500" />
-                                1 Month
-                            </p>
-                        </div>
-                    </div>
-                </div>
+  <div class="grid grid-cols-12 gap-6">
+    <div class="col-span-9 bg-white rounded-xl shadow-sm relative">
+      <div ref="profileCard" class="relative rounded-t-xl overflow-hidden">
+        <div
+          class="absolute inset-x-0 top-0 h-2/5 bg-primary text-white pr-10 pt-5"
+        >
+          <!-- Background -->
+        </div>
+        <div class="relative flex items-center py-10">
+          <Avatar
+            :img="userData"
+            class="h-40 w-40 border-4 border-white ml-10"
+          />
+          <div class="text-white absolute top-6 left-[240px]">
+            <div class="flex">
+              <p class="font-semibold text-[25px]">{{ fullName }}</p>
+              <!-- <button>
+                <edit-icon class="h5 w-5 ml-4 mt-1" />
+              </button> -->
             </div>
+            <p class="font-semibold text-[20px] -mt-1 absolute">#{{ candidate.name }}</p>
+          </div>
+          <div class="flex justify-start items-center gap-10 ml-10 mt-20">
+            <div>
+              <p
+                class="text-[15px] mt-1.5 text-primary font-medium flex gap-3 items-center capitalize"
+              >
+                <location-icon class="h-4 w-4 text-gray-500" />
+                <span v-if="candidate.country">
+                  {{
+                    [
+                      candidate.location,
+                      candidate.temp_state,
+                      candidate.country
+                    ]
+                      .filter(Boolean)
+                      .join(', ')
+                      .toLowerCase()
+                  }}
+                </span>
+                <span v-else class="text-default"> Current Location </span>
+              </p>
+              <p
+                class="text-[15px] mt-1.5 text-primary font-medium flex gap-3 items-center"
+              >
+                <suitcase-icon class="h-4 w-4 text-gray-500" />
+                <span v-if="candidate.total_experience">
+                  {{ candidate.total_experience || 0 }} Years
+                </span>
+                <span v-else> Fresher </span>
+              </p>
+              <p
+                class="text-[15px] mt-1.5 text-primary font-medium flex gap-3 items-center"
+              >
+                <wallet-icon class="h-4 w-4 text-gray-500" />
+                <span v-if="candidate.current_ctc">
+                  {{ candidate.currency_ctc }} {{ candidate.current_ctc }} -
+                  {{ candidate.ctc_mentioned_in }}
+                </span>
+                <span v-else class="text-default"> Current CTC </span>
+              </p>
+            </div>
+            <div class="border-l border-gray-500 pl-10">
+              <p
+                class="text-[15px] mt-1.5 text-primary font-medium flex gap-3 items-center"
+              >
+                <phone-icon class="h-4 w-4 text-gray-500" />
+                <span v-if="userData.mobile_no">
+                  {{ userData.mobile_no }}
+                </span>
+                <span v-else class="text-default"> Mobile Number </span>
+              </p>
+              <p
+                class="text-[15px] mt-1.5 text-primary font-medium flex gap-3 items-center"
+              >
+                <mail-icon class="h-4 w-4 text-gray-500" />
+                {{ userData.email }}
+              </p>
+              <p
+                class="text-[15px] mt-1.5 text-primary font-medium flex gap-3 items-center"
+              >
+                <calendar-icon class="h-4 w-4 text-gray-500" />
+                <span v-if="candidate.notice_period_months == 1">
+                  {{ candidate.notice_period_months }} Month
+                </span>
+                <span v-else-if="candidate.notice_period_months > 1">
+                  {{ candidate.notice_period_months }} Months
+                </span>
+                <span v-else class="text-default"> Notice Period </span>
+              </p>
+            </div>
+          </div>
         </div>
-        <div class="col-span-3 bg-white rounded-xl shadow-sm p-5">
-            hi
+      </div>
+    </div>
+    <div class="col-span-3 bg-white rounded-xl shadow-sm p-5">
+      {{ userData.bio }}
+    </div>
+  </div>
+
+  <div class="grid grid-cols-12 gap-6 mt-6 pb-10">
+    <div class="col-span-3">
+      <div class="bg-white shadow-sm rounded-xl p-5 relative sticky top-24">
+        <transition
+          mode="out-in"
+          enter-active-class="transition duration-300 ease-out"
+          enter-from-class="opacity-0"
+          enter-to-class="opacity-100"
+          leave-active-class="transition duration-200 ease-in"
+          leave-from-class="opacity-100"
+          leave-to-class="opacity-0"
+        >
+          <div v-if="showProfile">
+            <div class="bg-primary h-16 -m-5 rounded-t-xl"></div>
+            <Avatar
+              :img="userData"
+              class="h-20 w-20 border-2 border-white -mt-8"
+            />
+            <p
+              class="text-xl font-medium text-gray-600 text-right absolute top-20 right-10"
+            >
+              Quick Links
+            </p>
+          </div>
+          <p v-else class="text-xl font-medium text-gray-600">Quick Links</p>
+        </transition>
+        <div
+          class="flex mt-4 px-5 text-[15px] hover:bg-hoverbg rounded-lg cursor-pointer py-2"
+        >
+          <button @click="scrollToResume" class="text-primary font-medium">
+            Resume
+          </button>
+          <button class="text-primary ml-auto font-medium text-[#275df5]">
+            Attach
+          </button>
         </div>
+        <div
+          class="flex mt-4 px-5 text-[15px] hover:bg-hoverbg rounded-lg cursor-pointer py-2"
+        >
+          <button @click="scrollToPersonal" class="text-primary font-medium">
+            Personal Details
+          </button>
+          <button @click="showPersonalDetailsDialog=true" class="text-primary ml-auto font-medium text-[#275df5]">
+            Add
+          </button>
+        </div>
+        <div
+          class="flex mt-4 px-5 text-[15px] hover:bg-hoverbg rounded-lg cursor-pointer py-2"
+        >
+          <button @click="scrollToContact" class="text-primary font-medium">
+            Contact Details
+          </button>
+          <button @click="showContactDetailsDialog=true" class="text-primary ml-auto font-medium text-[#275df5]">
+            Add
+          </button>
+        </div>
+        <div
+          class="flex mt-4 px-5 text-[15px] hover:bg-hoverbg rounded-lg cursor-pointer py-2"
+        >
+          <button @click="scrollToEducation" class="text-primary font-medium">
+            Education Details
+          </button>
+          <button @click="showEducationDetailsDialog=true" class="text-primary ml-auto font-medium text-[#275df5]">
+            Add
+          </button>
+        </div>
+        <div
+          class="flex mt-4 px-5 text-[15px] hover:bg-hoverbg rounded-lg cursor-pointer py-2"
+        >
+          <button @click="scrollToExperience" class="text-primary font-medium">
+            Experience Details
+          </button>
+          <button @click="showExperienceDetailsDialog=true" class="text-primary ml-auto font-medium text-[#275df5]">
+            Add
+          </button>
+        </div>
+        <div
+          class="flex mt-4 px-5 text-[15px] hover:bg-hoverbg rounded-lg cursor-pointer py-2"
+        >
+          <button @click="scrollToPassport" class="text-primary font-medium">
+            Passport Details
+          </button>
+          <button @click="showPassportDetailsDialog=true" class="text-primary ml-auto font-medium text-[#275df5]">
+            Add
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-span-9">
+      <div ref="resumeSection" class="bg-white rounded-xl shadow-sm p-5">
+        <h1 class="font-semibold text-primary">Resume</h1>
+        <div
+          class="border-2 border-dashed border-gray-500 text-center rounded-lg flex justify-center items-center gap-4 mt-5"
+        >
+          <div class="py-5">
+            <button
+              class="border border-[#275df5] px-5 py-1.5 font-medium text-[14px] rounded-full text-[#275df5]"
+            >
+              Attach Resume
+            </button>
+            <p class="text-sm font-medium text-gray-500 mt-2">
+              Supported Formats: doc, docx, rtf, pdf, upto 2 MB
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- Personal Details -->
+      <div class="bg-white rounded-xl shadow-sm p-5 mt-6">
+        <div class="flex">
+          <h1 class="font-semibold text-primary">Personal Details</h1>
+          <button
+            @click="showPersonalDetailsDialog=true"
+            class="text-primary ml-auto text-[14px] font-medium text-[#275df5]"
+          >
+            Add personal details
+          </button>
+        </div>
+        <div class="text-gray-500 font-medium text-[13px] mt-2">
+          This information is important for employers to know you better
+        </div>
+      </div>
+      <!-- Contact Details -->
+      <div ref="contactSection" class="bg-white rounded-xl shadow-sm p-5 mt-6">
+        <div class="flex">
+          <h1 class="font-semibold text-primary">Contact Details</h1>
+          <button
+            @click="showContactDetailsDialog=true"
+            class="text-primary ml-auto text-[14px] font-medium text-[#275df5]"
+          >
+            Add contact details
+          </button>
+        </div>
+        <div class="text-gray-500 font-medium text-[13px] mt-2">
+          Add a contact details so that recruiters can reach you
+        </div>
+      </div>
+      <!-- Education Details -->
+      <div
+        ref="educationSection"
+        class="bg-white rounded-xl shadow-sm p-5 mt-6"
+      >
+        <div class="flex">
+          <h1 class="font-semibold text-primary">Education Details</h1>
+          <button
+            @click="showEducationDetailsDialog=true"
+            class="text-primary ml-auto text-[14px] font-medium text-[#275df5]"
+          >
+            Add education details
+          </button>
+        </div>
+        <div class="text-gray-500 font-medium text-[13px] mt-2">
+          Add your education details to showcase your qualifications
+        </div>
+      </div>
+      <!-- Experience Details -->
+      <div
+        ref="experienceSection"
+        class="bg-white rounded-xl shadow-sm p-5 mt-6"
+      >
+        <div class="flex">
+          <h1 class="font-semibold text-primary">Experience Details</h1>
+          <button
+            @click="showExperienceDetailsDialog=true"
+            class="text-primary ml-auto text-[14px] font-medium text-[#275df5]"
+          >
+            Add experience details
+          </button>
+        </div>
+        <div class="text-gray-500 font-medium text-[13px] mt-2">
+          Add your experience details to showcase your professional background
+        </div>
+      </div>
+      <!-- Passport Details -->
+      <div ref="passportSection" class="bg-white rounded-xl shadow-sm p-5 mt-6">
+        <div class="flex">
+          <h1 class="font-semibold text-primary">Passport Details</h1>
+          <button
+            @click="showPassportDetailsDialog=true"
+            class="text-primary ml-auto text-[14px] font-medium text-[#275df5]"
+          >
+            Add passport details
+          </button>
+        </div>
+        <div class="text-gray-500 font-medium text-[13px] mt-2">
+          Add your passport details to verify your identity and facilitate
+          international job opportunities
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Personal Details Dialog -->
+  <Dialog v-model="showPersonalDetailsDialog" title="Personal Details" width="max-w-2xl">
+    <div class="text-gray-600 flex gap-6">
+      <div class="">
+        <label class="text-[13px] font-medium">Full Name</label>
+        <input
+          type="text"
+          v-model="fullName"
+          placeholder="Enter full name"
+          class="bg-background w-full mb-2 border-0 mt-2 font-medium text-[13px] rounded-lg text-primary outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <label class="text-[13px] font-medium">Date of Birth</label>
+        <input
+          type="date"
+          v-model="dateOfBirth"
+          placeholder="Select date of birth"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <label class="text-[13px] font-medium">Gender</label>
+        <input
+          type="text"
+          v-model="gender"
+          placeholder="Select gender"
+          @focus="showGenderSuggestions = true"
+          @blur="hideGenderSuggestions"
+          class="bg-background w-full mb-2 border-0 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <div
+          v-if="showGenderSuggestions && filteredGenderOptions.length"
+          class="z-60 mt-1 w-[300px] max-h-[200px] absolute hide-scrollbar overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+        >
+          <div
+            v-for="option in filteredGenderOptions"
+            :key="option"
+            @mousedown="selectGenderOption(option)"
+            class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-hoverbg transition-all duration-200"
+          >
+            {{ option }}
+          </div>
+        </div>
+        <label class="text-[13px] font-medium">Vaccination Status</label>
+        <input
+          type="text"
+          v-model="vaccination"
+          placeholder="Select vaccination"
+          @focus="showVaccinationSuggestions = true"
+          @blur="hideVaccinationSuggestions"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <div
+          v-if="showVaccinationSuggestions && filteredVaccinationOptions.length"
+          class="z-60 mt-1 w-[300px] max-h-[200px] absolute hide-scrollbar overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+        >
+          <div
+            v-for="option in filteredVaccinationOptions"
+            :key="option"
+            @mousedown="selectVaccinationOption(option)"
+            class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-hoverbg transition-all duration-200"
+          >
+            {{ option }}
+          </div>
+        </div>
+      </div>
+      <div>
+        <label class="text-[13px] font-medium">Nationality</label>
+        <input
+          type="text"
+          v-model="nationality"
+          placeholder="Select nationality"
+          @focus="showNationalitySuggestions = true"
+          @blur="hideNationalitySuggestions"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <div
+          v-if="showNationalitySuggestions && filteredNationalityOptions.length"
+          class="z-60 mt-1 w-[300px] max-h-[200px] absolute hide-scrollbar overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+        >
+          <div
+            v-for="option in filteredNationalityOptions"
+            :key="option"
+            @mousedown="selectNationalityOption(option)"
+            class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-hoverbg transition-all duration-200"
+          >
+            {{ option }}
+          </div>
+        </div>
+        <label class="text-[13px] font-medium">District</label>
+        <input
+          type="text"
+          v-model="district"
+          placeholder="Select district"
+          @focus="showDistrictSuggestions = true"
+          @blur="hideDistrictSuggestions"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <div
+          v-if="showDistrictSuggestions && filteredDistrictOptions.length"
+          class="z-60 mt-1 w-[300px] max-h-[200px] absolute hide-scrollbar overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+        >
+          <div
+            v-for="option in filteredDistrictOptions"
+            :key="option"
+            @mousedown="selectDistrictOption(option)"
+            class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-hoverbg transition-all duration-200"
+          >
+            {{ option }}
+          </div>
+        </div>
+        <label class="text-[13px] font-medium">State</label>
+        <input
+          type="text"
+          v-model="state"
+          placeholder="Select state"
+          @focus="showStateSuggestions = true"
+          @blur="hideStateSuggestions"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <div
+          v-if="showStateSuggestions && filteredStateOptions.length"
+          class="z-60 mt-1 w-[300px] max-h-[200px] absolute hide-scrollbar overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+        >
+          <div
+            v-for="option in filteredStateOptions"
+            :key="option"
+            @mousedown="selectStateOption(option)"
+            class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-hoverbg transition-all duration-200"
+          >
+            {{ option }}
+          </div>
+        </div>
+        <label class="text-[13px] font-medium">Country</label>
+        <input
+          type="text"
+          v-model="country"
+          placeholder="Select country"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+      </div>
     </div>
 
-    <div class="grid grid-cols-12 gap-6 mt-6">
-        <div class="col-span-3 ">
-            <quick-link-card :showProfile="showProfile" class="sticky top-24" />
-        </div>
-        <div class="col-span-9">
-            <div class=" bg-white rounded-xl shadow-sm p-5">
-                <h1 class="font-semibold text-primary">Resume</h1>
-                <div class="border-2 border-dashed border-gray-500 text-center rounded-lg flex justify-center items-center gap-4 mt-5">
-                    <div class="py-5">
-                        <button class="border border-[#275df5] px-5 py-1.5 font-medium text-[14px] rounded-full text-[#275df5]">
-                            Attach Resume
-                        </button>
-                        <p class="text-sm font-medium text-gray-500 mt-2">
-                            Supported Formats: doc, docx, rtf, pdf, upto 2 MB
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <!-- Personal Details -->
-            <div class=" bg-white rounded-xl shadow-sm p-5 mt-6">
-                <div class="flex">
-                    <h1 class="font-semibold text-primary">Personal Details</h1>
-                    <button class="text-primary ml-auto font-medium text-[#275df5]">
-                        Add personal details
-                    </button>
-                </div>
-                <div class="text-gray-500 font-medium text-[13px] mt-2">
-                    This information is important for employers to know you better
-                </div>
-            </div>
-            <!-- Contact Details -->
-            <div class=" bg-white rounded-xl shadow-sm p-5 mt-6">
-                <div class="flex">
-                    <h1 class="font-semibold text-primary">Contact Details</h1>
-                    <button class="text-primary ml-auto font-medium text-[#275df5]">
-                        Add contact details
-                    </button>
-                </div>
-                <div class="text-gray-500 font-medium text-[13px] mt-2">
-                    Add a contact details so that recruiters can reach you
-                </div>
-            </div>
-            <!-- Education Details -->
-            <div class=" bg-white rounded-xl shadow-sm p-5 mt-6">
-                <div class="flex">
-                    <h1 class="font-semibold text-primary">Education Details</h1>
-                    <button class="text-primary ml-auto font-medium text-[#275df5]">
-                        Add education details
-                    </button>
-                </div>
-                <div class="text-gray-500 font-medium text-[13px] mt-2">
-                    Add your education details to showcase your qualifications
-                </div>
-            </div>
-            <!-- Experience Details -->
-            <div class=" bg-white rounded-xl shadow-sm p-5 mt-6">
-                <div class="flex">
-                    <h1 class="font-semibold text-primary">Experience Details</h1>
-                    <button class="text-primary ml-auto font-medium text-[#275df5]">
-                        Add experience details
-                    </button>
-                </div>
-                <div class="text-gray-500 font-medium text-[13px] mt-2">
-                    Add your experience details to showcase your professional background
-                </div>
-            </div>
-            <!-- Passport Details -->
-            <div class=" bg-white rounded-xl shadow-sm p-5 mt-6">
-                <div class="flex">
-                    <h1 class="font-semibold text-primary">Passport Details</h1>
-                    <button class="text-primary ml-auto font-medium text-[#275df5]">
-                        Add passport details
-                    </button>
-                </div>
-                <div class="text-gray-500 font-medium text-[13px] mt-2">
-                    Add your passport details to verify your identity and facilitate international job opportunities
-                </div>
-            </div>
-        </div>
+    <template #footer>
+      <button
+        class="px-4 font-medium rounded-lg bg-primary text-white min-w-[90px] max-w-[90px] h-8 flex items-center justify-center gap-2 disabled:opacity-70"
+        @click="savePersonalDetails"
+        :disabled="isSaving"
+      >
+        <Loader v-if="isSaving" class="text-[24px]" />
+
+        <span>
+          {{ saveStatus }}
+        </span>
+      </button>
+    </template>
+  </Dialog>
+
+  <!-- Contact Details Dialog -->
+  <Dialog v-model="showContactDetailsDialog" title="Contact Details" width="max-w-md">
+    <div class="text-gray-600 flex gap-6">
+      <div class="">
+        <label class="text-[13px] font-medium">Email</label>
+        <input
+          type="email"
+          v-model="email"
+          placeholder="Enter email"
+          class="bg-background w-full mb-2 border-0 mt-2 font-medium text-[13px] rounded-lg text-primary outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <label class="text-[13px] font-medium">Mobile Number</label>
+        <input
+          type="telephone"
+          v-model="mobileNumber"
+          placeholder="Enter mobile number"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <label class="text-[13px] font-medium">Alternate Number</label>
+        <input
+          type="telephone"
+          v-model="alternateNumber"
+          placeholder="Enter alternate number"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <label class="text-[13px] font-medium">Whatsapp Number</label>
+        <input
+          type="telephone"
+          v-model="whatsappNumber"
+          placeholder="eg. +91-9677400172"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+      </div>
     </div>
+
+    <template #footer>
+      <button class="px-4 py-1 font-medium rounded-lg bg-primary text-white">
+        Save
+      </button>
+    </template>
+  </Dialog>
+
+  <!-- Experience Details Dialog -->
+  <Dialog v-model="showExperienceDetailsDialog" title="Experience Details" width="max-w-2xl">
+    <div class="text-gray-600 flex gap-6">
+      <div class="">
+        <label class="text-[13px] font-medium">India Experience</label>
+        <input
+          type="text"
+          v-model="indiaExperience"
+          placeholder="Enter India experience"
+          class="bg-background w-full mb-2 border-0 mt-2 font-medium text-[13px] rounded-lg text-primary outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <label class="text-[13px] font-medium">Overseas Experience</label>
+        <input
+          type="text"
+          v-model="overseasExperience"
+          placeholder="Enter overseas experience"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <label class="text-[13px] font-medium">Current Employer</label>
+        <input
+          type="text"
+          v-model="currentEmployer"
+          placeholder="Enter current employer"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <label class="text-[13px] font-medium">Notice Period (in months)</label>
+        <input
+          type="text"
+          v-model="noticePeriod"
+          placeholder="Enter notice period"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+      </div>
+      <div>
+        <label class="text-[13px] font-medium">CTC Mentioned In</label>
+        <input
+          type="text"
+          v-model="ctcMentionedIn"
+          placeholder="Select CTC mentioned in"
+          @focus="showCTCMentionedInSuggestions = true"
+          @blur="hideCTCMentionedInSuggestions"
+          class="bg-background w-full mb-2 border-0 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <div
+          v-if="showCTCMentionedInSuggestions && filteredCTCMentionedInOptions.length"
+          class="z-60 mt-1 w-[288px] max-h-[200px] absolute hide-scrollbar overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+        >
+          <div
+            v-for="option in filteredCTCMentionedInOptions"
+            :key="option"
+            @mousedown="selectCTCMentionedInOption(option)"
+            class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-hoverbg transition-all duration-200"
+          >
+            {{ option }}
+          </div>
+        </div>
+        <label class="text-[13px] font-medium">CTC Currency</label>
+        <input
+          type="text"
+          v-model="ctcCurrency"
+          placeholder="Select CTC currency"
+          @focus="showCTCCurrencySuggestions = true"
+          @blur="hideCTCCurrencySuggestions"
+          class="bg-background w-full mb-2 border-0 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <div
+          v-if="showCTCCurrencySuggestions && filteredCTCCurrencyOptions.length"
+          class="z-60 mt-1 w-[288px] max-h-[200px] absolute hide-scrollbar overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+        >
+          <div
+            v-for="option in filteredCTCCurrencyOptions"
+            :key="option"
+            @mousedown="selectCTCCurrencyOption(option)"
+            class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-hoverbg transition-all duration-200"
+          >
+            {{ option }}
+          </div>
+        </div>
+        <label class="text-[13px] font-medium">Current CTC</label>
+        <input
+          type="text"
+          v-model="currentCtc"
+          placeholder="Enter current CTC"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <label class="text-[13px] font-medium">Expected CTC</label>
+        <input
+          type="text"
+          v-model="expectedCtc"
+          placeholder="Enter expected CTC"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+      </div>
+    </div>
+
+    <template #footer>
+      <button class="px-4 py-1 font-medium rounded-lg bg-primary text-white">
+        Save
+      </button>
+    </template>
+  </Dialog>
+
+  <!-- Passport Details Dialog -->
+  <Dialog v-model="showPassportDetailsDialog" title="Passport Details" width="max-w-md">
+    <div class="text-gray-600 flex gap-6">
+      <div class="">
+        <label class="text-[13px] font-medium">Passport Number</label>
+        <input
+          type="text"
+          v-model="passportNumber"
+          placeholder="Enter passport number"
+          class="bg-background w-full mb-2 border-0 mt-2 font-medium text-[13px] rounded-lg text-primary outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <label class="text-[13px] font-medium">Old Passport Number</label>
+        <input
+          type="text"
+          v-model="oldPassportNumber"
+          placeholder="Enter old passport number"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <label class="text-[13px] font-medium">Expiry Date</label>
+        <input
+          type="date"
+          v-model="expiryDate"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <label class="text-[13px] font-medium">Passport Category</label>
+        <input
+          type="text"
+          v-model="passportCategory"
+          placeholder="Select passport category"
+          @focus="showPassportCategorySuggestions = true"
+          @blur="hidePassportCategorySuggestions"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+        />
+        <div
+          v-if="showPassportCategorySuggestions && filteredPassportCategoryOptions.length"
+          class="z-60 mt-1 w-[400px] max-h-[200px] absolute hide-scrollbar overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+        >
+          <div
+            v-for="option in filteredPassportCategoryOptions"
+            :key="option"
+            @mousedown="selectPassportCategoryOption(option)"
+            class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-hoverbg transition-all duration-200"
+          >
+            {{ option }}
+          </div>
+        </div>
+        <div
+          class="border-2 border-dashed border-gray-500 text-center rounded-lg flex justify-center items-center gap-4 mt-5"
+        >
+          <div class="py-5">
+            <button
+              class="border border-[#275df5] px-5 py-1.5 font-medium text-[12px] rounded-full text-[#275df5]"
+            >
+              Attach Passport
+            </button>
+            <p class="text-sm font-medium text-gray-500 mt-2">
+              Supported Formats: doc, docx, rtf, pdf, upto 2 MB
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <template #footer>
+      <button class="px-4 py-1 font-medium rounded-lg bg-primary text-white">
+        Save
+      </button>
+    </template>
+  </Dialog>
+
+  <Toast 
+    :show="showToast"
+    @update:show="showToast = $event"
+    :type="toastType"
+    :title="toastTitle"
+    :message="toastMessage"
+  />
+
+  <FreezePage
+    :show="isSaving"
+    title="Saving Details"
+    message="Please wait while we save your information"
+  />
 </template>
 
 <script setup>
 // vue
-import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue';
+import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue'
 
 // Data
 import { user } from '@/data/user'
 import { getCandidate } from '@/data/candidate'
+import { getNationality, getDistricts, getState, getCurrency } from '@/data/doctype'
 
-// Icons
-import Avatar from '../components/Avatar.vue';
-import EditIcon from '../components/icons/EditIcon.vue';
-import PhoneIcon from '../components/icons/PhoneIcon.vue';
-import MailIcon from '../components/icons/MailIcon.vue';
-import CalendarIcon from '../components/icons/CalendarIcon.vue';
-import LocationIcon from '../components/icons/LocationIcon.vue';
-import SuitcaseIcon from '../components/icons/SuitcaseIcon.vue';
-import WalletIcon from '../components/icons/WalletIcon.vue';
+// Utils
+import { handleSave } from '@/utils/document'
 
 // Components
-import QuickLinkCard from '../components/QuickLinkCard.vue';
+import Avatar from '../components/Avatar.vue'
+import Dialog from '../components/Dialog.vue'
+import Loader from '../components/Loader.vue'
+import Toast from '../components/Toast.vue'
+import FreezePage from '../components/FreezePage.vue'
 
-// Declarations
+// Icons
+import EditIcon from '../components/icons/EditIcon.vue'
+import PhoneIcon from '../components/icons/PhoneIcon.vue'
+import MailIcon from '../components/icons/MailIcon.vue'
+import CalendarIcon from '../components/icons/CalendarIcon.vue'
+import LocationIcon from '../components/icons/LocationIcon.vue'
+import SuitcaseIcon from '../components/icons/SuitcaseIcon.vue'
+import WalletIcon from '../components/icons/WalletIcon.vue'
+
+// State
 const showProfile = ref(false)
 const profileCard = ref(null)
-const candidate = ref(null)
+const candidate = ref({})
+const saveStatus = ref('Save')
+const isSaving = ref(false)
 
-// Dynamic data
+// Toast
+const showToast = ref(false)
+const toastType = ref('')
+const toastTitle = ref('')
+const toastMessage = ref('')
+
+// Dialog states
+const showPersonalDetailsDialog = ref(false)
+const showContactDetailsDialog = ref(false)
+const showEducationDetailsDialog = ref(false)
+const showExperienceDetailsDialog = ref(false)
+const showPassportDetailsDialog = ref(false)
+
+// Section refs
+const resumeSection = ref(null)
+const personalSection = ref(null)
+const contactSection = ref(null)
+const educationSection = ref(null)
+const experienceSection = ref(null)
+const passportSection = ref(null)
+
+// Fields
+const fullName = ref('')
+const dateOfBirth = ref('')
+const vaccination = ref('')
+const gender = ref('')
+const nationality = ref('')
+const district = ref('')
+const state = ref('')
+const country = ref('')
+const email = ref('')
+const mobileNumber = ref('')
+const alternateNumber = ref('')
+const whatsappNumber = ref('')
+const indiaExperience = ref('')
+const overseasExperience = ref('')
+const currentEmployer = ref('')
+const noticePeriod = ref('')
+const ctcMentionedIn = ref('')
+const ctcCurrency = ref('')
+const currentCtc = ref('')
+const expectedCtc = ref('')
+const passportNumber = ref('')
+const oldPassportNumber = ref('')
+const expiryDate = ref('')
+const passportCategory = ref('')
+
+// Suggestion Dropdown States
+const showVaccinationSuggestions = ref(false)
+const showGenderSuggestions = ref(false)
+const showNationalitySuggestions = ref(false)
+const showDistrictSuggestions = ref(false)
+const showStateSuggestions = ref(false)
+const showCTCMentionedInSuggestions = ref(false)
+const showCTCCurrencySuggestions = ref(false)
+const showPassportCategorySuggestions = ref(false)
+
+// Options
+const vaccinationOptions = [
+  "Dose 1",
+  "Dose 2",
+  "Dose 3",
+  "Not Vaccinated"
+]
+const genderOptions = [
+  "Male",
+  "Female",
+  "Prefer Not to say"
+]
+const nationalityOptions = ref([])
+const districtOptions = ref([])
+const stateOptions = ref([])
+const CTCMentionedInOptions = [
+  "Monthly",
+  "Yearly"
+]
+const CTCCurrencyOptions = ref([])
+const passportCategoryOptions = [
+  "ECR",
+  "ECNR"
+]
+
+// Reusable smooth scroll
+const scrollToSection = (sectionRef) => {
+    if (!sectionRef.value) return
+
+    const yOffset = -100
+
+    const y =
+        sectionRef.value.getBoundingClientRect().top +
+        window.pageYOffset +
+        yOffset
+
+    window.scrollTo({
+        top: y,
+        behavior: 'smooth'
+    })
+}
+
+// Scroll handlers
+const scrollToResume = () => scrollToSection(resumeSection)
+const scrollToPersonal = () => scrollToSection(personalSection)
+const scrollToContact = () => scrollToSection(contactSection)
+const scrollToEducation = () => scrollToSection(educationSection)
+const scrollToExperience = () => scrollToSection(experienceSection)
+const scrollToPassport = () => scrollToSection(passportSection)
+
+// Dialog
+const openPersonalDetailsDialog = () => {
+    showPersonalDetailsDialog.value = true
+}
+
+// User data
 const userData = computed(() => ({
     src: user.image,
     alt: 'profile',
     fullName: user.fullName,
     email: user.email,
     mobile_no: user.mobileNo,
+    bio: user.bio
 }))
 
-
+// Observer
 let observer = null
 
 onMounted(async () => {
     observer = new IntersectionObserver(
         ([entry]) => {
-            // If div is NOT visible
             showProfile.value = !entry.isIntersecting
         },
         {
@@ -183,6 +847,11 @@ onMounted(async () => {
     if (profileCard.value) {
         observer.observe(profileCard.value)
     }
+    // options
+    nationalityOptions.value = await getNationality()
+    districtOptions.value = await getDistricts()
+    stateOptions.value = await getState()
+    CTCCurrencyOptions.value = await getCurrency()
 })
 
 onBeforeUnmount(() => {
@@ -191,6 +860,7 @@ onBeforeUnmount(() => {
     }
 })
 
+// Candidate fetch
 watch(
     () => user.email,
     async (email) => {
@@ -200,4 +870,282 @@ watch(
     },
     { immediate: true }
 )
+
+// Set value for fields
+watch(candidate, (val) => {
+    // Personal Details
+    fullName.value = val?.given_name || ''
+    dateOfBirth.value = val?.date_of_birth || ''
+    vaccination.value = val?.vaccination_status || ''
+    gender.value = val?.gender || ''
+    nationality.value = val?.nationality || ''
+    district.value = val?.location || ''
+    state.value = val?.temp_state || ''
+    country.value = val?.country || ''
+    // Contact Details
+    email.value = val?.mail_id || ''
+    mobileNumber.value = val?.mobile_number || ''
+    alternateNumber.value = val?.mobile || ''
+    whatsappNumber.value = val?.whatsapp_number || ''
+    // Education Details
+    // Experience Details
+    indiaExperience.value = val?.india_experience || ''
+    overseasExperience.value = val?.overseas_experience || ''
+    currentEmployer.value = val?.current_employer || ''
+    noticePeriod.value = val?.notice_period_months || ''
+    ctcMentionedIn.value = val?.ctc_mentioned_in || ''
+    ctcCurrency.value = val?.currency_ctc || ''
+    currentCtc.value = val?.current_ctc || ''
+    expectedCtc.value = val?.expected_ctc || ''
+    // Passport Details
+    passportNumber.value = val?.passport_number || ''
+    oldPassportNumber.value = val?.custom_old_passport_number || ''
+    expiryDate.value = val?.passport_expiry_date || ''
+    passportCategory.value = val?.ecr_status_candidate || ''
+})
+
+// Field Suggestions
+function selectVaccinationOption(option) {
+    selectOption(
+        vaccination,
+        option,
+        showVaccinationSuggestions
+    )
+}
+function selectGenderOption(option) {
+    selectOption(
+        gender,
+        option,
+        showGenderSuggestions
+    )
+}
+function selectNationalityOption(option) {
+    selectOption(
+        nationality,
+        option,
+        showNationalitySuggestions
+    )
+}
+function selectDistrictOption(option) {
+    selectOption(
+        district,
+        option,
+        showDistrictSuggestions
+    )
+}
+function selectStateOption(option) {
+    selectOption(
+        state,
+        option,
+        showStateSuggestions
+    )
+}
+function selectCTCMentionedInOption(option) {
+    selectOption(
+        ctcMentionedIn,
+        option,
+        showCTCMentionedInSuggestions
+    )
+}
+function selectCTCCurrencyOption(option) {
+    selectOption(
+        ctcCurrency,
+        option,
+        showCTCCurrencySuggestions
+    )
+}
+function selectPassportCategoryOption(option) {
+    selectOption(
+        passportCategory,
+        option,
+        showPassportCategorySuggestions
+    )
+}
+
+function hideVaccinationSuggestions() {
+    hideSuggestions(
+        vaccination,
+        vaccinationOptions,
+        showVaccinationSuggestions
+    )
+}
+function hideGenderSuggestions() {
+    hideSuggestions(
+        gender,
+        genderOptions,
+        showGenderSuggestions
+    )
+}
+function hideNationalitySuggestions() {
+    hideSuggestions(
+        nationality,
+        nationalityOptions,
+        showNationalitySuggestions
+    )
+}
+function hideDistrictSuggestions() {
+    hideSuggestions(
+        district,
+        districtOptions,
+        showDistrictSuggestions
+    )
+}
+function hideStateSuggestions() {
+    hideSuggestions(
+        state,
+        stateOptions,
+        showStateSuggestions
+    )
+}
+function hideCTCMentionedInSuggestions() {
+    hideSuggestions(
+        ctcMentionedIn,
+        CTCMentionedInOptions,
+        showCTCMentionedInSuggestions
+    )
+}
+function hideCTCCurrencySuggestions() {
+    hideSuggestions(
+        ctcCurrency,
+        CTCCurrencyOptions,
+        showCTCCurrencySuggestions
+    )
+}
+function hidePassportCategorySuggestions() {
+    hideSuggestions(
+        passportCategory,
+        passportCategoryOptions,
+        showPassportCategorySuggestions
+    )
+}
+
+// Filtered suggestions
+const filteredNationalityOptions = computed(() => {
+    return nationalityOptions.value.filter(option =>
+        option.toLowerCase().includes(
+            nationality.value.toLowerCase()
+        )
+    )
+})
+const filteredDistrictOptions = computed(() => {
+    return districtOptions.value.filter(option =>
+        option.toLowerCase().includes(
+            district.value.toLowerCase()
+        )
+    )
+})
+const filteredGenderOptions = computed(() => {
+    return genderOptions.filter(option =>
+        option.toLowerCase().includes(
+            gender.value.toLowerCase()
+        )
+    )
+})
+const filteredVaccinationOptions = computed(() => {
+    return vaccinationOptions.filter(option =>
+        option.toLowerCase().includes(
+            vaccination.value.toLowerCase()
+        )
+    )
+})
+const filteredStateOptions = computed(() => {
+    return stateOptions.value.filter(option =>
+        option.toLowerCase().includes(
+            state.value.toLowerCase()
+        )
+    )
+})
+const filteredCTCMentionedInOptions = computed(() => {
+    return CTCMentionedInOptions.filter(option =>
+        option.toLowerCase().includes(
+            ctcMentionedIn.value.toLowerCase()
+        )
+    )
+})
+const filteredCTCCurrencyOptions = computed(() => {
+    return CTCCurrencyOptions.value.filter(option =>
+        option.toLowerCase().includes(
+            ctcCurrency.value.toLowerCase()
+        )
+    )
+})
+const filteredPassportCategoryOptions = computed(() => {
+  return passportCategoryOptions.filter(option =>
+    option.toLowerCase().includes(passportCategory.value.toLowerCase())
+  )
+})
+
+// Reusable Hide Helper
+function hideSuggestions(model, options, showRef) {
+
+    setTimeout(() => {
+
+        const validOption = (options.value || options).find(
+            option =>
+                option.toLowerCase().trim() ===
+                model.value.toLowerCase().trim()
+        )
+
+        if (validOption) {
+            model.value = validOption
+        } else {
+            model.value = ''
+        }
+
+        showRef.value = false
+
+    }, 100)
+
+}
+
+// Reusable Select Helper
+function selectOption(model, value, showRef) {
+    model.value = value
+    showRef.value = false
+}
+
+// Save Dialog
+const savePersonalDetails = async () => {
+
+    await handleSave({
+
+        endpoint: '/api/methods/jobpro.api.update_candidate_details',
+
+        payload: {
+            given_name: fullName.value,
+            date_of_birth: dateOfBirth.value,
+            gender: gender.value,
+            vaccination_status: vaccination.value,
+            nationality: nationality.value,
+            location: district.value,
+            temp_state: state.value,
+            country: country.value
+        },
+
+        onStart: () => {
+            isSaving.value = true
+            saveStatus.value = 'Saving...'
+        },
+
+        onSuccess: () => {
+            showPersonalDetailsDialog.value = false
+            toastType.value = 'success'
+            toastTitle.value = 'Saved Successfully'
+            toastMessage.value = 'Your personal details have been saved successfully.'
+            showToast.value = true
+        },
+
+        onError: () => {
+            toastType.value = 'error'
+            toastMessage.value = 'There was an error saving your details. Please try again.'
+            showToast.value = true
+        },
+
+        onFinally: () => {
+            isSaving.value = false
+            saveStatus.value = 'Save'
+        }
+    })
+}
+
 </script>

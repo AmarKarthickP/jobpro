@@ -77,6 +77,7 @@ def get_inr_price(currency, amount):
 
 @frappe.whitelist(allow_guest=True)
 def get_options(doctype, fields):
+    frappe.errprint(fields)
     try:
         response = requests.get(
             f"{base_url}/api/method/teampro.api.get_options",
@@ -91,7 +92,8 @@ def get_options(doctype, fields):
         )
         response.raise_for_status()
         data = response.json()
-        return data
+        frappe.errprint(data)
+        return data.get("message", {})
 
     except requests.exceptions.RequestException as e:
         frappe.log_error(
@@ -99,10 +101,6 @@ def get_options(doctype, fields):
             message=frappe.get_traceback()
         )
         frappe.throw("Unable to fetch options from tasks from external server")
- 
-def test_check():
-    email = "pavimani42@gmail.com"
-    get_candidates(email)
            
 @frappe.whitelist(allow_guest=True)
 def get_candidates(email):
@@ -128,3 +126,117 @@ def get_candidates(email):
             message=frappe.get_traceback()
         )
         frappe.throw("Unable to fetch candidates from external server")
+        
+      
+@frappe.whitelist(allow_guest=True)
+def get_nationality():
+    try:
+        response = requests.get(
+            f"{base_url}/api/method/teampro.api.get_nationality",
+            headers={
+                "Authorization": f"token {api_key}:{api_secret}"
+            },
+            timeout=10
+        )
+        response.raise_for_status()
+        data = response.json()
+        frappe.log_error("Nationality Data", data)
+        return data.get("message")
+
+    except requests.exceptions.RequestException as e:
+        frappe.log_error(
+            title="External Nationality API Error",
+            message=frappe.get_traceback()
+        )
+        frappe.throw("Unable to fetch nationality from external server")
+        
+@frappe.whitelist(allow_guest=True)
+def get_districts():
+    try:
+        response = requests.get(
+            f"{base_url}/api/method/teampro.api.get_districts",
+            headers={
+                "Authorization": f"token {api_key}:{api_secret}"
+            },
+            timeout=10
+        )
+        response.raise_for_status()
+        data = response.json()
+        frappe.log_error("District Data", data)
+        return data.get("message")
+
+    except requests.exceptions.RequestException as e:
+        frappe.log_error(
+            title="External District API Error",
+            message=frappe.get_traceback()
+        )
+        frappe.throw("Unable to fetch districts from external server")
+        
+@frappe.whitelist(allow_guest=True)
+def get_state():
+    try:
+        response = requests.get(
+            f"{base_url}/api/method/teampro.api.get_states",
+            headers={
+                "Authorization": f"token {api_key}:{api_secret}"
+            },
+            timeout=10
+        )
+        response.raise_for_status()
+        data = response.json()
+        frappe.log_error("State Data", data)
+        return data.get("message")
+
+    except requests.exceptions.RequestException as e:
+        frappe.log_error(
+            title="External State API Error",
+            message=frappe.get_traceback()
+        )
+        frappe.throw("Unable to fetch states from external server")
+        
+@frappe.whitelist(allow_guest=True)
+def get_country():
+    try:
+        response = requests.get(
+            f"{base_url}/api/method/teampro.api.get_country",
+            headers={
+                "Authorization": f"token {api_key}:{api_secret}"
+            },
+            timeout=10
+        )
+        response.raise_for_status()
+        data = response.json()
+        frappe.log_error("Country Data", data)
+        return data.get("message")
+
+    except requests.exceptions.RequestException as e:
+        frappe.log_error(
+            title="External Country API Error",
+            message=frappe.get_traceback()
+        )
+        frappe.throw("Unable to fetch country from external server")
+        
+@frappe.whitelist(allow_guest=True)
+def get_currency():
+    try:
+        response = requests.get(
+            f"{base_url}/api/method/teampro.api.get_currency",
+            headers={
+                "Authorization": f"token {api_key}:{api_secret}"
+            },
+            timeout=10
+        )
+        response.raise_for_status()
+        data = response.json()
+        frappe.log_error("Currency Data", data)
+        return data.get("message")
+
+    except requests.exceptions.RequestException as e:
+        frappe.log_error(
+            title="External Currency API Error",
+            message=frappe.get_traceback()
+        )
+        frappe.throw("Unable to fetch currency from external server")
+
+def test_check():
+    return get_country()

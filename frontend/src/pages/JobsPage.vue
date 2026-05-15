@@ -312,7 +312,7 @@
         v-if="jobs.length == 0"
         class="flex items-center justify-center mt-5"
       >
-        <loader />
+        <loader class="text-[40px]" />
       </div>
     </div>
   </div>

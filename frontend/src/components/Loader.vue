@@ -1,5 +1,5 @@
 <template>
-    <div class="loader">
+    <div class="loader mt-1">
         <div class="bar1"></div>
         <div class="bar2"></div>
         <div class="bar3"></div>
@@ -18,8 +18,8 @@
 <style scoped>
 .loader {
   position: relative;
-  width: 54px;
-  height: 54px;
+  width: 1em;
+  height: 1em;
   border-radius: 10px;
 }
 
