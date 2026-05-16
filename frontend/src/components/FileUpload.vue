@@ -4,10 +4,13 @@
     @dragover.prevent="isDragging = true"
     @dragleave.prevent="isDragging = false"
     @drop.prevent="handleDrop"
-    @click="openFilePicker"
+    @click="!loading && openFilePicker()"
     :class="[
-      'border-2 border-dashed rounded-xl p-10 text-center transition-all duration-200 cursor-pointer',
-      isDragging
+      'relative border-2 border-dashed rounded-xl p-5 text-center transition-all duration-200',
+      loading
+        ? 'cursor-not-allowed opacity-80'
+        : 'cursor-pointer',
+      isDragging || loading
         ? 'border-blue-500 bg-blue-50 scale-[1.01]'
         : 'border-gray-300 bg-white hover:border-gray-400'
     ]"
@@ -20,8 +23,17 @@
       @change="handleFileSelect"
     />
 
+    <!-- Loading Overlay -->
+    <div
+      v-if="loading"
+      class="absolute inset-0 bg-white/80 backdrop-blur-[1px] rounded-xl flex flex-col items-center justify-center z-10"
+    >
+      <loader class="text-[40px]" />
+    </div>
+
     <div class="flex flex-col items-center gap-2">
-      <div class="text-lg font-semibold">
+      <div class="text-lg font-medium text-[#275df5] flex items-center gap-1">
+        <attachment-icon class="h-4 w-4" />
         {{ title }}
       </div>
 
@@ -30,8 +42,8 @@
       </div>
 
       <div
-        v-if="selectedFile"
-        class="mt-4 text-sm text-green-600 font-medium"
+        v-if="selectedFile && loading"
+        class="mt-2 text-sm text-green-600 font-medium break-all"
       >
         Selected: {{ selectedFile.name }}
       </div>
@@ -41,6 +53,8 @@
 
 <script setup>
 import { ref } from 'vue'
+import AttachmentIcon from '../components/icons/AttachmentIcon.vue'
+import Loader from './Loader.vue'
 
 const props = defineProps({
   title: {
@@ -55,6 +69,10 @@ const props = defineProps({
     type: String,
     default: '*',
   },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const emit = defineEmits(['file-selected'])
@@ -68,6 +86,8 @@ const openFilePicker = () => {
 }
 
 const handleDrop = (event) => {
+  if (props.loading) return
+
   isDragging.value = false
 
   const files = event.dataTransfer.files
@@ -79,6 +99,8 @@ const handleDrop = (event) => {
 }
 
 const handleFileSelect = (event) => {
+  if (props.loading) return
+
   const files = event.target.files
 
   if (files.length > 0) {

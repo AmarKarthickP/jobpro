@@ -12,6 +12,18 @@
             :img="userData"
             class="h-40 w-40 border-4 border-white ml-10"
           />
+          <label
+            class="absolute bottom-4 left-[108px] text-primary hover:underline text-[13px] font-semibold transition-all duration-300 ease-in-out cursor-pointer"
+          >
+            Edit
+
+            <input
+              type="file"
+              class="hidden"
+              accept="image/*"
+              @change="handlePhotoChange"
+            />
+          </label>
           <div class="text-white absolute top-6 left-[240px]">
             <div class="flex">
               <p class="font-semibold text-[25px] uppercase">{{ fullName }}</p>
@@ -128,20 +140,10 @@
         <div
           class="flex mt-4 px-5 text-[15px] hover:bg-hoverbg rounded-lg cursor-pointer py-2"
         >
-          <button @click="scrollToResume" class="text-primary font-medium">
-            Resume
-          </button>
-          <button class="text-primary ml-auto font-medium text-[#275df5]">
-            Attach
-          </button>
-        </div>
-        <div
-          class="flex mt-4 px-5 text-[15px] hover:bg-hoverbg rounded-lg cursor-pointer py-2"
-        >
           <button @click="scrollToPersonal" class="text-primary font-medium">
             Personal Details
           </button>
-          <button @click="showPersonalDetailsDialog=true" class="text-primary ml-auto font-medium text-[#275df5]">
+          <button @click="showPersonalDetailsDialog=true" class="text-primary ml-auto font-medium text-highlight">
             Add
           </button>
         </div>
@@ -151,7 +153,7 @@
           <button @click="scrollToContact" class="text-primary font-medium">
             Contact Details
           </button>
-          <button @click="showContactDetailsDialog=true" class="text-primary ml-auto font-medium text-[#275df5]">
+          <button @click="showContactDetailsDialog=true" class="text-primary ml-auto font-medium text-highlight">
             Add
           </button>
         </div>
@@ -161,7 +163,7 @@
           <button @click="scrollToEducation" class="text-primary font-medium">
             Education Details
           </button>
-          <button @click="showEducationDetailsDialog=true" class="text-primary ml-auto font-medium text-[#275df5]">
+          <button @click="showEducationDetailsDialog=true" class="text-primary ml-auto font-medium text-highlight">
             Add
           </button>
         </div>
@@ -171,7 +173,7 @@
           <button @click="scrollToExperience" class="text-primary font-medium">
             Experience Details
           </button>
-          <button @click="showExperienceDetailsDialog=true" class="text-primary ml-auto font-medium text-[#275df5]">
+          <button @click="showExperienceDetailsDialog=true" class="text-primary ml-auto font-medium text-highlight">
             Add
           </button>
         </div>
@@ -181,37 +183,40 @@
           <button @click="scrollToPassport" class="text-primary font-medium">
             Passport Details
           </button>
-          <button @click="showPassportDetailsDialog=true" class="text-primary ml-auto font-medium text-[#275df5]">
+          <button @click="showPassportDetailsDialog=true" class="text-primary ml-auto font-medium text-highlight">
             Add
           </button>
         </div>
       </div>
     </div>
     <div class="col-span-9">
-      <div ref="resumeSection" class="bg-white rounded-xl shadow-sm p-5">
-        <h1 class="font-semibold text-primary">Resume</h1>
-        <div
-          class="border-2 border-dashed border-gray-500 text-center rounded-lg flex justify-center items-center gap-4 mt-5"
-        >
-          <div class="py-5">
-            <button
-              class="border border-[#275df5] px-5 py-1.5 font-medium text-[14px] rounded-full text-[#275df5]"
-            >
-              Attach Resume
+      <!-- Resume Upload -->
+      <div ref="resumeSection" class="p-6 bg-white rounded-xl">
+        <div class="flex items-center">
+          <h1 class="font-semibold text-primary">Resume</h1>
+          <div v-show="resumeURL" class="flex gap-5 pr-5 ml-auto">
+            <button>
+              <download-icon @click="downloadResume" class="h-4 w-4 text-highlight" />
             </button>
-            <p class="text-sm font-medium text-gray-500 mt-2">
-              Supported Formats: doc, docx, rtf, pdf, upto 2 MB
-            </p>
+            <button>
+              <delete-icon @click="deleteResume" class="h-4 w-4 text-red-500" />
+            </button>
           </div>
         </div>
+        <FileUpload class="mt-3"
+          :title="resumeFileName"
+          subtitle="Drop your resume here or click to browse"
+          :loading="isResumeUploading"
+          @file-selected="handleResumeUpload"
+        />
       </div>
       <!-- Personal Details -->
-      <div class="bg-white rounded-xl shadow-sm p-5 mt-6">
+      <div ref="personalSection" class="bg-white rounded-xl shadow-sm p-5 mt-6">
         <div class="flex">
           <h1 class="font-semibold text-primary">Personal Details</h1>
           <button
             @click="showPersonalDetailsDialog=true"
-            class="text-primary ml-auto text-[14px] font-medium text-[#275df5]"
+            class="text-primary ml-auto text-[14px] font-medium text-highlight"
           >
             Add personal details
           </button>
@@ -226,7 +231,7 @@
           <h1 class="font-semibold text-primary">Contact Details</h1>
           <button
             @click="showContactDetailsDialog=true"
-            class="text-primary ml-auto text-[14px] font-medium text-[#275df5]"
+            class="text-primary ml-auto text-[14px] font-medium text-highlight"
           >
             Add contact details
           </button>
@@ -244,7 +249,7 @@
           <h1 class="font-semibold text-primary">Education Details</h1>
           <button
             @click="showEducationDetailsDialog=true"
-            class="text-primary ml-auto text-[14px] font-medium text-[#275df5]"
+            class="text-primary ml-auto text-[14px] font-medium text-highlight"
           >
             Add education details
           </button>
@@ -262,7 +267,7 @@
           <h1 class="font-semibold text-primary">Experience Details</h1>
           <button
             @click="showExperienceDetailsDialog=true"
-            class="text-primary ml-auto text-[14px] font-medium text-[#275df5]"
+            class="text-primary ml-auto text-[14px] font-medium text-highlight"
           >
             Add experience details
           </button>
@@ -271,13 +276,33 @@
           Add your experience details to showcase your professional background
         </div>
       </div>
+      <!-- Passport Upload -->
+      <div ref="passportAttachSection" class="p-6 bg-white rounded-xl mt-6">
+        <div class="flex items-center">
+          <h1 class="font-semibold text-primary">Passport</h1>
+          <div v-show="passportURL" class="flex gap-5 pr-5 ml-auto">
+            <button>
+              <download-icon @click="downloadPassport" class="h-4 w-4 text-highlight" />
+            </button>
+            <button>
+              <delete-icon @click="deletePassport" class="h-4 w-4 text-red-500" />
+            </button>
+          </div>
+        </div>
+        <FileUpload class="mt-3"
+          :title="passportFileName"
+          subtitle="Drop your passport here or click to browse"
+          :loading="isPassportUploading"
+          @file-selected="handlePassportUpload"
+        />
+      </div>
       <!-- Passport Details -->
       <div ref="passportSection" class="bg-white rounded-xl shadow-sm p-5 mt-6">
         <div class="flex">
           <h1 class="font-semibold text-primary">Passport Details</h1>
           <button
             @click="showPassportDetailsDialog=true"
-            class="text-primary ml-auto text-[14px] font-medium text-[#275df5]"
+            class="text-primary ml-auto text-[14px] font-medium text-highlight"
           >
             Add passport details
           </button>
@@ -749,20 +774,6 @@
             {{ option }}
           </div>
         </div>
-        <div
-          class="border-2 border-dashed border-gray-500 text-center rounded-lg flex justify-center items-center gap-4 mt-5"
-        >
-          <div class="py-5">
-            <button
-              class="border border-[#275df5] px-5 py-1.5 font-medium text-[12px] rounded-full text-[#275df5]"
-            >
-              Attach Passport
-            </button>
-            <p class="text-sm font-medium text-gray-500 mt-2">
-              Supported Formats: doc, docx, rtf, pdf, upto 2 MB
-            </p>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -806,7 +817,7 @@ import { getCandidate } from '@/data/candidate'
 import { getNationality, getDistricts, getState, getCurrency, getCountry, getHighestDegree, getSpecialization } from '@/data/doctype'
 
 // Utils
-import { handleSave } from '@/utils/document'
+import { handleSave, uploadFile } from '@/utils/document'
 
 // Components
 import Avatar from '../components/Avatar.vue'
@@ -814,6 +825,7 @@ import Dialog from '../components/Dialog.vue'
 import Loader from '../components/Loader.vue'
 import Toast from '../components/Toast.vue'
 import FreezePage from '../components/FreezePage.vue'
+import FileUpload from '../components/FileUpload.vue'
 
 // Icons
 import EditIcon from '../components/icons/EditIcon.vue'
@@ -823,6 +835,13 @@ import CalendarIcon from '../components/icons/CalendarIcon.vue'
 import LocationIcon from '../components/icons/LocationIcon.vue'
 import SuitcaseIcon from '../components/icons/SuitcaseIcon.vue'
 import WalletIcon from '../components/icons/WalletIcon.vue'
+import CameraIcon from '../components/icons/CameraIcon.vue'
+import AttachmentIcon from '../components/icons/AttachmentIcon.vue'
+import DownloadIcon from '../components/icons/DownloadIcon.vue'
+import DeleteIcon from '../components/icons/DeleteIcon.vue'
+
+// .env
+const EXTERNAL_SITE = import.meta.env.VITE_FRAPPE_EXTERNAL_SITE
 
 // State
 const showProfile = ref(false)
@@ -830,6 +849,14 @@ const profileCard = ref(null)
 const candidate = ref({})
 const saveStatus = ref('Save')
 const isSaving = ref(false)
+
+// File Uploads
+const isResumeUploading = ref(false)
+const isPassportUploading = ref(false)
+const resumeFileName = ref('Attach Resume')
+const passportFileName = ref('Attach Passport')
+const resumeURL = ref('')
+const passportURL = ref('')
 
 // Toast
 const showToast = ref(false)
@@ -846,6 +873,7 @@ const showPassportDetailsDialog = ref(false)
 
 // Section refs
 const resumeSection = ref(null)
+const passportAttachSection = ref(null)
 const personalSection = ref(null)
 const contactSection = ref(null)
 const educationSection = ref(null)
@@ -946,6 +974,7 @@ const scrollToSection = (sectionRef) => {
 
 // Scroll handlers
 const scrollToResume = () => scrollToSection(resumeSection)
+const scrollToPassportAttach = () => scrollToSection(passportAttachSection)
 const scrollToPersonal = () => scrollToSection(personalSection)
 const scrollToContact = () => scrollToSection(contactSection)
 const scrollToEducation = () => scrollToSection(educationSection)
@@ -1044,6 +1073,23 @@ watch(candidate, (val) => {
     oldPassportNumber.value = val?.custom_old_passport_number || ''
     expiryDate.value = val?.passport_expiry_date || ''
     passportCategory.value = val?.ecr_status_candidate || ''
+    // File
+    resumeURL.value =
+        val?.custom_updated__un_masked_cv
+            ? `${EXTERNAL_SITE}${val.custom_updated__un_masked_cv}`
+            : ''
+    passportURL.value =
+        val?.passport
+            ? `${EXTERNAL_SITE}${val.passport}`
+            : ''
+    resumeFileName.value =
+        val?.custom_updated__un_masked_cv
+            ? `Resume: ${fullName.value}`
+            : 'Attach Resume'
+    passportFileName.value =
+        val?.passport
+            ? `Passport: ${fullName.value}`
+            : 'Attach Passport'
 })
 
 // Field Suggestions
@@ -1335,7 +1381,7 @@ const savePersonalDetails = async () => {
     await handleSave({
       endpoint: '/api/method/jobpro.api.update_candidate_details',
         payload: {
-            given_name: fullName.value,
+            given_name: (fullName.value || '').toUpperCase(),
             date_of_birth: dateOfBirth.value,
             gender: gender.value,
             vaccination_status: vaccination.value,
@@ -1522,5 +1568,106 @@ const savePassportDetails = async () => {
             saveStatus.value = 'Save'
         }
     })
+}
+
+// Handle file uploads
+const handleResumeUpload = async (file) => {
+    await uploadFile({
+        endpoint: '/api/method/jobpro.api.upload_resume',
+        file,
+        doctype: "Candidate",
+        docname: candidate.value.name,
+        fieldname: 'custom_updated__un_masked_cv',
+
+        onStart: () => {
+            isResumeUploading.value = true
+            console.log('Uploading...')
+        },
+
+        onSuccess: (data) => {
+            toastType.value = 'success'
+            toastTitle.value = 'Uploaded Successfully'
+            toastMessage.value = 'Your CV has been uploaded.'
+            showToast.value = true
+            resumeFileName.value = `Resume: ${fullName.value}`
+        },
+
+        onError: (error) => {
+            toastType.value = 'error'
+            toastTitle.value = 'Upload Failed'
+            toastMessage.value = 'There was an error uploading your CV'
+            showToast.value = true
+        },
+
+        onFinally: () => {
+            isResumeUploading.value = false
+            console.log('Done')
+        },
+    })
+}
+// Passport Upload
+const handlePassportUpload = async (file) => {
+    await uploadFile({
+        endpoint: '/api/method/jobpro.api.upload_resume',
+        file,
+        doctype: 'Candidate',
+        docname: candidate.value.name,
+        fieldname: 'passport',
+
+        onStart: () => {
+            isPassportUploading.value = true
+        },
+
+        onSuccess: () => {
+            toastType.value = 'success'
+            toastTitle.value = 'Uploaded Successfully'
+            toastMessage.value = 'Your passport has been uploaded.'
+            showToast.value = true
+            passportFileName.value = `Passport: ${fullName.value}`
+        },
+
+        onError: () => {
+            toastType.value = 'error'
+            toastTitle.value = 'Upload Failed'
+            toastMessage.value = 'There was an error uploading your passport.'
+            showToast.value = true
+        },
+
+        onFinally: () => {
+            isPassportUploading.value = false
+        },
+    })
+}
+
+const downloadResume = () => {
+    if (!resumeURL.value) return
+
+    window.open(resumeURL.value, '_blank')
+}
+
+const deleteResume = async () => {
+    resumeURL.value = ''
+    resumeFileName.value = 'Attach Resume'
+
+    toastType.value = 'success'
+    toastTitle.value = 'Deleted Successfully'
+    toastMessage.value = 'Resume has been removed.'
+    showToast.value = true
+}
+
+const downloadPassport = () => {
+    if (!passportURL.value) return
+
+    window.open(passportURL.value, '_blank')
+}
+
+const deletePassport = async () => {
+    passportURL.value = ''
+    passportFileName.value = 'Attach Passport'
+
+    toastType.value = 'success'
+    toastTitle.value = 'Deleted Successfully'
+    toastMessage.value = 'Passport has been removed.'
+    showToast.value = true
 }
 </script>

@@ -3,6 +3,7 @@ import requests
 import json
 from erpnext.setup.utils import get_exchange_rate
 from frappe.utils import fmt_money
+from frappe.utils.file_manager import save_file
 
 base_url = "https://erp.teamproit.com"
 
@@ -12,7 +13,6 @@ api_secret = frappe.conf.get("teampro_api_secret")
 
 @frappe.whitelist(allow_guest=True)
 def get_tasks(additional_filters=None):
-    frappe.log_error("API HIT", "HIT")
     filters = [
         ["status", "in", ["Open", "Overdue", "Pending Review", "Working"]],
         ["service", "in", ["REC-I", "REC-D"]]
@@ -47,7 +47,6 @@ def get_tasks(additional_filters=None):
         )
         response.raise_for_status()
         data = response.json()
-        frappe.log_error("data", data)
         # INR conversion
         # for row in data["data"]:
         #     count += 1
@@ -117,7 +116,6 @@ def get_candidates(email):
         )
         response.raise_for_status()
         data = response.json()
-        frappe.log_error("Candidate Data", data)
         return data.get("message")
 
     except requests.exceptions.RequestException as e:
@@ -140,7 +138,6 @@ def get_nationality():
         )
         response.raise_for_status()
         data = response.json()
-        frappe.log_error("Nationality Data", data)
         return data.get("message")
 
     except requests.exceptions.RequestException as e:
@@ -162,7 +159,6 @@ def get_districts():
         )
         response.raise_for_status()
         data = response.json()
-        frappe.log_error("District Data", data)
         return data.get("message")
 
     except requests.exceptions.RequestException as e:
@@ -184,7 +180,6 @@ def get_state():
         )
         response.raise_for_status()
         data = response.json()
-        frappe.log_error("State Data", data)
         return data.get("message")
 
     except requests.exceptions.RequestException as e:
@@ -206,7 +201,6 @@ def get_country():
         )
         response.raise_for_status()
         data = response.json()
-        frappe.log_error("Country Data", data)
         return data.get("message")
 
     except requests.exceptions.RequestException as e:
@@ -228,7 +222,6 @@ def get_currency():
         )
         response.raise_for_status()
         data = response.json()
-        frappe.log_error("Currency Data", data)
         return data.get("message")
 
     except requests.exceptions.RequestException as e:
@@ -250,7 +243,6 @@ def get_highest_degree():
         )
         response.raise_for_status()
         data = response.json()
-        frappe.log_error("Highest Degree Data", data)
         return data.get("message")
 
     except requests.exceptions.RequestException as e:
@@ -272,7 +264,6 @@ def get_specialization():
         )
         response.raise_for_status()
         data = response.json()
-        frappe.log_error("Specialization Data", data)
         return data.get("message")
 
     except requests.exceptions.RequestException as e:
@@ -288,11 +279,6 @@ def update_candidate_details():
         # Incoming frontend payload
         data = frappe.request.get_json()
 
-        frappe.log_error(
-            title="Incoming Candidate Data",
-            message=frappe.as_json(data)
-        )
-
         response = requests.post(
             f"{base_url}/api/method/teampro.jobpro_api.update_candidate_details",
 
@@ -306,13 +292,7 @@ def update_candidate_details():
         )
 
         response.raise_for_status()
-
         response_data = response.json()
-
-        frappe.log_error(
-            title="External API Response",
-            message=frappe.as_json(response_data)
-        )
 
         return {
             "status": "success",
@@ -336,3 +316,77 @@ def update_candidate_details():
         )
 
         frappe.throw("Something went wrong")
+        
+@frappe.whitelist(allow_guest=True)
+def upload_resume():
+    try:
+        file = frappe.request.files.get("file")
+
+        if not file:
+            frappe.throw("No file uploaded")
+
+        docname = frappe.form_dict.get("docname")
+        doctype = frappe.form_dict.get("doctype")
+        fieldname = frappe.form_dict.get("fieldname")
+
+        response = requests.post(
+            f"{base_url}/api/method/teampro.jobpro_api.upload_resume",
+
+            data={
+                "docname": docname,
+                "doctype": doctype,
+                "fieldname": fieldname,
+            },
+
+            files={
+                "file": (
+                    file.filename,
+                    file.read(),
+                    file.content_type
+                )
+            },
+
+            headers={
+                "Authorization": f"token {api_key}:{api_secret}"
+            },
+
+            timeout=30
+        )
+
+        frappe.log_error(
+            title="External Upload Response",
+            message=response.text
+        )
+
+        response.raise_for_status()
+        response_data = response.json()
+        file_url = response_data.get("message", {}).get("file_url")
+        return {
+            "status": "success",
+            "file_url": file_url
+        }
+
+    except requests.exceptions.RequestException:
+        frappe.log_error(
+            title="External Resume Upload Error",
+            message=frappe.get_traceback()
+        )
+
+        frappe.throw(
+            "Unable to upload resume to external server"
+        )
+
+    except Exception:
+        frappe.log_error(
+            title="Upload Resume Error",
+            message=frappe.get_traceback()
+        )
+
+        frappe.throw("Something went wrong")
+        
+def delete_logs():
+    error_logs = frappe.get_all("Error Log", pluck="name")
+    for error_log in error_logs:
+        el = frappe.get_doc("Error Log", error_log)
+        el.delete()
+        print(error_log)
