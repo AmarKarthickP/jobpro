@@ -147,7 +147,27 @@
       </TransitionGroup>
     </div>
     <div class="col-span-4">
-      <div class="rounded-lg shadow-sm px-5 pt-3 pb-3 bg-white"></div>
+      <div class="rounded-lg shadow-sm px-5 pt-3 pb-3 bg-white">
+        <p class="text-primary font-semibold capitalize truncate text-[17px]">
+          SENIOR MECHANICAL TECHNICIAN
+        </p>
+        <p
+          class="text-gray-600 font-medium text-[15px] capitalize truncate mt-1"
+        >
+          Oman National Engineering & Investment Co. (ONEIC)
+        </p>
+        <div
+          class="text-[15px] mt-2 text-gray-600 font-medium flex items-center gap-1"
+        >
+          <img src="https://i.postimg.cc/3wZGjD3N/kuwait.png" class="h-5" />
+          <p>KSA</p>
+        </div>
+      </div>
+      <ProgressTracker
+        class="mt-10"
+        title="Progress"
+        :statuses="statuses"
+      />
     </div>
   </div>
 </template>
@@ -170,10 +190,12 @@ import LeftIcon from '../components/icons/LeftIcon.vue'
 import ListViewIcon from '../components/icons/ListViewIcon.vue'
 import GridViewIcon from '../components/icons/GridViewIcon.vue'
 import SearchIcon from '../components/icons/SearchIcon.vue'
+import SuccessIcon from '../components/icons/SuccessIcon.vue'
 
 // Component
 import JobCard from '../components/JobCard.vue'
 import Loader from '../components/Loader.vue'
+import ProgressTracker from '@/components/ProgressTracker.vue'
 
 // States
 const isLoading = ref(false)
@@ -187,6 +209,31 @@ const appliedJobs = ref([])
 // Fields
 const status = ref('')
 const position = ref('')
+
+const statuses = [
+  {
+    label: 'Sourced',
+    state: 'completed',
+    datetime: '14-05-2026 11:00:11',
+  },
+  {
+    label: 'Pending QC',
+    state: 'completed',
+    datetime: '14-05-2026 12:30:00',
+  },
+  {
+    label: 'Shortlisted',
+    state: 'current',
+  },
+  {
+    label: 'Interviewed',
+    state: 'pending',
+  },
+  {
+    label: 'Rejected',
+    state: 'failed',
+  },
+]
 
 // Options
 const statusOptions = [

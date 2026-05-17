@@ -16,7 +16,7 @@
             class="relative text-xs bg-[#ffebdb] rounded-lg px-3 py-1 text-[#e56700]"
           >
             <span class="relative z-10 font-normal"
-              >Applied on: {{ timeAgo(data.applied_on) }}</span
+              >Applied: {{ timeAgo(data.applied_on) }}</span
             >
           </badge>
         </div>
