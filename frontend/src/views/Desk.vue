@@ -56,7 +56,7 @@
             </div>
         </router-link>
         <router-link 
-            to="/notify"
+            to="/notifications"
             v-slot="{ isActive }"
         >
             <div :class="navClass(isActive)">

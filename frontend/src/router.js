@@ -6,6 +6,8 @@ import HomePage from './pages/HomePage.vue'
 import JobsPage from './pages/JobsPage.vue'
 import ProfilePage from './pages/ProfilePage.vue'
 import ActivityPage from './pages/ActivityPage.vue'
+import DashboardPage from './pages/DashboardPage.vue'
+import NotificationsPage from './pages/NotificationsPage.vue'
 
 const routes = [
   {
@@ -40,6 +42,16 @@ const routes = [
         path: 'activity',
         name: 'activity',
         component: ActivityPage
+      },
+      {
+        path: 'dashboard',
+        name: 'dashboard',
+        component: DashboardPage
+      },
+      {
+        path: 'notifications',
+        name: 'notifications',
+        component: NotificationsPage
       },
     ]
   }
