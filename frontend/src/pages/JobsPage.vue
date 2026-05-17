@@ -288,24 +288,20 @@
         enter-active-class="transition-all duration-500 ease-out"
         enter-from-class="opacity-0 translate-y-4 scale-95"
         enter-to-class="opacity-100 translate-y-0 scale-100"
-        leave-active-class="transition-all duration-300 ease-in absolute"
-        leave-from-class="opacity-100 translate-y-0 scale-100"
-        leave-to-class="opacity-0 translate-y-4 scale-95"
-        move-class="transition-all duration-500"
-        class="space-y-4"
+        leave-active-class="transition-all duration-400 ease-in-out"
+        leave-from-class="opacity-100 scale-100"
+        leave-to-class="opacity-0 scale-95"
+        move-class="transition-all duration-500 ease-in-out"
+        :class="view == 'grid'
+        ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5'
+        : 'flex flex-col gap-5'"
       >
-        <div
-          :class="view == 'grid'
-                ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5'
-                : 'flex flex-col'"
-        >
-          <div v-for="job in paginatedJobs" :key="job.name">
-            <job-card
-              :data="job"
-              :view="view"
-              @show-details="selectedJob = job"
-            />
-          </div>
+        <div v-for="job in paginatedJobs" :key="`${job.name}-${job.status}`">
+          <job-card
+            :data="job"
+            :view="view"
+            @show-details="selectedJob = job"
+          />
         </div>
       </TransitionGroup>
       <div
@@ -535,7 +531,7 @@ const filteredQualificationOptions =
 
 const filteredSalaryTypeOptions =
     createFilteredOptions(salaryTypeOptions, salaryType)
-    
+
 const filteredExperienceOptions =
     createFilteredOptions(experienceOptions, experience)
 
