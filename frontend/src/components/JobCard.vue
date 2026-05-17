@@ -1,7 +1,12 @@
 <template>
   <div
-    class="mt-5 bg-white shadow-sm rounded-lg hover:shadow-md transition-all duration-300 ease-in-out px-5 py-3"
-  >
+  class="mt-5 bg-white border rounded-lg px-5 py-3 transition-all duration-300 ease-in-out"
+  :class="
+    selected
+      ? ' shadow-lg scale-[1.01]'
+      : 'border-transparent shadow-sm hover:shadow-md hover:border-gray-200 hover:-translate-y-0.5'
+  "
+>
     <div v-if="view=='list'" class="grid grid-cols-12">
       <div class="col-span-10">
         <div class="flex items-center gap-3">
@@ -187,7 +192,7 @@
             </span>
           </badge>
 
-          <button
+          <button v-if="page!='Activity'"
             @click="showJobDetails=true"
             class="flex items-center gap-2 font-medium pr-10 ml-auto text-[13px] text-gray-600 hover:text-primary"
           >
@@ -209,17 +214,31 @@
             Apply Now
           </button>
           <button
-            v-else
-            class="relative cursor-default overflow-hidden mt-16 text-center w-full bg-[#ffebdb] py-2 rounded-xl text-[#e56700] text-[14px] font-medium"
+            v-if="page=='Activity' && data.status!='IDB'"
+            class="relative cursor-default overflow-hidden mt-16 text-center w-full bg-primary py-2 rounded-xl text-white text-[14px] font-medium"
           >
             <!-- Shimmer -->
             <span
-              class="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white to-transparent"
+              class="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/40 to-transparent"
             ></span>
 
             <!-- Text -->
             <span class="relative z-10">
               {{ data.status }}
+            </span>
+          </button>
+          <button
+            v-if="page=='Activity' && data.status=='IDB'"
+            class="relative cursor-default overflow-hidden mt-16 text-center w-full bg-red-600 py-2 rounded-xl text-white text-[14px] font-medium"
+          >
+            <!-- Shimmer -->
+            <span
+              class="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/40 to-transparent"
+            ></span>
+
+            <!-- Text -->
+            <span class="relative z-10">
+              Rejected
             </span>
           </button>
         </div>
@@ -429,12 +448,12 @@
           Apply Now
         </button>
         <button
-          v-else
-          class="relative cursor-default overflow-hidden text-center mt-3 w-full bg-[#ffebdb] py-1.5 rounded-xl text-[#e56700] text-[11px] font-medium"
+          v-if="page=='Activity' && data.status!='IDB'"
+          class="relative cursor-default overflow-hidden text-center mt-3 ml-auto w-[50%] bg-primary py-1.5 rounded-xl text-white text-[11px] font-medium"
         >
           <!-- Shimmer -->
           <span
-            class="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white to-transparent"
+            class="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/40 to-transparent"
           ></span>
 
           <!-- Text -->
@@ -442,11 +461,19 @@
             {{ data.status }}
           </span>
         </button>
-        <button v-if="page=='Activity'"
-          @click="showJobDetails=true"
-          class="text-center mt-3 w-full bg-primary py-1.5 rounded-xl text-white text-[11px] font-medium"
+        <button
+          v-if="page=='Activity' && data.status=='IDB'"
+          class="relative cursor-default overflow-hidden text-center mt-3 ml-auto w-[50%] bg-red-600 py-1.5 rounded-xl text-white text-[11px] font-medium"
         >
-          Job Details
+          <!-- Shimmer -->
+          <span
+            class="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/40 to-transparent"
+          ></span>
+
+          <!-- Text -->
+          <span class="relative z-10">
+            Rejected
+          </span>
         </button>
       </div>
     </div>
@@ -749,7 +776,11 @@ defineProps({
     page: {
       type: String,
       default: ''
-    }
+    },
+    selected: {
+  type: Boolean,
+  default: false,
+},
 })
 
 import { ref, watch, onUnmounted } from 'vue'

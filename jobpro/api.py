@@ -415,6 +415,28 @@ def get_applied_jobs(candidate):
         )
         frappe.throw("Unable to fetch country from external server")
     
-def test_check():
-    candidate = "CD155093"
-    return get_applied_jobs(candidate)
+@frappe.whitelist(allow_guest=1)
+def get_candidate_status(candidate, task):
+    try:
+        response = requests.get(
+            f"{base_url}/api/method/teampro.jobpro_api.get_candidate_status",
+            headers={
+                "Authorization": f"token {api_key}:{api_secret}"
+            },
+            params={
+                "candidate": candidate,
+                "task": task
+            }
+        )
+        response.raise_for_status()
+        data = response.json()
+        print(data)
+        return data.get("message")
+
+    except requests.exceptions.RequestException as e:
+        frappe.log_error(
+            title="External Candidate Status API Error",
+            message=frappe.get_traceback()
+        )
+        frappe.throw("Unable to fetch candidate status from external server")
+    

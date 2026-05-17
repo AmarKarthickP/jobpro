@@ -141,33 +141,53 @@
         ? 'grid grid-cols-1 md:grid-cols-2 gap-5 mt-5'
         : 'flex flex-col gap-5 mt-5'"
       >
-        <div v-for="job in filteredAndSortedJobs" :key="job.name">
-          <job-card :data="job" :view="view" page="Activity" />
+        <div
+          v-for="job in filteredAndSortedJobs"
+          :key="job.name"
+          @click="selectedJob = job"
+          class="cursor-pointer rounded-xl transition-all duration-300"
+          :class="[
+    selectedJob?.name === job.name
+      ? 'scale-[1.01]'
+      : 'hover:scale-[1.005]'
+  ]"
+        >
+          <job-card
+            :data="job"
+            :view="view"
+            :selected="selectedJob?.name === job.name"
+            page="Activity"
+          />
         </div>
       </TransitionGroup>
     </div>
     <div class="col-span-4">
       <div class="rounded-lg shadow-sm px-5 pt-3 pb-3 bg-white">
         <p class="text-primary font-semibold capitalize truncate text-[17px]">
-          SENIOR MECHANICAL TECHNICIAN
+          {{ selectedJob?.subject || 'Select a Job' }}
         </p>
         <p
           class="text-gray-600 font-medium text-[15px] capitalize truncate mt-1"
         >
-          Oman National Engineering & Investment Co. (ONEIC)
+          {{ selectedJob?.customer || '-' }}
         </p>
         <div
           class="text-[15px] mt-2 text-gray-600 font-medium flex items-center gap-1"
         >
-          <img src="https://i.postimg.cc/3wZGjD3N/kuwait.png" class="h-5" />
-          <p>KSA</p>
+          <img :src="selectedJob?.custom_country_flag" class="h-5" />
+          <p>{{ selectedJob?.territory || '-' }}</p>
         </div>
       </div>
-      <ProgressTracker
-        class="mt-10"
-        title="Progress"
-        :statuses="statuses"
-      />
+      <div class="mt-10 cursor-default">
+        <div
+          v-if="isStatusLoading"
+          class="bg-white rounded-xl p-10 flex justify-center items-center shadow-sm"
+        >
+          <Loader class="text-[35px]" />
+        </div>
+
+        <ProgressTracker v-else title="Application Status" :statuses="statuses" />
+      </div>
     </div>
   </div>
 </template>
@@ -178,7 +198,7 @@ import { ref, watch, computed } from 'vue'
 
 // Data
 import { user } from '../data/user'
-import { getCandidate } from '../data/candidate'
+import { getCandidate, getCandidateStatuses } from '../data/candidate'
 import { getAppliedJobs } from '../data/jobs'
 
 // Icons
@@ -210,30 +230,10 @@ const appliedJobs = ref([])
 const status = ref('')
 const position = ref('')
 
-const statuses = [
-  {
-    label: 'Sourced',
-    state: 'completed',
-    datetime: '14-05-2026 11:00:11',
-  },
-  {
-    label: 'Pending QC',
-    state: 'completed',
-    datetime: '14-05-2026 12:30:00',
-  },
-  {
-    label: 'Shortlisted',
-    state: 'current',
-  },
-  {
-    label: 'Interviewed',
-    state: 'pending',
-  },
-  {
-    label: 'Rejected',
-    state: 'failed',
-  },
-]
+// Progress Tracker
+const statuses = ref([])
+const selectedJob = ref(null)
+const isStatusLoading = ref(false)
 
 // Options
 const statusOptions = [
@@ -464,6 +464,13 @@ watch(
 
         try {
             appliedJobs.value = await getAppliedJobs(name)
+
+            if (
+              appliedJobs.value.length &&
+              !selectedJob.value
+            ) {
+              selectedJob.value = appliedJobs.value[0]
+            }
         } finally {
             isLoading.value = false
         }
@@ -477,5 +484,41 @@ watch(
         animateCounter(newValue)
     },
     { immediate: true }
+)
+// Progress Tracker
+watch(
+  () => selectedJob.value,
+  async (job) => {
+
+    if (!job || !candidate.value.name) {
+      statuses.value = []
+      return
+    }
+
+    isStatusLoading.value = true
+
+    try {
+
+      statuses.value =
+        await getCandidateStatuses({
+
+          candidate: candidate.value.name,
+
+          task: job.name,
+
+        })
+
+    } catch (error) {
+
+      console.log(error)
+
+    } finally {
+
+      isStatusLoading.value = false
+
+    }
+
+  },
+  { immediate: true }
 )
 </script>
