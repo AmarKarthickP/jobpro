@@ -318,7 +318,7 @@ def update_candidate_details():
         frappe.throw("Something went wrong")
         
 @frappe.whitelist(allow_guest=True)
-def upload_resume():
+def upload_file():
     try:
         file = frappe.request.files.get("file")
 
@@ -330,7 +330,7 @@ def upload_resume():
         fieldname = frappe.form_dict.get("fieldname")
 
         response = requests.post(
-            f"{base_url}/api/method/teampro.jobpro_api.upload_resume",
+            f"{base_url}/api/method/teampro.jobpro_api.upload_file",
 
             data={
                 "docname": docname,
@@ -390,3 +390,31 @@ def delete_logs():
         el = frappe.get_doc("Error Log", error_log)
         el.delete()
         print(error_log)
+        
+@frappe.whitelist(allow_guest=1)
+def get_applied_jobs(candidate):
+    try:
+        response = requests.get(
+            f"{base_url}/api/method/teampro.jobpro_api.get_applied_jobs",
+            headers={
+                "Authorization": f"token {api_key}:{api_secret}"
+            },
+            params={
+                "candidate": candidate
+            }
+        )
+        response.raise_for_status()
+        data = response.json()
+        print(data)
+        return data.get("message")
+
+    except requests.exceptions.RequestException as e:
+        frappe.log_error(
+            title="External Country API Error",
+            message=frappe.get_traceback()
+        )
+        frappe.throw("Unable to fetch country from external server")
+    
+def test_check():
+    candidate = "CD155093"
+    return get_applied_jobs(candidate)
