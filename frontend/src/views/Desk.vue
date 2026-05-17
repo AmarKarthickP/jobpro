@@ -17,42 +17,52 @@
                     />
                 </div>
             </div>
-        <router-link to="/home"
-            class="flex flex-col items-center text-default hover:text-primary transition-all duration-500 ease-in-out"
-            exact-active-class="text-primary"
+        <router-link
+            to="/home"
+            v-slot="{ isActive }"
         >
-            <home-icon class="h-7 w-7"/>
-            <p class="text-[12px] font-medium">Home</p>
+            <div :class="navClass(isActive)">
+                <home-icon class="h-7 w-7 pt-1"/>
+                <p class="text-[12px] font-medium">Home</p>
+            </div>
         </router-link>
-        <router-link to="/dashboard"
+        <router-link 
+            to="/dashboard"
             v-if="auth.isLoggedIn"
-            class="flex flex-col items-center text-default hover:text-primary transition-all duration-500 ease-in-out"
-            exact-active-class="text-primary"
+            v-slot="{ isActive }"
         >
-            <dasboard-icon class="h-7 w-7 pt-1" />
-            <p class="text-[12px] font-medium">Dashboard</p>
+            <div :class="navClass(isActive)">
+                <dasboard-icon class="h-7 w-7 pt-1" />
+                <p class="text-[12px] font-medium">Dashboard</p>
+            </div>
         </router-link>
-        <router-link to="/jobs"
-            class="flex flex-col items-center text-default hover:text-primary transition-all duration-500 ease-in-out"
-            exact-active-class="text-primary"
+        <router-link 
+            to="/jobs"
+            v-slot="{ isActive }"
         >
-            <job-icon class="h-7 w-7 pt-1" />
-            <p class="text-[12px] font-medium">Jobs</p>
+            <div :class="navClass(isActive)">
+                <job-icon class="h-7 w-7 pt-1" />
+                <p class="text-[12px] font-medium">Jobs</p>
+            </div>
         </router-link>
-        <router-link to="/messaging"
+        <router-link 
+            to="/activity"
+            v-slot="{ isActive }"
             v-if="auth.isLoggedIn"
-            class="flex flex-col items-center text-default hover:text-primary transition-all duration-500 ease-in-out"
-            exact-active-class="text-primary"
         >
-            <messaging-icon class="h-7 w-7 pt-1" />
-            <p class="text-[12px] font-medium">Messaging</p>
+            <div :class="navClass(isActive)">
+                <activity-icon class="h-7 w-7 pt-1" />
+                <p class="text-[12px] font-medium">Activity</p>
+            </div>
         </router-link>
-        <router-link to="/notifications"
-            class="flex flex-col items-center text-default hover:text-primary transition-all duration-500 ease-in-out"
-            exact-active-class="text-primary"
+        <router-link 
+            to="/notify"
+            v-slot="{ isActive }"
         >
-            <notification-icon class="h-7 w-7 pt-1" />
-            <p class="text-[12px] font-medium">Notifications</p>
+            <div :class="navClass(isActive)">
+                <notification-icon class="h-7 w-7 pt-1" />
+                <p class="text-[12px] font-medium">Alerts</p>
+            </div>
         </router-link>
         <div 
             v-if="auth.isLoggedIn"
@@ -69,7 +79,6 @@
                     </div>
                 </div>
             </button>
-
             
         </div>
         <button
@@ -164,6 +173,14 @@ const viewProfileMenu = ref(false)
 import clickOutside from '@/directives/clickOutside'
 import DownIcon from '../components/icons/DownIcon.vue';
 import router from '../router';
+import ActivityIcon from '../components/icons/ActivityIcon.vue';
 const vClickOutside = clickOutside
+
+const navClass = (isActive) => [
+    'flex flex-col items-center transition-all duration-500 ease-in-out',
+    isActive
+        ? 'text-primary'
+        : 'text-default hover:text-primary'
+]
 
 </script>
