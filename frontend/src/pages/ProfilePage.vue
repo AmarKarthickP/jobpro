@@ -1573,7 +1573,7 @@ const savePassportDetails = async () => {
 // Handle file uploads
 const handleResumeUpload = async (file) => {
     await uploadFile({
-        endpoint: '/api/method/jobpro.api.upload_resume',
+        endpoint: '/api/method/jobpro.api.upload_file',
         file,
         doctype: "Candidate",
         docname: candidate.value.name,
@@ -1608,7 +1608,7 @@ const handleResumeUpload = async (file) => {
 // Passport Upload
 const handlePassportUpload = async (file) => {
     await uploadFile({
-        endpoint: '/api/method/jobpro.api.upload_resume',
+        endpoint: '/api/method/jobpro.api.upload_file',
         file,
         doctype: 'Candidate',
         docname: candidate.value.name,

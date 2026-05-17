@@ -58,20 +58,6 @@
           <p class="font-medium ml-auto text-lg text-red-600">
             Showing {{ animatedJobsCount }} jobs
           </p>
-          <button
-            @click="handlePrevPage"
-            :disabled="currentPage === 1"
-            class="text-center ml-5 px-3 py-2 rounded-xl flex justify-evenly text-primary text-[14px] font-medium disabled:opacity-40"
-          >
-            <left-icon class="h-3 w-3" />
-          </button>
-          <button
-            @click="handleNextPage"
-            :disabled="currentPage === totalPages"
-            class="text-center px-3 py-2 rounded-xl flex justify-center text-primary text-[14px] font-medium disabled:opacity-40"
-          >
-            <right-icon class="h-3 w-3" />
-          </button>
         </div>
         <div class="border-t border-gray-300 my-2"></div>
         <div class="flex flex-wrap items-center gap-5 justify-center relative">
