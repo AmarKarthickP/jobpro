@@ -1,10 +1,10 @@
 <template>
   <div
-    class="mt-5 bg-white border rounded-lg px-5 py-3 transition-all duration-300 ease-in-out"
+    class="mt-5 bg-white rounded-lg px-5 py-3 transition-all duration-300 ease-in-out"
     :class="
     selected
       ? ' shadow-lg scale-[1.01]'
-      : 'shadow-sm hover:shadow-md hover:border-gray-200 hover:-translate-y-0.5'
+      : 'shadow-sm hover:shadow-md hover:-translate-y-0.5'
   "
   >
     <div v-if="view=='list'" class="grid grid-cols-12">
