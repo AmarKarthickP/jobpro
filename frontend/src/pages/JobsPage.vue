@@ -441,10 +441,12 @@ onMounted(async () => {
     experience.value = route.query.experience || ''
     selectedLocation.value = route.query.location || ''
 
-    getFilteredJobs()
     const data = await getJobs()
+
     allJobs.value = data
     jobs.value = data
+
+    await getFilteredJobs()
 })
 
 
@@ -683,7 +685,8 @@ function selectLocation(location) {
 
 // Filter Jobs
 async function getFilteredJobs() {
-
+    if (!allJobs.value.length) return
+    
     let additionalFilters = []
 
     if (position.value) {
@@ -738,7 +741,7 @@ async function getFilteredJobs() {
         maxSalary.value
     ])
 
-    jobs.value = await getJobs(additionalFilters)
+    jobs.value = await getJobs(additionalFilters, candidateName.value)
 
 }
 
@@ -876,11 +879,10 @@ watch(
     (query) => {
         position.value = query.position || ''
         experience.value = query.experience || ''
-        location.value = query.location || ''
+        selectedLocation.value = query.location || ''
 
         getFilteredJobs()
-    },
-    { immediate: true }
+    }
 )
 // Candidate fetch
 watch(
@@ -900,4 +902,11 @@ watch(candidate, (val) => {
             ? true
             : false
 })
+watch(
+  candidateName,
+  async (value) => {
+    await getFilteredJobs()
+  },
+  { immediate: true }
+)
 </script>

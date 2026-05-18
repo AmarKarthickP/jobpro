@@ -6,63 +6,33 @@ from frappe.utils import fmt_money
 from frappe.utils.file_manager import save_file
 
 base_url = "https://erp.teamproit.com"
-
 api_key = frappe.conf.get("teampro_api_key")
 api_secret = frappe.conf.get("teampro_api_secret")
 
-
 @frappe.whitelist(allow_guest=True)
-def get_tasks(additional_filters=None):
-    filters = [
-        ["status", "in", ["Open", "Overdue", "Pending Review", "Working"]],
-        ["service", "in", ["REC-I", "REC-D"]]
-    ]
-    if additional_filters:
-        if isinstance(additional_filters, str):
-            additional_filters = json.loads(additional_filters)
-        filters.extend(additional_filters)
-        
-    fields = [
-        "name","subject","territory","created_on", "currency", 
-        "amount","custom_country_flag", "customer", "custom_free_recruitment",
-        "food", "accommodation", "joining_ticket", "transportation",
-        "custom_customer_location_image", "qualification_type", "specialization", "minimum_experience",
-        "maximum_experience", "gulf_experience", "description", "custom_about_customer", 
-        "custom_customer_website", "custom_major_key_skills", "vac", "total_experience"
-    ]   
-    count = 0
-
+def get_tasks(additional_filters=None, candidate=None):
     try:
         response = requests.get(
-            f"{base_url}/api/resource/Task",
+            f"{base_url}/api/method/teampro.jobpro_api.get_tasks",
             params={
-                "fields": json.dumps(fields),
-                "filters": json.dumps(filters),
-                "limit_page_length": 1000,
-                "order_by": "created_on desc"
+                "additional_filters": additional_filters,
+                "candidate": candidate
             },
             headers={
                 "Authorization": f"token {api_key}:{api_secret}"
             },
+            timeout=10
         )
         response.raise_for_status()
         data = response.json()
-        # INR conversion
-        # for row in data["data"]:
-        #     count += 1
-        #     currency = row["currency"]
-        #     amount = row["amount"] or 0
-        #     row["amount_inr"] = get_inr_price(currency,amount)
-        #     row["amount"] = fmt_money(amount=amount, precision=0)
-        # print(count)
-        return data
+        return data.get("message", {})
 
     except requests.exceptions.RequestException as e:
         frappe.log_error(
             title="External Task API Error",
             message=frappe.get_traceback()
         )
-        frappe.throw("Unable to fetch tasks from external server")
+        frappe.throw("Unable to fetch options from tasks from external server")
         
 def get_inr_price(currency, amount):
     if not currency or not amount:
@@ -76,7 +46,6 @@ def get_inr_price(currency, amount):
 
 @frappe.whitelist(allow_guest=True)
 def get_options(doctype, fields):
-    frappe.errprint(fields)
     try:
         response = requests.get(
             f"{base_url}/api/method/teampro.jobpro_api.get_options",
@@ -91,7 +60,6 @@ def get_options(doctype, fields):
         )
         response.raise_for_status()
         data = response.json()
-        frappe.errprint(data)
         return data.get("message", {})
 
     except requests.exceptions.RequestException as e:
@@ -273,7 +241,7 @@ def get_specialization():
         )
         frappe.throw("Unable to fetch specialization from external server")
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=1)
 def update_candidate_details():
     try:
         # Incoming frontend payload
@@ -439,4 +407,49 @@ def get_candidate_status(candidate, task):
             message=frappe.get_traceback()
         )
         frappe.throw("Unable to fetch candidate status from external server")
+        
+@frappe.whitelist(allow_guest=1)
+def apply_job():
+    try:
+        # Incoming frontend payload
+        data = frappe.request.get_json()
+
+        response = requests.post(
+            f"{base_url}/api/method/teampro.jobpro_api.apply_job",
+
+            json=data,
+
+            headers={
+                "Authorization": f"token {api_key}:{api_secret}"
+            },
+
+            timeout=15
+        )
+
+        response.raise_for_status()
+        response_data = response.json()
+
+        return {
+            "status": "success",
+            "message": response_data
+        }
+
+    except requests.exceptions.RequestException:
+        frappe.log_error(
+            title="External Apply Job API Error",
+            message=frappe.get_traceback()
+        )
+
+        frappe.throw(
+            "Unable to apply jobs on external server"
+        )
+
+    except Exception:
+        frappe.log_error(
+            title="Apply Job Error",
+            message=frappe.get_traceback()
+        )
+
+        frappe.throw("Something went wrong")
+   
     

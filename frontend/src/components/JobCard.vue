@@ -1,12 +1,12 @@
 <template>
   <div
-  class="mt-5 bg-white border rounded-lg px-5 py-3 transition-all duration-300 ease-in-out"
-  :class="
+    class="mt-5 bg-white border rounded-lg px-5 py-3 transition-all duration-300 ease-in-out"
+    :class="
     selected
       ? ' shadow-lg scale-[1.01]'
       : 'shadow-sm hover:shadow-md hover:border-gray-200 hover:-translate-y-0.5'
   "
->
+  >
     <div v-if="view=='list'" class="grid grid-cols-12">
       <div class="col-span-10">
         <div class="flex items-center gap-3">
@@ -17,7 +17,8 @@
               >• {{ timeAgo(data.created_on) }}</span
             >
           </badge>
-          <badge v-if="page=='Activity'"
+          <badge
+            v-if="page=='Activity'"
             class="relative text-xs bg-[#ffebdb] rounded-lg px-3 py-1 text-[#e56700]"
           >
             <span class="relative z-10 font-normal"
@@ -192,7 +193,8 @@
             </span>
           </badge>
 
-          <button v-if="page!='Activity'"
+          <button
+            v-if="page!='Activity'"
             @click="showJobDetails=true"
             class="flex items-center gap-2 font-medium pr-10 ml-auto text-[13px] text-gray-600 hover:text-primary"
           >
@@ -210,9 +212,16 @@
           <button
             @click="handleApplyJob"
             v-if="page!='Activity'"
-            class="mt-16 text-center w-full bg-primary py-2 rounded-lg text-white text-[14px] font-medium"
+            :disabled="isSaving || data.already_applied"
+            class="mt-16 text-center w-full bg-primary py-2 rounded-lg text-white text-[14px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Apply Now
+            {{
+  data.already_applied
+    ? 'Applied'
+    : isSaving
+      ? 'Applying'
+      : 'Apply Now'
+            }}
           </button>
           <button
             v-if="page=='Activity' && data.status!='IDB'"
@@ -238,9 +247,7 @@
             ></span>
 
             <!-- Text -->
-            <span class="relative z-10">
-              Rejected
-            </span>
+            <span class="relative z-10"> Rejected </span>
           </button>
         </div>
       </div>
@@ -255,7 +262,8 @@
             >• {{ timeAgo(data.created_on) }}</span
           >
         </badge>
-        <badge v-if="page=='Activity'"
+        <badge
+          v-if="page=='Activity'"
           class="relative overflow-hidden text-xs bg-[#ffebdb] rounded-lg px-2 py-0.5 text-[#e56700]"
         >
           <span class="relative z-10 font-normal"
@@ -436,7 +444,8 @@
         </badge>
       </div>
       <div class="flex gap-3 mb-2">
-        <button v-if="page!='Activity'"
+        <button
+          v-if="page!='Activity'"
           @click="showJobDetails=true"
           class="text-center mt-3 w-full border border-primary py-1.5 rounded-lg text-primary text-[11px] font-medium"
         >
@@ -445,9 +454,16 @@
         <button
           @click="handleApplyJob"
           v-if="page!='Activity'"
-          class="text-center mt-3 w-full bg-primary py-1.5 rounded-lg text-white text-[11px] font-medium"
+          :disabled="isSaving || data.already_applied"
+          class="text-center mt-3 w-full bg-primary py-1.5 rounded-lg text-white text-[11px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Apply Now
+          {{
+  data.already_applied
+    ? 'Applied'
+    : isSaving
+      ? 'Applying'
+      : 'Apply Now'
+          }}
         </button>
         <button
           v-if="page=='Activity' && data.status!='IDB'"
@@ -473,9 +489,7 @@
           ></span>
 
           <!-- Text -->
-          <span class="relative z-10">
-            Rejected
-          </span>
+          <span class="relative z-10"> Rejected </span>
         </button>
       </div>
     </div>
@@ -668,6 +682,7 @@
 
 
 
+
                 }}<span v-if="data.specialization">
                   (need specialization in {{ data.specialization }})</span
                 >
@@ -676,6 +691,7 @@
                 Experience:
                 <span
                   >{{ data.minimum_experience
+
 
 
 
@@ -748,9 +764,16 @@
           <button
             @click="handleApplyJob"
             v-if="page!='Activity'"
-            class="text-center w-full bg-primary py-2 rounded-lg text-white text-[14px] font-medium"
+            :disabled="isSaving || data.already_applied"
+            class="text-center w-full bg-primary py-2 rounded-lg text-white text-[14px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Apply Now
+            {{
+  data.already_applied
+    ? 'Applied'
+    : isSaving
+      ? 'Applying'
+      : 'Apply Now'
+            }}
           </button>
           <!-- <button
             class="text-center w-full bg-primary py-2 rounded-xl text-white text-[14px] font-medium"
@@ -766,11 +789,12 @@
   <Dialog v-model="showAttachCVDialog" title="Attach Resume" width="max-w-md">
     <div>
       <p class="text-[14px] text-gray-600 font-medium">
-        We noticed that your resume is not attached yet.
-        Please upload your resume to continue with your job application.
+        We noticed that your resume is not attached yet. Please upload your
+        resume to continue with your job application.
       </p>
       <div class="bg-white rounded-xl">
-        <FileUpload class="mt-5"
+        <FileUpload
+          class="mt-5"
           :title="resumeFileName"
           subtitle="Drop your resume here or click to browse"
           @file-selected="handleResumeUpload"
@@ -779,7 +803,7 @@
     </div>
   </Dialog>
 
-  <Toast 
+  <Toast
     :show="showToast"
     @update:show="showToast = $event"
     :type="toastType"
@@ -799,7 +823,7 @@
 import { ref, watch, onUnmounted } from 'vue'
 // Utils
 import { timeAgo } from '@/utils/date'
-import { uploadFile } from '@/utils/document'
+import { uploadFile, handleSave } from '@/utils/document'
 // Icons
 import DownIcon from '@/components/icons/DownIcon.vue';
 import SuitcaseIcon from './icons/SuitcaseIcon.vue';
@@ -848,6 +872,7 @@ const props = defineProps({
 // States
 const showJobDetails = ref(false)
 const showAttachCVDialog = ref(false)
+const localCVAttached = ref(props.isCVAttached)
 
 // Toast
 const showToast = ref(false)
@@ -869,7 +894,10 @@ function truncateText(text, length) {
 }
 
 // Methods
-function handleApplyJob() {
+async function handleApplyJob() {
+  if (props.data.already_applied) {
+    return
+  }
   if (!props.isLoggedIn) {
     const currentPath =
       window.location.pathname + window.location.search
@@ -878,8 +906,40 @@ function handleApplyJob() {
     return
   }
   else {
-    if (!props.isCVAttached) {
+    if (!localCVAttached.value) {
       showAttachCVDialog.value = true
+    }
+    else {
+      await handleSave({
+        endpoint: '/api/method/jobpro.api.apply_job',
+          payload: {
+              candidate: props.candidateName,
+              task: props.data.name,
+          },
+
+          onStart: () => {
+              isSaving.value = true
+          },
+
+          onSuccess: () => {
+              toastType.value = 'success'
+              toastTitle.value = 'Applied'
+              toastMessage.value = 'Application has been registered successfully'
+              showToast.value = true
+              props.data.already_applied = 1
+          },
+
+          onError: () => {
+              toastType.value = 'error'
+              toastTitle.value = 'Application Failed'
+              toastMessage.value = 'There was an error applying for the job'
+              showToast.value = true
+          },
+
+          onFinally: () => {
+              isSaving.value = false
+          }
+      })
     }
   }
 }
@@ -898,12 +958,16 @@ const handleResumeUpload = async (file) => {
             isSaving.value = true
         },
 
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
             toastType.value = 'success'
             toastTitle.value = 'Uploaded Successfully'
             toastMessage.value = 'Your CV has been uploaded.'
             showToast.value = true
             showAttachCVDialog.value = false
+
+            localCVAttached.value = true
+
+            await handleApplyJob()
         },
 
         onError: (error) => {
@@ -923,6 +987,12 @@ const handleResumeUpload = async (file) => {
 watch(showJobDetails, (value) => {
     document.body.style.overflow = value ? 'hidden' : ''
 })
+watch(
+  () => props.isCVAttached,
+  (value) => {
+    localCVAttached.value = value
+  }
+)
 onUnmounted(() => {
     document.body.style.overflow = ''
 })
