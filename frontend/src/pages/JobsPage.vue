@@ -300,6 +300,9 @@
           <job-card
             :data="job"
             :view="view"
+            :isLoggedIn="auth.isLoggedIn"
+            :isCVAttached="isCVAttached"
+            :candidateName="candidateName"
             @show-details="selectedJob = job"
           />
         </div>
@@ -345,11 +348,13 @@ import {
 } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
-// API
+// Session
+import { auth } from '@/data/auth'
+
+// Data
 import { getJobs } from '@/data/jobs'
-import TestJobCard from '../components/TestJobCard.vue'
-
-
+import { user } from '@/data/user'
+import { getCandidate } from '@/data/candidate'
 
 // User Data
 const userData = {
@@ -361,8 +366,6 @@ const userData = {
     alt: 'profile',
 }
 
-
-
 // Main State
 const jobs = ref([])
 const allJobs = ref([])
@@ -373,6 +376,8 @@ const maxSalary = ref(10000)
 
 const animatedJobsCount = ref(0)
 const view = ref("grid")
+const isCVAttached = ref(false)
+const candidateName = ref('')
 
 const currentPage = ref(1)
 const jobsPerPage = 12
@@ -471,6 +476,8 @@ const paginatedJobs = computed(() => {
 
     return jobs.value.slice(start, end)
 })
+
+const candidate = ref([])
 
 // Animates the no of jobs from 0 to x
 function animateCounter(target) {
@@ -875,4 +882,22 @@ watch(
     },
     { immediate: true }
 )
+// Candidate fetch
+watch(
+    () => user.email,
+    async (email) => {
+        if (!email) return
+
+        candidate.value = await getCandidate(email)
+    },
+    { immediate: true }
+)
+// Set value for fields
+watch(candidate, (val) => {
+  candidateName.value = val?.name || '',
+  isCVAttached.value =
+        val?.custom_updated__un_masked_cv
+            ? true
+            : false
+})
 </script>

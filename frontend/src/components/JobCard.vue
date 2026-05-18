@@ -4,7 +4,7 @@
   :class="
     selected
       ? ' shadow-lg scale-[1.01]'
-      : 'border-transparent shadow-sm hover:shadow-md hover:border-gray-200 hover:-translate-y-0.5'
+      : 'shadow-sm hover:shadow-md hover:border-gray-200 hover:-translate-y-0.5'
   "
 >
     <div v-if="view=='list'" class="grid grid-cols-12">
@@ -208,14 +208,15 @@
           </p>
           <!-- <p class="text-xl font-medium text-primary text-right">In INR?<span class="text-2xl">{{ data.amount_inr  }}</span></p> -->
           <button
+            @click="handleApplyJob"
             v-if="page!='Activity'"
-            class="mt-16 text-center w-full bg-primary py-2 rounded-xl text-white text-[14px] font-medium"
+            class="mt-16 text-center w-full bg-primary py-2 rounded-lg text-white text-[14px] font-medium"
           >
             Apply Now
           </button>
           <button
             v-if="page=='Activity' && data.status!='IDB'"
-            class="relative cursor-default overflow-hidden mt-16 text-center w-full bg-primary py-2 rounded-xl text-white text-[14px] font-medium"
+            class="relative cursor-default overflow-hidden mt-16 text-center w-full bg-primary py-2 rounded-lg text-white text-[14px] font-medium"
           >
             <!-- Shimmer -->
             <span
@@ -229,7 +230,7 @@
           </button>
           <button
             v-if="page=='Activity' && data.status=='IDB'"
-            class="relative cursor-default overflow-hidden mt-16 text-center w-full bg-red-600 py-2 rounded-xl text-white text-[14px] font-medium"
+            class="relative cursor-default overflow-hidden mt-16 text-center w-full bg-red-600 py-2 rounded-lg text-white text-[14px] font-medium"
           >
             <!-- Shimmer -->
             <span
@@ -437,19 +438,20 @@
       <div class="flex gap-3 mb-2">
         <button v-if="page!='Activity'"
           @click="showJobDetails=true"
-          class="text-center mt-3 w-full border border-primary py-1.5 rounded-xl text-primary text-[11px] font-medium"
+          class="text-center mt-3 w-full border border-primary py-1.5 rounded-lg text-primary text-[11px] font-medium"
         >
           Job Details
         </button>
         <button
+          @click="handleApplyJob"
           v-if="page!='Activity'"
-          class="text-center mt-3 w-full bg-primary py-1.5 rounded-xl text-white text-[11px] font-medium"
+          class="text-center mt-3 w-full bg-primary py-1.5 rounded-lg text-white text-[11px] font-medium"
         >
           Apply Now
         </button>
         <button
           v-if="page=='Activity' && data.status!='IDB'"
-          class="relative cursor-default overflow-hidden text-center mt-3 ml-auto w-[50%] bg-primary py-1.5 rounded-xl text-white text-[11px] font-medium"
+          class="relative cursor-default overflow-hidden text-center mt-3 ml-auto w-[50%] bg-primary py-1.5 rounded-lg text-white text-[11px] font-medium"
         >
           <!-- Shimmer -->
           <span
@@ -463,7 +465,7 @@
         </button>
         <button
           v-if="page=='Activity' && data.status=='IDB'"
-          class="relative cursor-default overflow-hidden text-center mt-3 ml-auto w-[50%] bg-red-600 py-1.5 rounded-xl text-white text-[11px] font-medium"
+          class="relative cursor-default overflow-hidden text-center mt-3 ml-auto w-[50%] bg-red-600 py-1.5 rounded-lg text-white text-[11px] font-medium"
         >
           <!-- Shimmer -->
           <span
@@ -744,8 +746,9 @@
           class="flex w-[90%] gap-5 mt-3 fixed bottom-0 bg-white pb-5 pt-1 bg-white after:content-[''] after:absolute after:left-0 after:top-[-24px] after:w-full after:h-6 after:bg-gradient-to-t after:from-white after:to-transparent after:pointer-events-none"
         >
           <button
+            @click="handleApplyJob"
             v-if="page!='Activity'"
-            class="text-center w-full bg-primary py-2 rounded-xl text-white text-[14px] font-medium"
+            class="text-center w-full bg-primary py-2 rounded-lg text-white text-[14px] font-medium"
           >
             Apply Now
           </button>
@@ -758,13 +761,60 @@
       </div>
     </div>
   </transition>
+
+  <!-- Attach CV Dialog -->
+  <Dialog v-model="showAttachCVDialog" title="Attach Resume" width="max-w-md">
+    <div>
+      <p class="text-[14px] text-gray-600 font-medium">
+        We noticed that your resume is not attached yet.
+        Please upload your resume to continue with your job application.
+      </p>
+      <div class="bg-white rounded-xl">
+        <FileUpload class="mt-5"
+          :title="resumeFileName"
+          subtitle="Drop your resume here or click to browse"
+          @file-selected="handleResumeUpload"
+        />
+      </div>
+    </div>
+  </Dialog>
+
+  <Toast 
+    :show="showToast"
+    @update:show="showToast = $event"
+    :type="toastType"
+    :title="toastTitle"
+    :message="toastMessage"
+  />
+
+  <FreezePage
+    :show="isSaving"
+    title="Saving Details"
+    message="Please wait while we save your information"
+  />
 </template>
 
 <script setup>
-import DownIcon from '@/components/icons/DownIcon.vue';
+// vue
+import { ref, watch, onUnmounted } from 'vue'
+// Utils
 import { timeAgo } from '@/utils/date'
+import { uploadFile } from '@/utils/document'
+// Icons
+import DownIcon from '@/components/icons/DownIcon.vue';
+import SuitcaseIcon from './icons/SuitcaseIcon.vue';
+import FoodIcon from './icons/FoodIcon.vue';
+import AccommodationIcon from './icons/AccommodationIcon.vue';
+import BusIcon from './icons/BusIcon.vue';
+import FlightTicketIcon from './icons/FlightTicketIcon.vue';
+// Components
+import Dialog from './Dialog.vue';
+import FileUpload from './FileUpload.vue';
+import Toast from './Toast.vue';
+import FreezePage from './FreezePage.vue';
 
-defineProps({
+// Props
+const props = defineProps({
     data: {
         type: Object,
         required: true
@@ -778,18 +828,97 @@ defineProps({
       default: ''
     },
     selected: {
-  type: Boolean,
-  default: false,
-},
+      type: Boolean,
+      default: false,
+    },
+    isLoggedIn: {
+      type: Boolean,
+      default: false,
+    },
+    isCVAttached: {
+      type: Boolean,
+      default: false,
+    },
+    candidateName: {
+      type: String,
+      default: '',
+    },
 })
 
-import { ref, watch, onUnmounted } from 'vue'
-import SuitcaseIcon from './icons/SuitcaseIcon.vue';
-import FoodIcon from './icons/FoodIcon.vue';
-import AccommodationIcon from './icons/AccommodationIcon.vue';
-import BusIcon from './icons/BusIcon.vue';
-import FlightTicketIcon from './icons/FlightTicketIcon.vue';
+// States
 const showJobDetails = ref(false)
+const showAttachCVDialog = ref(false)
+
+// Toast
+const showToast = ref(false)
+const toastType = ref('')
+const toastTitle = ref('')
+const toastMessage = ref('')
+
+// Freeze
+const isSaving = ref(false)
+
+// File Uploads
+const isResumeUploading = ref(false)
+const resumeFileName = ref('Attach Resume')
+
+function truncateText(text, length) {
+    return text && text.length > length
+      ? text.substring(0, length) + "..."
+      : text;
+}
+
+// Methods
+function handleApplyJob() {
+  if (!props.isLoggedIn) {
+    const currentPath =
+      window.location.pathname + window.location.search
+    const redirectUrl = encodeURIComponent(currentPath)
+    window.location.href = `/login?redirect-to=${redirectUrl}`
+    return
+  }
+  else {
+    if (!props.isCVAttached) {
+      showAttachCVDialog.value = true
+    }
+  }
+}
+
+// Handle file uploads
+const handleResumeUpload = async (file) => {
+    await uploadFile({
+        endpoint: '/api/method/jobpro.api.upload_file',
+        file,
+        doctype: "Candidate",
+        docname: props.candidateName,
+        fieldname: 'custom_updated__un_masked_cv',
+
+        onStart: () => {
+            isResumeUploading.value = true
+            isSaving.value = true
+        },
+
+        onSuccess: (data) => {
+            toastType.value = 'success'
+            toastTitle.value = 'Uploaded Successfully'
+            toastMessage.value = 'Your CV has been uploaded.'
+            showToast.value = true
+            showAttachCVDialog.value = false
+        },
+
+        onError: (error) => {
+            toastType.value = 'error'
+            toastTitle.value = 'Upload Failed'
+            toastMessage.value = 'There was an error uploading your CV'
+            showToast.value = true
+        },
+
+        onFinally: () => {
+            isResumeUploading.value = false
+            isSaving.value = false
+        },
+    })
+}
 
 watch(showJobDetails, (value) => {
     document.body.style.overflow = value ? 'hidden' : ''
@@ -797,9 +926,4 @@ watch(showJobDetails, (value) => {
 onUnmounted(() => {
     document.body.style.overflow = ''
 })
-function truncateText(text, length) {
-    return text && text.length > length
-      ? text.substring(0, length) + "..."
-      : text;
-}
 </script>
