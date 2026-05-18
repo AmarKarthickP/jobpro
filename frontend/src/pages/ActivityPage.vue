@@ -170,13 +170,13 @@
         <p
           class="text-gray-600 font-medium text-[15px] capitalize truncate mt-1"
         >
-          {{ selectedJob?.customer || '-' }}
+          {{ selectedJob?.customer }} &nbsp;
         </p>
         <div
           class="text-[15px] mt-2 text-gray-600 font-medium flex items-center gap-1"
         >
           <img :src="selectedJob?.custom_country_flag" class="h-5" />
-          <p>{{ selectedJob?.territory || '-' }}</p>
+          <p>{{ selectedJob?.territory}}&nbsp;</p>
         </div>
       </div>
       <div class="mt-10 cursor-default">

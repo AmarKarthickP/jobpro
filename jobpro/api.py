@@ -451,5 +451,71 @@ def apply_job():
         )
 
         frappe.throw("Something went wrong")
-   
-    
+import frappe
+import requests
+
+@frappe.whitelist()
+def create_candidate(doc, method):
+
+    try:
+
+        data = {
+            "given_name": doc.full_name,
+            "mail_id": doc.email,
+            "mobile_number": doc.mobile_no,
+            "source": "REFERPRO",
+            "gender": doc.gender,
+            "date_of_birth": doc.birth_date,
+            "custom_sourced_by": "Normal",
+            "position": "From JOBPRO",
+            "candidate_image": doc.user_image
+        }
+
+        response = requests.post(
+            f"{base_url}/api/method/teampro.jobpro_api.create_candidate",
+
+            json=data,
+
+            headers={
+                "Authorization": f"token {api_key}:{api_secret}"
+            },
+        )
+
+        response.raise_for_status()
+
+        return {
+            "status": "success",
+            "data": response.json()
+        }
+
+    except requests.exceptions.RequestException as e:
+
+        error = ""
+
+        if e.response:
+            try:
+                error = e.response.json()
+            except Exception:
+                error = e.response.text
+
+        frappe.log_error(
+            title="External Document Creation API Error",
+            message=str(error)
+        )
+
+        return {
+            "status": "error",
+            "message": str(error)
+        }
+
+    except Exception:
+
+        frappe.log_error(
+            title="Create Document Error",
+            message=frappe.get_traceback()
+        )
+
+        return {
+            "status": "error",
+            "message": "Something went wrong"
+        }

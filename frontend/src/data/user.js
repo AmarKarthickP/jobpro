@@ -19,7 +19,7 @@ createResource({
     onSuccess(data) {
 
         const image = data.message.user_image
-            ? `${window.location.origin}${data.message.user_image}`
+            ? `${data.message.user_image}`
             : `${defaultProfile}`
 
         user.fullName = data.message.full_name

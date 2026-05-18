@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-12 gap-6">
-    <div class="col-span-9 bg-white rounded-xl shadow-sm relative">
+    <div class="col-span-12 bg-white rounded-xl shadow-sm relative">
       <div ref="profileCard" class="relative rounded-t-xl overflow-hidden">
         <div
           class="absolute inset-x-0 top-0 h-2/5 bg-primary text-white pr-10 pt-5"
@@ -106,9 +106,9 @@
         </div>
       </div>
     </div>
-    <div class="col-span-3 bg-white rounded-xl shadow-sm p-5">
+    <!-- <div class="col-span-3 bg-white rounded-xl shadow-sm p-5">
       {{ userData.bio }}
-    </div>
+    </div> -->
   </div>
 
   <div class="grid grid-cols-12 gap-6 mt-6 pb-10">
@@ -499,11 +499,10 @@
         />
         <label class="text-[13px] font-medium">Mobile Number</label>
         <input
-          readonly
           type="telephone"
           v-model="mobileNumber"
           placeholder="Enter mobile number"
-          class="bg-hoverbg hover:cursor-not-allowed w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+          class="bg-background w-full border-0 mb-2 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
         />
         <label class="text-[13px] font-medium">Alternate Number</label>
         <input

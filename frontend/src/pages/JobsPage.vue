@@ -4,20 +4,16 @@
     <div class="col-span-3">
       <div class="sticky top-24">
         <div class="bg-white shadow-sm rounded-lg pb-4">
-          <div class="bg-black h-14 rounded-t-lg"></div>
-          <avatar
-            :img="userData"
-            class="w-20 border-2 border-white -mt-8 ml-5"
-          />
-          <div class="text-right -mt-8 mr-5">
+          <div class="text-right p-5 flex items-center">
+            <h1 class="font-medium text-primary text-[20px]">Filters</h1>
             <button
               @click="removeFilters"
-              class="text-gray-500 text-[13px] font-medium hover:text-red-600 transition-all duration-300 ease-in-out"
+              class="text-gray-500 ml-auto text-[13px] font-medium hover:text-red-600 transition-all duration-300 ease-in-out"
             >
               Clear all
             </button>
           </div>
-          <div class="mt-5 px-5">
+          <div class="px-5">
             <h1 class="text-center font-medium text-primary">
               <span class="text-[#0770e4]">{{ animatedJobsCount }} Jobs</span>
               Available Now
