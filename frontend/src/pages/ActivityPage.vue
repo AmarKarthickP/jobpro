@@ -138,8 +138,8 @@
         leave-to-class="opacity-0 scale-95"
         move-class="transition-all duration-500 ease-in-out"
         :class="view == 'grid'
-        ? 'grid grid-cols-1 md:grid-cols-2 gap-5 mt-5'
-        : 'flex flex-col gap-5 mt-5'"
+        ? 'grid grid-cols-1 md:grid-cols-2 gap-5 mt-5 mb-10'
+        : 'flex flex-col gap-5 mt-5 mb-10'"
       >
         <div
           v-for="job in filteredAndSortedJobs"
@@ -162,6 +162,7 @@
       </TransitionGroup>
     </div>
     <div class="col-span-4">
+      <div class="sticky top-24">
       <div class="rounded-lg shadow-sm px-5 pt-3 pb-3 bg-white">
         <p class="text-primary font-semibold capitalize truncate text-[17px]">
           {{ selectedJob?.subject || 'Select a Job' }}
@@ -187,6 +188,7 @@
         </div>
 
         <ProgressTracker v-else title="Application Status" :statuses="statuses" />
+      </div>
       </div>
     </div>
   </div>
