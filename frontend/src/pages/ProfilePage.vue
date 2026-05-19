@@ -20,9 +20,9 @@
           <div class="text-white absolute top-6 left-[240px]">
             <div class="flex">
               <p class="font-semibold text-[25px] uppercase">{{ fullName }}</p>
-              <!-- <button>
+              <button>
                 <edit-icon class="h5 w-5 ml-4 mt-1" />
-              </button> -->
+              </button>
             </div>
             <p class="font-semibold text-[20px] -mt-1 absolute">#{{ candidate.name }}</p>
           </div>
@@ -94,6 +94,17 @@
                 </span>
                 <span v-else class="text-default"> Notice Period </span>
               </p>
+            </div>
+          </div>
+          <div class="absolute top-0 right-0 p-5 pt-6">
+            <div class="bg-white rounded-lg w-[330px] h-[200px] shadow-lg p-3">
+              <div class="flex">
+                <h1 class="text-primary font-semibold relative">About me</h1>
+                <!-- <pin-icon class="h-10 w-10 top-0 absolute" /> -->
+                <img src="../assets/defaults/pin.png" class="h-12 top-4 right-6 absolute" />
+              </div>
+              <div class="border-t border-gray-300 my-2"></div>
+              <p class="text-[14px] font-medium text-gray-600">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odio cupiditate quibusdam perspiciatis non minus consectetur ipsa tempora dolor inventore voluptas, maxime corrupti exercitationem debitis architecto mollitia hic voluptate voluptatem! Officia?</p>
             </div>
           </div>
         </div>
@@ -832,6 +843,7 @@ import AttachmentIcon from '../components/icons/AttachmentIcon.vue'
 import DownloadIcon from '../components/icons/DownloadIcon.vue'
 import DeleteIcon from '../components/icons/DeleteIcon.vue'
 import AttachImage from '../components/AttachImage.vue'
+import PinIcon from '../components/icons/PinIcon.vue'
 
 // .env
 const EXTERNAL_SITE = import.meta.env.VITE_FRAPPE_EXTERNAL_SITE
