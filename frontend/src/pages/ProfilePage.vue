@@ -20,9 +20,6 @@
           <div class="text-white absolute top-6 left-[240px]">
             <div class="flex">
               <p class="font-semibold text-[25px] uppercase">{{ fullName }}</p>
-              <button>
-                <edit-icon class="h5 w-5 ml-4 mt-1" />
-              </button>
             </div>
             <p class="font-semibold text-[20px] -mt-1 absolute">#{{ candidate.name }}</p>
           </div>
@@ -98,21 +95,22 @@
           </div>
           <div class="absolute top-0 right-0 p-5 pt-6">
             <div class="bg-white rounded-lg w-[330px] h-[200px] shadow-lg p-3">
-              <div class="flex">
+              <div class="flex items-center">
                 <h1 class="text-primary font-semibold relative">About me</h1>
+                <button>
+                  <edit-icon @click="showAboutMeDialog=true" class="h-4 w-4 ml-4 text-primary" />
+                </button>
                 <!-- <pin-icon class="h-10 w-10 top-0 absolute" /> -->
                 <img src="../assets/defaults/pin.png" class="h-12 top-4 right-6 absolute" />
               </div>
               <div class="border-t border-gray-300 my-2"></div>
-              <p class="text-[14px] font-medium text-gray-600">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odio cupiditate quibusdam perspiciatis non minus consectetur ipsa tempora dolor inventore voluptas, maxime corrupti exercitationem debitis architecto mollitia hic voluptate voluptatem! Officia?</p>
+              <p v-if="bio" class="text-[14px] font-medium text-gray-600">{{ truncateText(bio, 215) }}</p>
+              <p v-else class="text-[14px] font-medium text-gray-600">Write a short professional summary about yourself.</p>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- <div class="col-span-3 bg-white rounded-xl shadow-sm p-5">
-      {{ userData.bio }}
-    </div> -->
   </div>
 
   <div class="grid grid-cols-12 gap-6 mt-6 pb-10">
@@ -318,6 +316,28 @@
       </div>
     </div>
   </div>
+
+  <!-- About Me Dialog -->
+  <Dialog v-model="showAboutMeDialog" title="About Me" width="max-w-2xl">
+    <div>
+      <label class="text-[13px] text-gray-600 font-medium">Write a short professional summary about yourself.</label>
+      <textarea v-model="bio" class="bg-background h-40 w-full mb-2 border-0 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"></textarea>
+    </div>
+
+    <template #footer>
+      <button
+        class="px-4 font-medium rounded-lg bg-primary text-white min-w-[90px] max-w-[90px] h-8 flex items-center justify-center gap-2 disabled:opacity-70"
+        @click="saveAboutMe"
+        :disabled="isSaving"
+      >
+        <Loader v-if="isSaving" class="text-[24px]" />
+
+        <span>
+          {{ saveStatus }}
+        </span>
+      </button>
+    </template>
+  </Dialog>
 
   <!-- Personal Details Dialog -->
   <Dialog v-model="showPersonalDetailsDialog" title="Personal Details" width="max-w-2xl">
@@ -874,12 +894,14 @@ const toastTitle = ref('')
 const toastMessage = ref('')
 
 // Dialog states
+const showAboutMeDialog = ref(false)
 const showPersonalDetailsDialog = ref(false)
 const showContactDetailsDialog = ref(false)
 const showEducationDetailsDialog = ref(false)
 const showExperienceDetailsDialog = ref(false)
 const showPassportDetailsDialog = ref(false)
 
+const bio = ref('')
 // Section refs
 const resumeSection = ref(null)
 const passportAttachSection = ref(null)
@@ -990,11 +1012,6 @@ const scrollToEducation = () => scrollToSection(educationSection)
 const scrollToExperience = () => scrollToSection(experienceSection)
 const scrollToPassport = () => scrollToSection(passportSection)
 
-// Dialog
-const openPersonalDetailsDialog = () => {
-    showPersonalDetailsDialog.value = true
-}
-
 // User data
 const userData = computed(() => ({
     src: profileImage.value,
@@ -1002,7 +1019,7 @@ const userData = computed(() => ({
     fullName: user.fullName,
     email: user.email,
     mobile_no: user.mobileNo,
-    bio: user.bio
+    bio: bio.value
 }))
 
 // Observer
@@ -1103,6 +1120,8 @@ watch(candidate, (val) => {
         val?.candidate_image
             ? `${EXTERNAL_SITE}${val.candidate_image}`
             : user.image
+
+    bio.value = user.bio
 
 })
 
@@ -1391,6 +1410,44 @@ function selectOption(model, value, showRef) {
 }
 
 // Save Dialog
+const saveAboutMe = async () => {
+    await handleSave({
+      endpoint: '/api/method/jobpro.api.update_user_details',
+        payload: {
+            name: userData.value.email,
+            bio: bio.value,
+            gender: gender.value,
+            birth_date: dateOfBirth.value,
+            mobile_no: mobileNumber.value,
+            full_name: fullName.value
+        },
+
+        onStart: () => {
+            isSaving.value = true
+            saveStatus.value = ''
+        },
+
+        onSuccess: () => {
+            showAboutMeDialog.value = false
+            toastType.value = 'success'
+            toastTitle.value = 'Saved Successfully'
+            toastMessage.value = 'Your details have been updated.'
+            showToast.value = true
+        },
+
+        onError: () => {
+            toastType.value = 'error'
+            toastTitle.value = 'Save Failed'
+            toastMessage.value = 'There was an error saving your details'
+            showToast.value = true
+        },
+
+        onFinally: () => {
+            isSaving.value = false
+            saveStatus.value = 'Save'
+        }
+    })
+}
 const savePersonalDetails = async () => {
     await handleSave({
       endpoint: '/api/method/jobpro.api.update_candidate_details',
@@ -1768,5 +1825,10 @@ const deletePassport = async () => {
             isPassportUploading.value = false
         },
     })
+}
+function truncateText(text, length) {
+    return text && text.length > length
+      ? text.substring(0, length) + "..."
+      : text;
 }
 </script>

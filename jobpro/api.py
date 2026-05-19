@@ -286,6 +286,12 @@ def update_candidate_details():
         frappe.throw("Something went wrong")
         
 @frappe.whitelist(allow_guest=True)
+def update_user_details():
+	data = frappe.request.get_json()
+	frappe.db.set_value("User", data.get("name"), data)
+	return {"message": "User details updated successfully."}
+
+@frappe.whitelist(allow_guest=True)
 def upload_file():
     try:
         file = frappe.request.files.get("file")

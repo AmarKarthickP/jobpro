@@ -6,7 +6,9 @@ import defaultProfile from '@/assets/defaults/empty-male-avatar.jpg';
 export const user = reactive({
     fullName: '',
     email: '',
-    image: ''
+    image: '',
+    mobile_no: '',
+    bio: ''
 })
 
 createResource({
