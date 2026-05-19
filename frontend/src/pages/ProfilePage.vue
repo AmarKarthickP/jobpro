@@ -1416,10 +1416,6 @@ const saveAboutMe = async () => {
         payload: {
             name: userData.value.email,
             bio: bio.value,
-            gender: gender.value,
-            birth_date: dateOfBirth.value,
-            mobile_no: mobileNumber.value,
-            full_name: fullName.value
         },
 
         onStart: () => {
