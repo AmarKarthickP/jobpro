@@ -296,6 +296,7 @@ def upload_file():
         docname = frappe.form_dict.get("docname")
         doctype = frappe.form_dict.get("doctype")
         fieldname = frappe.form_dict.get("fieldname")
+        user = frappe.form_dict.get("user")
 
         response = requests.post(
             f"{base_url}/api/method/teampro.jobpro_api.upload_file",
@@ -329,6 +330,8 @@ def upload_file():
         response.raise_for_status()
         response_data = response.json()
         file_url = response_data.get("message", {}).get("file_url")
+        if user:
+            frappe.db.set_value("User", user, "user_image", base_url+file_url)
         return {
             "status": "success",
             "file_url": file_url

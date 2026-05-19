@@ -1,22 +1,27 @@
 <template>
-  <div class="p-6">
-    <FileUpload
-      title="Upload Resume"
-      subtitle="Drop your resume here or click to browse"
-      accept=".pdf,.doc,.docx"
-      :loading="isUploading"
-      @file-selected="handleFile"
-    />
-  </div>
+  <AttachImage
+    :modelValue="userData"
+    :loading="photoUploading"
+    @file-selected="handlePhotoChange"
+  />
 </template>
 
 <script setup>
-import FileUpload from '@/components/FileUpload.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import AttachImage from '../components/AttachImage.vue'
 
-const isUploading = ref(true)
+const photoUploading = ref(false)
 
-const handleFile = (file) => {
-  console.log('Received File:', file)
+const userData = computed(() => ({
+  src: 'https://lh3.googleusercontent.com/a/ACg8ocKekUbg5fNImOpaB0pfTG1B07lebyaoVvUPVNPcH9PVJ4HZN9T0=s96-c',
+  alt: 'profile',
+  fullName: 'Amar Karthick',
+  email: 'amar.p@groupteampro.com',
+  mobile_no: '6369606405',
+  bio: 'test'
+}))
+
+const handlePhotoChange = (file) => {
+  console.log(file)
 }
 </script>

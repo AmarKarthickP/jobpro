@@ -56,6 +56,7 @@ export const uploadFile = async ({
     doctype = null,
     docname = null,
     fieldname = null,
+    user = null,
     onStart = null,
     onSuccess = null,
     onError = null,
@@ -80,6 +81,10 @@ export const uploadFile = async ({
 
         if (fieldname) {
             formData.append('fieldname', fieldname)
+        }
+
+        if (user) {
+            formData.append('user', user)
         }
 
 

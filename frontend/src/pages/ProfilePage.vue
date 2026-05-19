@@ -8,22 +8,15 @@
           <!-- Background -->
         </div>
         <div class="relative flex items-center py-10">
-          <Avatar
-            :img="userData"
-            class="h-40 w-40 border-4 border-white ml-10"
-          />
-          <label
-            class="absolute bottom-4 left-[108px] text-primary hover:underline text-[13px] font-semibold transition-all duration-300 ease-in-out cursor-pointer"
+          <div
+            class="ml-10 relative bg-white rounded-full group w-fit"
           >
-            Edit
-
-            <input
-              type="file"
-              class="hidden"
-              accept="image/*"
-              @change="handlePhotoChange"
-            />
-          </label>
+            <AttachImage
+              :modelValue="userData"
+              :loading="photoUploading"
+              @file-selected="handlePhotoChange"
+            />            
+          </div>
           <div class="text-white absolute top-6 left-[240px]">
             <div class="flex">
               <p class="font-semibold text-[25px] uppercase">{{ fullName }}</p>
@@ -838,6 +831,7 @@ import CameraIcon from '../components/icons/CameraIcon.vue'
 import AttachmentIcon from '../components/icons/AttachmentIcon.vue'
 import DownloadIcon from '../components/icons/DownloadIcon.vue'
 import DeleteIcon from '../components/icons/DeleteIcon.vue'
+import AttachImage from '../components/AttachImage.vue'
 
 // .env
 const EXTERNAL_SITE = import.meta.env.VITE_FRAPPE_EXTERNAL_SITE
@@ -856,6 +850,10 @@ const resumeFileName = ref('Attach Resume')
 const passportFileName = ref('Attach Passport')
 const resumeURL = ref('')
 const passportURL = ref('')
+
+// Attach Image
+const photoUploading = ref(false)
+const profileImage = ref(user.image)
 
 // Toast
 const showToast = ref(false)
@@ -987,7 +985,7 @@ const openPersonalDetailsDialog = () => {
 
 // User data
 const userData = computed(() => ({
-    src: user.image,
+    src: profileImage.value,
     alt: 'profile',
     fullName: user.fullName,
     email: user.email,
@@ -1089,6 +1087,11 @@ watch(candidate, (val) => {
         val?.passport
             ? `Passport: ${fullName.value}`
             : 'Attach Passport'
+    profileImage.value =
+        val?.candidate_image
+            ? `${EXTERNAL_SITE}${val.candidate_image}`
+            : user.image
+
 })
 
 // Field Suggestions
@@ -1570,6 +1573,48 @@ const savePassportDetails = async () => {
 }
 
 // Handle file uploads
+const handlePhotoChange = async (file) => {
+
+    // instant preview
+    profileImage.value = URL.createObjectURL(file)
+
+    await uploadFile({
+        endpoint: '/api/method/jobpro.api.upload_file',
+        file,
+        doctype: "Candidate",
+        docname: candidate.value.name,
+        fieldname: 'candidate_image',
+        user: candidate.value.mail_id,
+
+        onStart: () => {
+            photoUploading.value = true
+        },
+
+        onSuccess: (data) => {
+
+            profileImage.value =
+                data?.message?.file_url
+                    ? `${EXTERNAL_SITE}${data.message.file_url}`
+                    : profileImage.value
+
+            toastType.value = 'success'
+            toastTitle.value = 'Uploaded Successfully'
+            toastMessage.value = 'Your profile image has been changed.'
+            showToast.value = true
+        },
+
+        onError: () => {
+            toastType.value = 'error'
+            toastTitle.value = 'Upload Failed'
+            toastMessage.value = 'There was an error uploading your profile image'
+            showToast.value = true
+        },
+
+        onFinally: () => {
+            photoUploading.value = false
+        },
+    })
+}
 const handleResumeUpload = async (file) => {
     await uploadFile({
         endpoint: '/api/method/jobpro.api.upload_file',
