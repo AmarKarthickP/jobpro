@@ -46,7 +46,7 @@
             <input
               type="text"
               placeholder="Experience"
-              v-model="experience"
+              v-model="experienceSearch"
               @change="getFilteredJobs"
               @focus="showExperienceSuggestions = true"
               @blur="hideExperienceSuggestions"
@@ -58,11 +58,11 @@
             >
               <div
                 v-for="option in filteredExperienceOptions"
-                :key="option"
+                :key="option.value"
                 @mousedown="selectExperienceOption(option)"
                 class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-gray-100 transition-all duration-200"
               >
-                {{ option }}
+                {{ option.label }}
               </div>
             </div>
             <!-- Location -->
@@ -381,7 +381,8 @@ const salaryType = ref("")
 const qualification = ref("")
 const currency = ref("")
 const selectedLocation = ref("")
-const experience = ref("")
+const experience = ref(null)
+const experienceSearch = ref("")
 
 
 
@@ -415,8 +416,11 @@ const qualificationOptions = [
 ]
 
 const experienceOptions = [
-  "Fresher",
-  ...Array.from({ length: 30 }, (_, i) => `${i + 1} Year${i + 1 > 1 ? "s" : ""}`)
+  { label: "Fresher", value: 0 },
+  ...Array.from({ length: 30 }, (_, i) => ({
+    label: `${i + 1} Year${i + 1 > 1 ? "s" : ""}`,
+    value: i + 1
+  }))
 ]
 
 
@@ -527,10 +531,19 @@ const filteredQualificationOptions =
 const filteredSalaryTypeOptions =
     createFilteredOptions(salaryTypeOptions, salaryType)
 
-const filteredExperienceOptions =
-    createFilteredOptions(experienceOptions, experience)
+const filteredExperienceOptions = computed(() => {
 
+    if (!experienceSearch.value) {
+        return experienceOptions
+    }
 
+    return experienceOptions.filter(option =>
+        option.label.toLowerCase().includes(
+            experienceSearch.value.toLowerCase()
+        )
+    )
+
+})
 
 // Reusable Select Helper
 function selectOption(model, value, showRef) {
@@ -639,21 +652,39 @@ function hideCurrencySuggestions() {
 
 // Currency
 function selectExperienceOption(option) {
-    selectOption(
-        experience,
-        option,
-        showExperienceSuggestions
-    )
+    experience.value = option.value
+    experienceSearch.value = option.label
+    showExperienceSuggestions.value = false
 }
+
+const experienceDisplay = computed(() => {
+    const option = experienceOptions.find(
+        item => item.value === experience.value
+    )
+
+    return option ? option.label : ""
+})
 
 function hideExperienceSuggestions() {
-    hideSuggestions(
-        experience,
-        experienceOptions,
-        showExperienceSuggestions
-    )
-}
 
+    setTimeout(() => {
+
+        const validOption = experienceOptions.find(
+            option =>
+                option.label.toLowerCase().trim() ===
+                experienceSearch.value.toLowerCase().trim()
+        )
+
+        if (validOption) {
+            experience.value = validOption.value
+            experienceSearch.value = validOption.label
+        }
+
+        showExperienceSuggestions.value = false
+
+    }, 100)
+
+}
 
 
 // Location
@@ -720,13 +751,20 @@ async function getFilteredJobs() {
         ">=",
         minSalary.value
     ])
+    
+    if (experience.value !== null && experience.value !== "") {
+        additionalFilters.push([
+            "total_experience",
+            "=",
+            experience.value
+        ])
+    }
 
     additionalFilters.push([
         "amount",
         "<=",
         maxSalary.value
     ])
-
     jobs.value = await getJobs(additionalFilters, candidateName.value)
 
 }
@@ -832,7 +870,8 @@ function removeFilters() {
     qualification.value = ""
     currency.value = ""
     selectedLocation.value = ""
-    experience.value = ""
+    experience.value = null
+    experienceSearch.value = ""
 
     getFilteredJobs()
 }
@@ -863,12 +902,27 @@ watch(
 watch(
     () => route.query,
     (query) => {
+
         position.value = query.position || ''
-        experience.value = query.experience || ''
         selectedLocation.value = query.location || ''
 
+        experience.value =
+            query.experience !== undefined &&
+            query.experience !== ''
+                ? Number(query.experience)
+                : null
+
+        const selectedExperience = experienceOptions.find(
+            item => item.value === experience.value
+        )
+
+        experienceSearch.value =
+            selectedExperience?.label || ''
+
         getFilteredJobs()
-    }
+
+    },
+    { immediate: true }
 )
 // Candidate fetch
 watch(

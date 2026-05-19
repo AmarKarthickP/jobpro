@@ -47,7 +47,7 @@
                 <!-- Experience -->
                 <div class="flex-1 relative">
                     <input
-                        v-model="experience"
+                        v-model="experienceSearch"
                         type="text"
                         placeholder="Select Experience"
                         @focus="showExperienceSuggestions = true"
@@ -60,11 +60,11 @@
                     >
                         <div
                             v-for="option in filteredExperienceOptions"
-                            :key="option"
+                            :key="option.value"
                             @mousedown="selectExperienceOption(option)"
                             class="px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-50 transition font-medium"
                         >
-                            {{ option }}
+                            {{ option.label }}
                         </div>
                     </div>
                 </div>
@@ -154,7 +154,8 @@ import CustomerCarousel from '../components/CustomerCarousel.vue'
 
 const position = ref("")
 const location = ref("")
-const experience = ref("")
+const experience = ref(null)
+const experienceSearch = ref("")
 const jobs = ref([])
 const allJobs = ref([])
 const countries = ref(0)
@@ -199,8 +200,11 @@ const locationOptions = computed(() => {
     return [...new Set(territories)]
 })
 const experienceOptions = [
-  "Fresher",
-  ...Array.from({ length: 30 }, (_, i) => `${i + 1} Year${i + 1 > 1 ? "s" : ""}`)
+  { label: "Fresher", value: 0 },
+  ...Array.from({ length: 30 }, (_, i) => ({
+    label: `${i + 1} Year${i + 1 > 1 ? "s" : ""}`,
+    value: i + 1
+  }))
 ]
 
 
@@ -229,18 +233,29 @@ function hideLocationSuggestions() {
 }
 // Experience
 function selectExperienceOption(option) {
-    selectOption(
-        experience,
-        option,
-        showExperienceSuggestions
-    )
+    experience.value = option.value
+    experienceSearch.value = option.label
+    showExperienceSuggestions.value = false
 }
 function hideExperienceSuggestions() {
-    hideSuggestions(
-        experience,
-        experienceOptions,
-        showExperienceSuggestions
-    )
+
+    setTimeout(() => {
+
+        const validOption = experienceOptions.find(
+            option =>
+                option.label.toLowerCase().trim() ===
+                experienceSearch.value.toLowerCase().trim()
+        )
+
+        if (validOption) {
+            experience.value = validOption.value
+            experienceSearch.value = validOption.label
+        }
+
+        showExperienceSuggestions.value = false
+
+    }, 100)
+
 }
 
 function selectLocationOption(option) {
@@ -253,7 +268,19 @@ function selectLocationOption(option) {
 
 // Filtered Suggestions
 const filteredPositionOptions = createFilteredOptions(positionOptions, position)
-const filteredExperienceOptions = createFilteredOptions(experienceOptions, experience)
+const filteredExperienceOptions = computed(() => {
+
+    if (!experienceSearch.value) {
+        return experienceOptions
+    }
+
+    return experienceOptions.filter(option =>
+        option.label.toLowerCase().includes(
+            experienceSearch.value.toLowerCase()
+        )
+    )
+
+})
 const filteredLocationOptions = createFilteredOptions(locationOptions, location)
 
 // Reusable Filter Helper
