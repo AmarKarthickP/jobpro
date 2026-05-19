@@ -816,7 +816,7 @@ import { getCandidate } from '@/data/candidate'
 import { getNationality, getDistricts, getState, getCurrency, getCountry, getHighestDegree, getSpecialization } from '@/data/doctype'
 
 // Utils
-import { handleSave, uploadFile } from '@/utils/document'
+import { handleSave, uploadFile, deleteFile } from '@/utils/document'
 
 // Components
 import Avatar from '../components/Avatar.vue'
@@ -1580,13 +1580,12 @@ const handleResumeUpload = async (file) => {
 
         onStart: () => {
             isResumeUploading.value = true
-            console.log('Uploading...')
         },
 
         onSuccess: (data) => {
             toastType.value = 'success'
             toastTitle.value = 'Uploaded Successfully'
-            toastMessage.value = 'Your CV has been uploaded.'
+            toastMessage.value = 'Your remsume has been uploaded.'
             showToast.value = true
             resumeFileName.value = `Resume: ${fullName.value}`
         },
@@ -1594,13 +1593,12 @@ const handleResumeUpload = async (file) => {
         onError: (error) => {
             toastType.value = 'error'
             toastTitle.value = 'Upload Failed'
-            toastMessage.value = 'There was an error uploading your CV'
+            toastMessage.value = 'There was an error uploading your remsume'
             showToast.value = true
         },
 
         onFinally: () => {
             isResumeUploading.value = false
-            console.log('Done')
         },
     })
 }
@@ -1645,13 +1643,36 @@ const downloadResume = () => {
 }
 
 const deleteResume = async () => {
-    resumeURL.value = ''
-    resumeFileName.value = 'Attach Resume'
 
-    toastType.value = 'success'
-    toastTitle.value = 'Deleted Successfully'
-    toastMessage.value = 'Resume has been removed.'
-    showToast.value = true
+    await deleteFile({
+        endpoint: '/api/method/jobpro.api.delete_file',
+        doctype: "Candidate",
+        docname: candidate.value.name,
+        fieldname: 'custom_updated__un_masked_cv',
+
+        onStart: () => {
+            isResumeUploading.value = true
+        },
+
+        onSuccess: (data) => {
+            toastType.value = 'success'
+            toastTitle.value = 'Deleted Successfully'
+            toastMessage.value = 'Your resume has been removed.'
+            showToast.value = true
+            resumeFileName.value = `Attach File`
+        },
+
+        onError: (error) => {
+            toastType.value = 'error'
+            toastTitle.value = 'Upload Failed'
+            toastMessage.value = 'There was an error deleting your resume'
+            showToast.value = true
+        },
+
+        onFinally: () => {
+            isResumeUploading.value = false
+        },
+    })
 }
 
 const downloadPassport = () => {
@@ -1661,12 +1682,34 @@ const downloadPassport = () => {
 }
 
 const deletePassport = async () => {
-    passportURL.value = ''
-    passportFileName.value = 'Attach Passport'
+    await deleteFile({
+        endpoint: '/api/method/jobpro.api.delete_file',
+        doctype: "Candidate",
+        docname: candidate.value.name,
+        fieldname: 'passport',
 
-    toastType.value = 'success'
-    toastTitle.value = 'Deleted Successfully'
-    toastMessage.value = 'Passport has been removed.'
-    showToast.value = true
+        onStart: () => {
+            isPassportUploading.value = true
+        },
+
+        onSuccess: (data) => {
+            toastType.value = 'success'
+            toastTitle.value = 'Deleted Successfully'
+            toastMessage.value = 'Your passport has been removed.'
+            showToast.value = true
+            passportFileName.value = `Attach File`
+        },
+
+        onError: (error) => {
+            toastType.value = 'error'
+            toastTitle.value = 'Upload Failed'
+            toastMessage.value = 'There was an error deleting your passport'
+            showToast.value = true
+        },
+
+        onFinally: () => {
+            isPassportUploading.value = false
+        },
+    })
 }
 </script>

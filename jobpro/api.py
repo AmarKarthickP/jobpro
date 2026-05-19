@@ -352,6 +352,59 @@ def upload_file():
 
         frappe.throw("Something went wrong")
         
+@frappe.whitelist(allow_guest=True)
+def delete_file():
+    try:
+        docname = frappe.form_dict.get("docname")
+        doctype = frappe.form_dict.get("doctype")
+        fieldname = frappe.form_dict.get("fieldname")
+
+        response = requests.post(
+            f"{base_url}/api/method/teampro.jobpro_api.delete_file",
+
+            data={
+                "docname": docname,
+                "doctype": doctype,
+                "fieldname": fieldname,
+            },
+
+            headers={
+                "Authorization": f"token {api_key}:{api_secret}"
+            },
+
+            timeout=30
+        )
+
+        frappe.log_error(
+            title="External Deletion Response",
+            message=response.text
+        )
+
+        response.raise_for_status()
+        response_data = response.json()
+        return {
+            "status": "success"
+        }
+
+    except requests.exceptions.RequestException:
+        frappe.log_error(
+            title="External Deletion Error",
+            message=frappe.get_traceback()
+        )
+
+        frappe.throw(
+            "Unable to remove the date from external server"
+        )
+
+    except Exception:
+        frappe.log_error(
+            title="Deletion Error",
+            message=frappe.get_traceback()
+        )
+
+        frappe.throw("Something went wrong")
+                
+        
 def delete_logs():
     error_logs = frappe.get_all("Error Log", pluck="name")
     for error_log in error_logs:
