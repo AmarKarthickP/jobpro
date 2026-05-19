@@ -113,11 +113,10 @@
         <div v-show="viewProfileMenu"
             class="bg-white fixed top-[80px] right-[200px] w-[300px] px-5 pt-5 pb-3 rounded-lg shadow-md shadow-gray-400 z-50"
         >
-            <div class="flex gap-2 mb-3">
+            <div class="flex gap-2 mb-3 items-center">
                 <avatar :img="userData" class="h-10 w-10 rounded-full" />
                 <div>
                     <p class="font-medium text-md">{{ user.fullName }}</p>
-                    <p class="text-sm mt-0.5 opacity-75">{{ userData.headline }}</p>
                 </div>
             </div>
             <router-link
@@ -158,7 +157,7 @@ import { user } from '@/data/user'
 const userData = computed(() => ({
     src: user.image,
     alt: 'profile',
-    headline: 'Software Developer | Frappe Framework | ERPNext | Vue JS',
+    bio: user.bio,
 }))
 
 function handleSignOut() {

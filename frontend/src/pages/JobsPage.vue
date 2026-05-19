@@ -352,16 +352,6 @@ import { getJobs } from '@/data/jobs'
 import { user } from '@/data/user'
 import { getCandidate } from '@/data/candidate'
 
-// User Data
-const userData = {
-    name: 'Amar Karthick P',
-    headline: 'Software Developer | Frappe Framework | ERPNext | Vue JS',
-    location: 'Chennai, Tamil Nadu',
-    company: 'TEAMPRO HR & IT Services Pvt. Ltd.',
-    src: defaultImage,
-    alt: 'profile',
-}
-
 // Main State
 const jobs = ref([])
 const allJobs = ref([])
