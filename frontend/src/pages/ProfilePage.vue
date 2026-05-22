@@ -1456,7 +1456,8 @@ const savePersonalDetails = async () => {
             location: district.value,
             temp_state: state.value,
             country: country.value,
-            name: candidate.value.name
+            name: candidate.value.name,
+            mail_id: email.value,
         },
 
         onStart: () => {
@@ -1530,6 +1531,7 @@ const saveEducationDetails = async () => {
             specialization: specialization.value,
             year_of_passing: yearOfPassing.value,
             name: candidate.value.name,
+            mail_id: email.value,
         },
 
         onStart: () => {
@@ -1571,6 +1573,7 @@ const saveExperienceDetails = async () => {
             current_ctc: currentCtc.value || 0,
             expected_ctc: expectedCtc.value || 0,
             name: candidate.value.name,
+            mail_id: email.value,
         },
 
         onStart: () => {
@@ -1608,6 +1611,7 @@ const savePassportDetails = async () => {
             ecr_status_candidate: passportCategory.value,
             ecr_status: passportCategory.value,
             name: candidate.value.name,
+            mail_id: email.value,
         },
 
         onStart: () => {
