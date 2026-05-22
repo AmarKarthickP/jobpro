@@ -256,10 +256,35 @@
             Add education details
           </button>
         </div>
-        <div class="text-gray-500 font-medium text-[13px] mt-2">
+        <div 
+          v-if="candidate.table_28" 
+          v-for="edu in candidate.table_28"
+          class="px-3"
+        >
+          <div class="py-2">
+            <div class="flex items-center gap-5">
+              <p class="text-primary/90 font-medium ">{{ edu.school_univ }}</p>
+              <button class="ml-auto">
+                <edit-icon class="h-4 w-4 text-highlight" />
+              </button>
+              <button>
+                <delete-icon class="h-4 w-4 text-red-500" />
+              </button>
+            </div>
+            <p class="text-primary/80 font-medium text-[14px]">{{ edu.level }} 
+              <!-- <span v-if="edu.specialization">, {{ edu.specialization }}</span> -->
+              <span v-if="edu.class_per"> - {{ edu.class_per }}%</span>
+            </p>
+            <p class="text-primary/80 font-medium text-[14px]">{{ edu.specialization }}</p>
+            <p class="text-primary/80 font-medium text-[14px]">{{ edu.year_of_passing }}</p>
+          </div>
+          <div class="border-t border-gray-300 my-2"></div>
+        </div>
+        <div v-else class="text-gray-500 font-medium text-[13px] mt-2">
           Add your education details to showcase your qualifications
         </div>
       </div>
+      
       <!-- Experience Details -->
       <div
         ref="experienceSection"
