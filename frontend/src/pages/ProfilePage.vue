@@ -259,7 +259,7 @@
         <div 
           v-if="candidate.table_28" 
           v-for="edu in candidate.table_28"
-          class="px-3"
+          class="px-3 mt-3"
         >
           <div class="py-2">
             <div class="flex items-center gap-5">
@@ -278,7 +278,7 @@
             <p class="text-primary/80 font-medium text-[14px]">{{ edu.specialization }}</p>
             <p class="text-primary/80 font-medium text-[14px]">{{ edu.year_of_passing }}</p>
           </div>
-          <div class="border-t border-gray-300 my-2"></div>
+          <div v-if="edu.idx!=candidate.table_28.length" class="border-t border-gray-300 my-2"></div>
         </div>
         <div v-else class="text-gray-500 font-medium text-[13px] mt-2">
           Add your education details to showcase your qualifications
