@@ -9,7 +9,7 @@
         </div>
         <div class="relative flex items-center py-10">
           <div
-            class="ml-10 relative bg-white rounded-full group w-fit"
+            class="ml-6 relative bg-white rounded-full group w-fit"
           >
             <AttachImage
               :modelValue="userData"
@@ -17,13 +17,13 @@
               @file-selected="handlePhotoChange"
             />            
           </div>
-          <div class="text-white absolute top-6 left-[240px]">
+          <div class="text-white absolute top-6 left-[210px]">
             <div class="flex">
               <p class="font-semibold text-[25px] uppercase">{{ fullName }}</p>
             </div>
             <p class="font-semibold text-[20px] -mt-1 absolute">#{{ candidate.name }}</p>
           </div>
-          <div class="flex justify-start items-center gap-10 ml-10 mt-20">
+          <div class="flex justify-start items-center gap-6 ml-6 mt-20">
             <div>
               <p
                 class="text-[15px] mt-1.5 text-primary font-medium flex gap-3 items-center capitalize"
@@ -63,7 +63,7 @@
                 <span v-else class="text-default"> Current CTC </span>
               </p>
             </div>
-            <div class="border-l border-gray-500 pl-10">
+            <div class="border-l border-gray-500 pl-6">
               <p
                 class="text-[15px] mt-1.5 text-primary font-medium flex gap-3 items-center"
               >
