@@ -17,13 +17,13 @@
               @file-selected="handlePhotoChange"
             />            
           </div>
-          <div class="text-white absolute top-6 left-[210px]">
+          <div class="text-white absolute top-6 left-[225px]">
             <div class="flex">
               <p class="font-semibold text-[25px] uppercase">{{ fullName }}</p>
             </div>
             <p class="font-semibold text-[20px] -mt-1 absolute">#{{ candidate.name }}</p>
           </div>
-          <div class="flex justify-start items-center gap-6 ml-6 mt-20">
+          <div class="flex justify-start items-center gap-6 ml-10 mt-20">
             <div>
               <p
                 class="text-[15px] mt-1.5 text-primary font-medium flex gap-3 items-center capitalize"
