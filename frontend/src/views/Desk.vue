@@ -6,16 +6,7 @@
                 <img src="@/assets/logo/teampro.png" class="h-6" />
             </router-link>
             <!-- Search-box -->
-            <div class="min-w-[350px]">
-                <!-- <div class="flex border-2 border-default hover:bg-hoverbg rounded-full px-3 w-[200px] focus-within:w-full transition-all duration-500 ease-in-out">
-                    <svg class="w-5 text-primary"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  
-                        <circle cx="11" cy="11" r="8" />
-                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                    </svg>
-                    <input class="outline-none bg-transparent rounded-full pl-2 h-8 text-sm w-[90%]"
-                        placeholder="Search" 
-                    />
-                </div> -->
+            <div class="min-w-[300px]">
             </div>
         <router-link
             to="/home"
