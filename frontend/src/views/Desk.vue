@@ -35,7 +35,8 @@
           <p class="text-[12px] font-medium">Activity</p>
         </div>
       </router-link>
-      <router-link to="/refer" v-slot="{ isActive }">
+      <router-link 
+        v-if="auth.isLoggedIn" to="/refer" v-slot="{ isActive }">
         <div :class="navClass(isActive)">
           <refer-icon class="h-7 w-7 pt-1" />
           <p class="text-[12px] font-medium">Refer</p>

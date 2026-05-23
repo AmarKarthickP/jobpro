@@ -64,6 +64,7 @@ const routes = [
         path: 'refer',
         name: 'refer',
         component: ReferPage,
+        meta: { requiresAuth: true }
       },
 
       {
