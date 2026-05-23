@@ -72,7 +72,7 @@
         Sign In
       </button>
       <router-link to="/home">
-        <div class="flex flex-col items-center text-primary pr-10">
+        <div class="flex flex-col items-center text-primary">
           <img src="../assets/logo/jobpro.png" alt="jobpro" class="w-16" />
         </div>
       </router-link>
