@@ -7,6 +7,18 @@
       : 'shadow-sm hover:shadow-md hover:-translate-y-0.5'
   "
   >
+  <div v-if="data.already_applied">
+    <div v-if="view=='grid'" class="relative">
+      <ribbon-right-icon class="h-20 absolute text-red-600 -top-6 -right-[21px]" />
+      <p class="text-white text-sm font-medium absolute -right-2 top-1">Applied</p>
+    </div> 
+    
+    <div v-if="view=='list'" class="relative">
+      <ribbon-right-icon class="h-24 absolute text-red-600 top-3 -right-[21px]" />
+      <p class="text-white text-[14px] font-medium absolute -right-1 top-[47px]">Applied</p>
+    </div> 
+  </div>
+
     <div v-if="view=='list'" class="grid grid-cols-12">
       <div class="col-span-10">
         <div class="flex items-center gap-3">
@@ -212,12 +224,12 @@
           <button
             @click="handleApplyJob"
             v-if="page!='Activity'"
-            :disabled="isSaving || data.already_applied"
+            :disabled="isSaving"
             class="mt-16 text-center w-full bg-primary py-2 rounded-lg text-white text-[14px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {{
   data.already_applied
-    ? 'Applied'
+    ? 'Check Status'
     : isSaving
       ? 'Applying'
       : 'Apply Now'
@@ -454,12 +466,12 @@
         <button
           @click="handleApplyJob"
           v-if="page!='Activity'"
-          :disabled="isSaving || data.already_applied"
+          :disabled="isSaving"
           class="text-center mt-3 w-full bg-primary py-1.5 rounded-lg text-white text-[11px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {{
   data.already_applied
-    ? 'Applied'
+    ? 'Check Status'
     : isSaving
       ? 'Applying'
       : 'Apply Now'
@@ -764,12 +776,12 @@
           <button
             @click="handleApplyJob"
             v-if="page!='Activity'"
-            :disabled="isSaving || data.already_applied"
+            :disabled="isSaving"
             class="text-center w-full bg-primary py-2 rounded-lg text-white text-[14px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {{
   data.already_applied
-    ? 'Applied'
+    ? 'Check Status'
     : isSaving
       ? 'Applying'
       : 'Apply Now'
@@ -821,6 +833,8 @@
 <script setup>
 // vue
 import { ref, watch, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
+
 // Utils
 import { timeAgo } from '@/utils/date'
 import { uploadFile, handleSave } from '@/utils/document'
@@ -831,6 +845,7 @@ import FoodIcon from './icons/FoodIcon.vue';
 import AccommodationIcon from './icons/AccommodationIcon.vue';
 import BusIcon from './icons/BusIcon.vue';
 import FlightTicketIcon from './icons/FlightTicketIcon.vue';
+import RibbonRightIcon from './icons/RibbonRightIcon.vue';
 // Components
 import Dialog from './Dialog.vue';
 import FileUpload from './FileUpload.vue';
@@ -869,6 +884,9 @@ const props = defineProps({
     },
 })
 
+// Router
+const router = useRouter()
+
 // States
 const showJobDetails = ref(false)
 const showAttachCVDialog = ref(false)
@@ -896,6 +914,12 @@ function truncateText(text, length) {
 // Methods
 async function handleApplyJob() {
   if (props.data.already_applied) {
+    router.push({
+        path: '/activity',
+        query: {
+            jobId: props.data.name,
+        }
+    })
     return
   }
   if (!props.isLoggedIn) {

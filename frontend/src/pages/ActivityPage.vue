@@ -220,7 +220,7 @@
 
 <script setup>
 // Vue
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 
 // Data
 import { user } from '../data/user'
@@ -580,4 +580,8 @@ watch(
   },
   { immediate: true }
 )
+
+onMounted(async () => {
+    jobId.value = route.query.jobId || ''
+})
 </script>
