@@ -9,6 +9,7 @@ import ProfilePage from './pages/ProfilePage.vue'
 import ActivityPage from './pages/ActivityPage.vue'
 import DashboardPage from './pages/DashboardPage.vue'
 import NotificationsPage from './pages/NotificationsPage.vue'
+import ReferPage from './pages/ReferPage.vue'
 
 const routes = [
   {
@@ -56,6 +57,12 @@ const routes = [
         path: 'notifications',
         name: 'notifications',
         component: NotificationsPage,
+      },
+
+      {
+        path: 'refer',
+        name: 'refer',
+        component: ReferPage,
       },
     ]
   }

@@ -6,8 +6,8 @@
                 <img src="@/assets/logo/teampro.png" class="h-6" />
             </router-link>
             <!-- Search-box -->
-            <div class="w-[350px]">
-                <div class="flex border-2 border-default hover:bg-hoverbg rounded-full px-3 w-[200px] focus-within:w-full transition-all duration-500 ease-in-out">
+            <div class="min-w-[350px]">
+                <!-- <div class="flex border-2 border-default hover:bg-hoverbg rounded-full px-3 w-[200px] focus-within:w-full transition-all duration-500 ease-in-out">
                     <svg class="w-5 text-primary"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  
                         <circle cx="11" cy="11" r="8" />
                         <line x1="21" y1="21" x2="16.65" y2="16.65" />
@@ -15,7 +15,7 @@
                     <input class="outline-none bg-transparent rounded-full pl-2 h-8 text-sm w-[90%]"
                         placeholder="Search" 
                     />
-                </div>
+                </div> -->
             </div>
         <router-link
             to="/home"
@@ -53,6 +53,15 @@
             <div :class="navClass(isActive)">
                 <activity-icon class="h-7 w-7 pt-1" />
                 <p class="text-[12px] font-medium">Activity</p>
+            </div>
+        </router-link>
+        <router-link 
+            to="/refer"
+            v-slot="{ isActive }"
+        >
+            <div :class="navClass(isActive)">
+                <refer-icon class="h-7 w-7 pt-1" />
+                <p class="text-[12px] font-medium">Refer</p>
             </div>
         </router-link>
         <router-link 
@@ -173,6 +182,7 @@ import clickOutside from '@/directives/clickOutside'
 import DownIcon from '../components/icons/DownIcon.vue';
 import router from '../router';
 import ActivityIcon from '../components/icons/ActivityIcon.vue';
+import ReferIcon from '../components/icons/ReferIcon.vue';
 const vClickOutside = clickOutside
 
 const navClass = (isActive) => [
