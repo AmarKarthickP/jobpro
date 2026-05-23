@@ -34,6 +34,30 @@
           <div class="relative">
             <input
               type="text"
+              placeholder="Job ID"
+              v-model="jobId"
+              @focus="showJobIdSuggestions = true"
+              @blur="hideJobIdSuggestions"
+              class="bg-background ml-3 w-[130px] border-0 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 pr-2 pl-4 py-1 transition-all duration-300 ease-in-out"
+            />
+
+            <div
+              v-if="showJobIdSuggestions && filteredJobIdOptions.length"
+              class="absolute z-50 mt-2 max-h-[200px] hide-scrollbar overflow-y-auto left-[5%] w-[133px] bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+            >
+              <div
+                v-for="option in filteredJobIdOptions"
+                :key="option"
+                @mousedown="selectJobIdOption(option)"
+                class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-gray-100 transition-all duration-200"
+              >
+                {{ option }}
+              </div>
+            </div>
+          </div>
+          <div class="relative">
+            <input
+              type="text"
               placeholder="Status"
               v-model="status"
               @focus="showStatusSuggestions = true"
@@ -231,6 +255,7 @@ const appliedJobs = ref([])
 // Fields
 const status = ref('')
 const position = ref('')
+const jobId = ref('')
 
 // Progress Tracker
 const statuses = ref([])
@@ -248,10 +273,15 @@ const positionOptions = computed(() => {
     const subjects = appliedJobs.value.map(job => job.subject)
     return [...new Set(subjects)]
 })
+const jobIdOptions = computed(() => {
+    const subjects = appliedJobs.value.map(job => job.name)
+    return [...new Set(subjects)]
+})
 
 // Suggestion
 const showStatusSuggestions = ref(false)
 const showPositionSuggestions = ref(false)
+const showJobIdSuggestions = ref(false)
 
 // Sorting
 const sortBy = ref('applied_on')
@@ -288,11 +318,29 @@ function hidePositionSuggestions() {
     )
 }
 
+// Job ID
+function selectJobIdOption(option) {
+    selectOption(
+        jobId,
+        option,
+        showJobIdSuggestions
+    )
+}
+function hideJobIdSuggestions() {
+    hideSuggestions(
+        jobId,
+        jobIdOptions,
+        showJobIdSuggestions
+    )
+}
+
 // Filtered Suggestions
 const filteredStatusOptions =
     createFilteredOptions(statusOptions, status)
 const filteredPositionOptions =
     createFilteredOptions(positionOptions, position)
+const filteredJobIdOptions =
+    createFilteredOptions(jobIdOptions, jobId)
 
 // Reusable Select Helper
 function selectOption(model, value, showRef) {
@@ -383,6 +431,15 @@ const filteredAndSortedJobs = computed(() => {
         jobs = jobs.filter(job =>
             job.subject?.toLowerCase().includes(
                 position.value.toLowerCase()
+            )
+        )
+    }
+
+    // Filter by jobId
+    if (jobId.value) {
+        jobs = jobs.filter(job =>
+            job.name?.toLowerCase().includes(
+                jobId.value.toLowerCase()
             )
         )
     }
