@@ -299,7 +299,28 @@
             Add experience details
           </button>
         </div>
-        <div class="text-gray-500 font-medium text-[13px] mt-2">
+        <div 
+          v-if="candidate.experience_details" 
+          v-for="exp in candidate.experience_details"
+          class="px-3 mt-3"
+        >
+          <div class="py-2">
+            <div class="flex items-center gap-5">
+              <p class="text-primary/90 font-medium ">{{ exp.organization }}</p>
+              <button class="ml-auto">
+                <edit-icon class="h-4 w-4 text-highlight" />
+              </button>
+              <button>
+                <delete-icon class="h-4 w-4 text-red-500" />
+              </button>
+            </div>
+            <p class="text-primary/80 font-medium text-[14px]">{{ exp.role }}</p>
+            <p class="text-primary/80 font-medium text-[14px]">{{ formatMonthYear(exp.from_date) }} - {{ formatMonthYear(exp.to_date) }}</p>
+            <p v-if="exp.work_summary" class="text-primary/80 font-medium text-[14px] bg-background p-3 rounded-lg mt-3">{{ exp.work_summary }}</p>
+          </div>
+          <div v-if="exp.idx!=candidate.experience_details.length" class="border-t border-gray-300 my-2"></div>
+        </div>
+        <div v-else class="text-gray-500 font-medium text-[13px] mt-2">
           Add your experience details to showcase your professional background
         </div>
       </div>
@@ -866,6 +887,7 @@ import { getNationality, getDistricts, getState, getCurrency, getCountry, getHig
 
 // Utils
 import { handleSave, uploadFile, deleteFile } from '@/utils/document'
+import { formatMonthYear } from '../utils/date'
 
 // Components
 import Avatar from '../components/Avatar.vue'
