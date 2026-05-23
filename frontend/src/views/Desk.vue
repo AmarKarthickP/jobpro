@@ -73,7 +73,7 @@
       </button>
       <router-link to="/home">
         <div class="flex flex-col items-center text-primary pr-10">
-          <img src="../assets/logo/jobpro.png" alt="jobpro" class="h-14 w-14" />
+          <img src="../assets/logo/jobpro.png" alt="jobpro" class="w-16" />
         </div>
       </router-link>
     </div>
