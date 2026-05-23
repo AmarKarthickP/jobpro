@@ -25,3 +25,12 @@ export function timeAgo(dateString) {
 
     return 'just now'
 }
+
+export function formatMonthYear(date) {
+  if (!date) return "";
+
+  return new Date(date).toLocaleDateString("en-US", {
+    month: "short",
+    year: "numeric",
+  });
+}
