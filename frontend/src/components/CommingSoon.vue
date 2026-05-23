@@ -20,6 +20,6 @@
             </h1>
 
         </div> -->
-        <img src="../assets/logo/comming-soon-funny.png" class="h-24" />
+        <img src="../assets/defaults/comming-soon-funny.png" class="h-24" />
     </div>
 </template> 
