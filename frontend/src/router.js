@@ -10,6 +10,7 @@ import ActivityPage from './pages/ActivityPage.vue'
 import DashboardPage from './pages/DashboardPage.vue'
 import NotificationsPage from './pages/NotificationsPage.vue'
 import ReferPage from './pages/ReferPage.vue'
+import TaskAIPage from './pages/TaskAIPage.vue'
 
 const routes = [
   {
@@ -63,6 +64,12 @@ const routes = [
         path: 'refer',
         name: 'refer',
         component: ReferPage,
+      },
+
+      {
+        path: 'task_ai',
+        name: 'task_ai',
+        component: TaskAIPage,
       },
     ]
   }
