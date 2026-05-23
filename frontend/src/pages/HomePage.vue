@@ -1,6 +1,6 @@
 <template>
     <section class="w-full flex flex-col items-center">
-        <div class="flex flex-col items-center mt-16">
+        <div class="flex flex-col items-center mt-20">
             
             <!-- Heading -->
             <h1 class="text-primary text-[35px] font-bold tracking-tight">
@@ -124,11 +124,28 @@
         </div>
     </section>
     
-
-    <!-- Hriring Companies -->
-    <section class="text-center mt-12">
-        <h1 class="font-bold text-primary text-[25px]">Our Hiring Companies</h1>
-        <customer-carousel class="-mt-10" />
+    <!-- Recent Jobs -->
+    <section class="text-center mt-14 flex justify-center items-center">
+        <div 
+            :class="[
+                auth.isLoggedIn ? 'w-[1300px]' : 'w-[1100px]'
+            ]"
+        >
+            <h1 class="font-bold text-primary text-[25px]">Our Hiring Companies</h1>
+            <customer-carousel class="-mt-10" />
+        </div>
+    </section>
+    
+    <!-- Recent Jobs -->
+    <section class="text-center flex justify-center items-center -mt-2 pb-10">
+        <div 
+            :class="[
+                auth.isLoggedIn ? 'w-[1200px]' : 'w-[1000px]'
+            ]"
+        >
+            <h1 class="font-bold text-primary text-[25px]">Recent Jobs</h1>
+            <job-carousel class="mt-10" />
+        </div>
     </section>
 </template>
 
@@ -137,20 +154,22 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 
-// Components
+// Icons
 import SearchIcon from '../components/icons/SearchIcon.vue'
 import WorldIcon from '../components/icons/WorldIcon.vue'
 import CompanyIcon from '../components/icons/CompanyIcon.vue'
 import PeopleIcon from '../components/icons/PeopleIcon.vue'
 import WorkIcon from '../components/icons/WorkIcon.vue'
 import SuitcaseIcon from '../components/icons/SuitcaseIcon.vue'
+// Components
+import CustomerCarousel from '../components/CustomerCarousel.vue'
+import JobCarousel from '../components/JobCarousel.vue'
 
 // Data
 import { getJobs } from '@/data/jobs'
-
+import { auth } from '@/data/auth'
 // Utils
 import { animateCounter } from '../utils/animatecounter'
-import CustomerCarousel from '../components/CustomerCarousel.vue'
 
 const position = ref("")
 const location = ref("")
