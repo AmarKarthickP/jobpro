@@ -251,7 +251,7 @@
           </button>
           <button
             v-if="page=='Activity' && data.status=='IDB'"
-            class="relative cursor-default overflow-hidden mt-16 text-center w-full bg-red-600 py-2 rounded-lg text-white text-[14px] font-medium"
+            class="relative cursor-default overflow-hidden mt-16 text-center w-full bg-primary py-2 rounded-lg text-white text-[14px] font-medium"
           >
             <!-- Shimmer -->
             <span
@@ -259,7 +259,7 @@
             ></span>
 
             <!-- Text -->
-            <span class="relative z-10"> Rejected </span>
+            <span class="relative z-10"> Better Luck Next Time </span>
           </button>
         </div>
       </div>
@@ -493,7 +493,7 @@
         </button>
         <button
           v-if="page=='Activity' && data.status=='IDB'"
-          class="relative cursor-default overflow-hidden text-center mt-3 ml-auto w-[50%] bg-red-600 py-1.5 rounded-lg text-white text-[11px] font-medium"
+          class="relative cursor-default overflow-hidden text-center mt-3 ml-auto w-[50%] bg-primary py-1.5 rounded-lg text-white text-[11px] font-medium"
         >
           <!-- Shimmer -->
           <span
@@ -501,7 +501,7 @@
           ></span>
 
           <!-- Text -->
-          <span class="relative z-10"> Rejected </span>
+          <span class="relative z-10"> Better Luck Next Time </span>
         </button>
       </div>
     </div>
