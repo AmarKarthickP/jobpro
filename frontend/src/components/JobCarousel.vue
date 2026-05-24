@@ -1,68 +1,81 @@
 <template>
   <div class="text-left cursor-default">
-    <!-- Row 1 -->
-    <div class="carousel">
-      <div class="carousel-track left">
-        <div class="flex gap-6">
-          <div
-            v-for="data in leftJobs"
-            :key="data.name"
-            class="bg-white rounded-xl shadow-sm border p-4 min-w-[250px]"
-          >
-            <p
-              class="text-[15px] font-semibold text-primary capitalize truncate"
-            >
-              {{ data.subject }}
-            </p>
 
-            <p
-              class="text-[14px] text-gray-600 font-medium capitalize truncate"
-            >
-              {{ data.customer }}
-            </p>
+    <!-- Loader -->
+    <div
+      v-if="loading"
+      class="flex justify-center items-center min-h-[200px]"
+    >
+      <Loader class="text-[40px] text-center" />
+    </div>
 
+    <!-- Content -->
+    <div v-else>
+      <!-- Row 1 -->
+      <div class="carousel">
+        <div class="carousel-track left">
+          <div class="flex gap-6">
             <div
-              class="text-[14px] mt-1 text-gray-600 font-medium flex items-center gap-1"
+              v-for="data in leftJobs"
+              :key="data.name"
+              class="bg-white rounded-xl shadow-sm border p-4 min-w-[250px]"
             >
-              <img :src="data.custom_country_flag" class="h-5" />
-              <p>{{ data.territory }}</p>
+              <p
+                class="text-[15px] font-semibold text-primary capitalize truncate"
+              >
+                {{ data.subject }}
+              </p>
+
+              <p
+                class="text-[14px] text-gray-600 font-medium capitalize truncate"
+              >
+                {{ data.customer }}
+              </p>
+
+              <div
+                class="text-[14px] mt-1 text-gray-600 font-medium flex items-center gap-1"
+              >
+                <img :src="data.custom_country_flag" class="h-5" />
+                <p>{{ data.territory }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="carousel mt-6">
+        <div class="carousel-track right">
+          <div class="flex gap-6">
+            <div
+              v-for="data in rightJobs"
+              :key="data.name"
+              class="bg-white rounded-xl shadow-sm border p-4 min-w-[250px]"
+            >
+              <p
+                class="text-[15px] font-semibold text-primary capitalize truncate"
+              >
+                {{ data.subject }}
+              </p>
+
+              <p
+                class="text-[14px] text-gray-600 font-medium capitalize truncate"
+              >
+                {{ data.customer }}
+              </p>
+
+              <div
+                class="text-[14px] mt-1 text-gray-600 font-medium flex items-center gap-1"
+              >
+                <img :src="data.custom_country_flag" class="h-5" />
+                <p>{{ data.territory }}</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Row 2 -->
-    <div class="carousel mt-6">
-      <div class="carousel-track right">
-        <div class="flex gap-6">
-          <div
-            v-for="data in rightJobs"
-            :key="data.name"
-            class="bg-white rounded-xl shadow-sm border p-4 min-w-[250px]"
-          >
-            <p
-              class="text-[15px] font-semibold text-primary capitalize truncate"
-            >
-              {{ data.subject }}
-            </p>
-
-            <p
-              class="text-[14px] text-gray-600 font-medium capitalize truncate"
-            >
-              {{ data.customer }}
-            </p>
-
-            <div
-              class="text-[14px] mt-1 text-gray-600 font-medium flex items-center gap-1"
-            >
-              <img :src="data.custom_country_flag" class="h-5" />
-              <p>{{ data.territory }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -73,15 +86,23 @@ import { ref, computed, onMounted } from 'vue'
 // data
 import { getJobs } from '@/data/jobs'
 
+// component
+import Loader from '@/components/Loader.vue'
+
 // variables
 const jobs = ref([])
+const loading = ref(true)
 
 const leftJobs = computed(() => jobs.value.slice(0, 10))
 const rightJobs = computed(() => jobs.value.slice(10, 20))
 
 onMounted(async () => {
-  const data = await getJobs()
-  jobs.value = data
+  try {
+    const data = await getJobs()
+    jobs.value = data
+  } finally {
+    loading.value = false
+  }
 })
 </script>
 
