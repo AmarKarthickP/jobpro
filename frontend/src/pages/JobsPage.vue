@@ -277,8 +277,6 @@
           </div>
         </div>
       </div>
-      <!-- Sponsored -->
-      <sponsored-card class="mt-5" />
       <TransitionGroup
         tag="div"
         enter-active-class="transition-all duration-500 ease-out"
@@ -318,7 +316,6 @@
 import ProfileCard from '@/components/ProfileCard.vue'
 import QuickLinkCard from '@/components/QuickLinkCard.vue'
 import Avatar from '../components/Avatar.vue'
-import SponsoredCard from '@/components/SponsoredCard.vue'
 import JobCard from '../components/JobCard.vue'
 import Slider from '../components/Slider.vue'
 import Loader from '../components/Loader.vue'
