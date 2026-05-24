@@ -116,7 +116,7 @@
             </div>
           </button>
 
-          <div class="relative w-5 h-5 ml-2">
+          <!-- <div class="relative w-5 h-5 ml-2">
             <transition
               mode="out-in"
               enter-active-class="transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)]"
@@ -140,7 +140,7 @@
                 class="h-5 w-5 text-primary cursor-pointer"
               />
             </transition>
-          </div>
+          </div> -->
         </div>
       </div>
       <div v-if="isLoading" class="flex items-center justify-center mt-5">
