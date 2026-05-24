@@ -221,6 +221,7 @@
 <script setup>
 // Vue
 import { ref, watch, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 
 // Data
 import { user } from '../data/user'
@@ -245,6 +246,7 @@ import ProgressTracker from '@/components/ProgressTracker.vue'
 
 // States
 const isLoading = ref(false)
+const route = useRoute()
 
 // Variables
 const view = ref('grid')
@@ -579,6 +581,25 @@ watch(
 
   },
   { immediate: true }
+)
+watch(
+  () => [jobId.value, filteredAndSortedJobs.value],
+  () => {
+
+    if (!jobId.value) return
+
+    const matchedJob = filteredAndSortedJobs.value.find(
+      job =>
+        job.name?.toLowerCase() ===
+        jobId.value.toLowerCase()
+    )
+
+    if (matchedJob) {
+      selectedJob.value = matchedJob
+    }
+
+  },
+  { immediate: true, deep: true }
 )
 
 onMounted(async () => {
