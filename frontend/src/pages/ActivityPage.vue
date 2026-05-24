@@ -186,8 +186,8 @@
       </TransitionGroup>
     </div>
     <div class="col-span-4">
-      <div class="sticky top-24">
-      <div class="rounded-lg shadow-sm px-5 pt-3 pb-3 bg-white">
+      <div class="sticky top-20">
+      <div class="rounded-lg shadow-sm px-5 pt-2.5 pb-3 bg-white">
         <p class="text-primary font-semibold capitalize truncate text-[17px]">
           {{ selectedJob?.subject || 'Select a Job' }}
         </p>
