@@ -7,17 +7,27 @@
       : 'shadow-sm hover:shadow-md hover:-translate-y-0.5'
   "
   >
-  <div v-if="data.already_applied">
-    <div v-if="view=='grid'" class="relative">
-      <ribbon-right-icon class="h-20 absolute text-red-600 -top-6 -right-[21px]" />
-      <p class="text-white text-sm font-medium absolute -right-2 top-1">Applied</p>
-    </div> 
-    
-    <div v-if="view=='list'" class="relative">
-      <ribbon-right-icon class="h-24 absolute text-red-600 top-3 -right-[21px]" />
-      <p class="text-white text-[14px] font-medium absolute -right-1 top-[47px]">Applied</p>
-    </div> 
-  </div>
+    <div v-if="data.already_applied">
+      <div v-if="view=='grid'" class="relative">
+        <ribbon-right-icon
+          class="h-20 absolute text-red-600 -top-6 -right-[21px]"
+        />
+        <p class="text-white text-sm font-medium absolute -right-2 top-1">
+          Applied
+        </p>
+      </div>
+
+      <div v-if="view=='list'" class="relative">
+        <ribbon-right-icon
+          class="h-24 absolute text-red-600 top-3 -right-[21px]"
+        />
+        <p
+          class="text-white text-[14px] font-medium absolute -right-1 top-[47px]"
+        >
+          Applied
+        </p>
+      </div>
+    </div>
 
     <div v-if="view=='list'" class="grid grid-cols-12">
       <div class="col-span-10">
@@ -470,13 +480,23 @@
           class="text-center mt-3 w-full bg-primary py-1.5 rounded-lg text-white text-[11px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {{
-  data.already_applied
-    ? 'Check Status'
-    : isSaving
-      ? 'Applying'
-      : 'Apply Now'
+              data.already_applied
+                ? 'Check Status'
+                : isSaving
+                  ? 'Applying'
+                  : 'Apply Now'
           }}
         </button>
+        <badge
+          v-if="page=='Activity'"
+          class="relative cursor-pointer overflow-hidden text-center mt-3 ml-auto w-[50%] bg-[#ffebdb] py-1.5 rounded-lg text-[#e56700] text-[11px] font-medium"
+        >
+
+          <!-- Text -->
+          <span class="relative z-10">
+            Job ID: {{ data.name }}
+          </span>
+        </badge>
         <button
           v-if="page=='Activity' && data.status!='IDB'"
           class="relative cursor-default overflow-hidden text-center mt-3 ml-auto w-[50%] bg-primary py-1.5 rounded-lg text-white text-[11px] font-medium"
@@ -695,6 +715,7 @@
 
 
 
+
                 }}<span v-if="data.specialization">
                   (need specialization in {{ data.specialization }})</span
                 >
@@ -703,6 +724,7 @@
                 Experience:
                 <span
                   >{{ data.minimum_experience
+
 
 
 
