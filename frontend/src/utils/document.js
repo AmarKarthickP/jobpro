@@ -1,5 +1,8 @@
 const API_KEY = import.meta.env.VITE_FRAPPE_API_KEY
 const API_SECRET = import.meta.env.VITE_FRAPPE_API_SECRET
+const EXTERNAL_ENDPOINT = import.meta.env.VITE_FRAPPE_EXTERNAL_SITE
+const EXTERNAL_API_KEY = import.meta.env.VITE_FRAPPE_EXTERNAL_API_KEY
+const EXTERNAL_API_SECRET = import.meta.env.VITE_FRAPPE_EXTERNAL_API_SECRET
 
 export const handleSave = async ({
     endpoint,
@@ -51,21 +54,22 @@ export const handleSave = async ({
 }
 
 export const uploadFile = async ({
-    endpoint,
     file,
     doctype = null,
     docname = null,
     fieldname = null,
-    user = null,
     onStart = null,
     onSuccess = null,
     onError = null,
     onFinally = null,
 }) => {
     try {
-        if (onStart) {
-            onStart()
+
+        if (!file) {
+            throw new Error('No file selected')
         }
+
+        onStart?.()
 
         const formData = new FormData()
 
@@ -83,43 +87,88 @@ export const uploadFile = async ({
             formData.append('fieldname', fieldname)
         }
 
-        if (user) {
-            formData.append('user', user)
+        formData.append('is_private', 0)
+
+        const response = await fetch(
+            `${EXTERNAL_ENDPOINT}/api/method/teampro.jobpro_api.upload_file`,
+            {
+                method: 'POST',
+
+                headers: {
+                    Authorization:
+                        `token ${EXTERNAL_API_KEY}:${EXTERNAL_API_SECRET}`,
+                },
+
+                body: formData,
+            }
+        )
+
+        const text = await response.text()
+
+        let data
+
+        try {
+            data = JSON.parse(text)
+        } catch (e) {
+
+            console.error('Invalid JSON Response:', text)
+
+            throw new Error(
+                `Invalid server response (${response.status})`
+            )
         }
 
+        // Frappe error handling
+        if (
+            !response.ok ||
+            data.exc ||
+            data.exception
+        ) {
 
-        const response = await fetch(endpoint, {
-            method: 'POST',
-            mode: 'cors',
-            credentials: 'omit',
-            headers: {
-                'Authorization': `token ${API_KEY}:${API_SECRET}`,
-            },
-            body: formData,
-        })
-        const data = await response.json()
+            let errorMessage = 'Upload failed'
 
-        if (!response.ok) {
-            throw new Error(data.message || 'Upload failed')
+            if (data._server_messages) {
+                try {
+                    const messages = JSON.parse(data._server_messages)
+
+                    errorMessage = JSON.parse(messages[0]).message
+                } catch {
+                    errorMessage = data._server_messages
+                }
+            } else if (data.message) {
+                errorMessage = data.message
+            }
+
+            throw new Error(errorMessage)
         }
 
-        if (onSuccess) {
-            onSuccess(data)
+        // Core frappe upload response
+        const fileUrl = data.message?.file_url
+
+        const result = {
+            status: 'success',
+            file_url: fileUrl,
+            data,
         }
 
-        return data
+        onSuccess?.(result)
+
+        return result
 
     } catch (error) {
+
         console.error('File Upload Error:', error)
 
-        if (onError) {
-            onError(error)
+        onError?.(error)
+
+        return {
+            status: 'error',
+            message: error.message || 'Upload failed',
         }
 
     } finally {
-        if (onFinally) {
-            onFinally()
-        }
+
+        onFinally?.()
     }
 }
 
