@@ -7,10 +7,9 @@
       <router-link to="/home">
         <img src="@/assets/logo/teampro.png" class="h-6 z-30" />
       </router-link>
-      <!-- Task AI -->
-      <router-link to="/task_ai" class="min-w-[300px]">
-        <task-a-i-button />
-      </router-link>
+      <!-- extra spacing -->
+      <div class="min-w-[100px]">
+      </div>
       <router-link to="/home" v-slot="{ isActive }">
         <div :class="navClass(isActive)">
           <home-icon class="h-7 w-7 pt-1" />
@@ -71,6 +70,10 @@
       >
         Sign In
       </button>
+      <!-- Task AI -->
+      <router-link v-if="auth.isLoggedIn" to="/task_ai">
+        <task-a-i-button />
+      </router-link>
       <router-link to="/home">
         <div class="flex flex-col items-center text-primary">
           <img src="../assets/logo/jobpro.png" alt="jobpro" class="w-16" />

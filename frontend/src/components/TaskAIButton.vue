@@ -49,7 +49,7 @@
     <div class="relative bg-white/50 overflow-hidden rounded-xl px-5 py-1 flex items-center">
     <span class="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/40 to-transparent"></span>
 
-      <h4 class="text-center font-semibold text-[18px] text-primary">
+      <h4 class="text-center font-semibold text-[17px] text-primary">
         Task
         <span
           class="bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500 bg-clip-text text-transparent"
