@@ -246,7 +246,7 @@
 
             <!-- Text -->
             <span class="relative z-10">
-              {{ data.status }}
+              {{ getMappedStatus(data.status) }}
             </span>
           </button>
           <button
@@ -488,7 +488,7 @@
 
           <!-- Text -->
           <span class="relative z-10">
-            {{ data.status }}
+            {{ getMappedStatus(data.status) }}
           </span>
         </button>
         <button
@@ -904,6 +904,25 @@ const isSaving = ref(false)
 // File Uploads
 const isResumeUploading = ref(false)
 const resumeFileName = ref('Attach Resume')
+
+// Status Mapping
+const statusMapping = {
+  "Sourced": "Received CV",
+  "Pending QC": "Under Review",
+  "Submit(SPOC)": "Shared with Recruiter",
+  "Submitted(Client)": "Sent to Employer",
+  "Shortlisted": "Shortlisted",
+  "Linedup": "Interview Scheduled",
+  "Linedup Confirmed": "Interview Confirmed",
+  "Reported": "Joined Interview",
+  "Interviewed": "Interview Completed",
+  "Proposed PSL": "Offer in Progress",
+  "Result Pending": "Awaiting Feedback",
+}
+
+function getMappedStatus(status) {
+  return statusMapping[status] || status
+}
 
 function truncateText(text, length) {
     return text && text.length > length

@@ -1,6 +1,7 @@
 <!-- ProgressTracker.vue -->
 
 <script setup>
+import { computed } from 'vue'
 import SuccessIcon from './icons/SuccessIcon.vue'
 import CloseIcon from './icons/CloseIcon.vue'
 
@@ -74,6 +75,36 @@ const getLineClass = (current, next) => {
   // Default pending line
   return 'bg-gray-300'
 }
+const visibleStatuses = computed(() => {
+
+  const currentIndex = props.statuses.findIndex(
+    row =>
+      row.state === 'current' ||
+      row.state === 'failed'
+  )
+
+  // No current status found
+  if (currentIndex === -1) {
+
+    const lastCompletedIndex = props.statuses
+      .map((row, index) =>
+        row.state === 'completed' ? index : -1
+      )
+      .filter(index => index !== -1)
+      .at(-1)
+
+    return props.statuses.slice(
+      Math.max((lastCompletedIndex ?? 0) - 1, 0),
+      (lastCompletedIndex ?? 0) + 2
+    )
+  }
+
+  // previous + current + next
+  return props.statuses.slice(
+    Math.max(currentIndex - 1, 0),
+    currentIndex + 2
+  )
+})
 </script>
 
 <template>
@@ -92,17 +123,17 @@ const getLineClass = (current, next) => {
     >
 
       <div
-        v-for="(status, index) in statuses"
+        v-for="(status, index) in visibleStatuses"
         :key="index"
         class="relative flex items-start gap-4"
-        :class="index !== statuses.length - 1 ? 'pb-5' : ''"
+        :class="index !== visibleStatuses.length - 1 ? 'pb-5' : ''"
       >
 
         <!-- Timeline Line -->
         <div
-          v-if="index !== statuses.length - 1"
+          v-if="index !== visibleStatuses.length - 1"
           class="absolute left-[14px] top-7 h-full w-[2px]"
-          :class="getLineClass(status, statuses[index + 1])"
+          :class="getLineClass(status, visibleStatuses[index + 1])"
         ></div>
 
         <!-- Timeline Icon -->
