@@ -939,7 +939,7 @@ const statusMapping = {
   "Reported": "Joined Interview",
   "Interviewed": "Interview Completed",
   "Proposed PSL": "Offer in Progress",
-  "Result Pending": "Awaiting Feedback",
+  "Result Pending": "Waiting List",
 }
 
 function getMappedStatus(status) {
