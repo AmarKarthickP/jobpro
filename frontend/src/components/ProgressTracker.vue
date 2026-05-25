@@ -4,6 +4,16 @@
 import { computed, ref } from 'vue'
 import SuccessIcon from './icons/SuccessIcon.vue'
 import CloseIcon from './icons/CloseIcon.vue'
+import IDCardIcon from './icons/IDCardIcon.vue'
+import StarIcon from './icons/StarIcon.vue'
+import HRIcon from './icons/HRIcon.vue'
+import ShortListedIcon from './icons/ShortListedIcon.vue'
+import CalendarIcon from './icons/CalendarIcon.vue'
+import ConfirmedIcon from './icons/ConfirmedIcon.vue'
+import JoinIcon from './icons/JoinIcon.vue'
+import WaitingListIcon from './icons/WaitingListIcon.vue'
+import EmployerIcon from './icons/EmployerIcon.vue'
+import InterviewIcon from './icons/InterviewIcon.vue'
 
 const props = defineProps({
   title: {
@@ -16,6 +26,21 @@ const props = defineProps({
     default: () => [],
   },
 })
+
+// Map Icons with staus
+const statusIcons = {
+  'Received CV': IDCardIcon,
+  'Under Review': StarIcon,
+  'Shared with Recruiter': HRIcon,
+  'Sent to Employer': EmployerIcon,
+  'Shortlisted': ShortListedIcon,
+  'Interview Scheduled': CalendarIcon,
+  'Interview Confirmed': ConfirmedIcon,
+  'Joined Interview': JoinIcon,
+  'Interview Completed': InterviewIcon,
+  'Offer in Progress': IDCardIcon,
+  'Waiting List': WaitingListIcon,
+}
 
 const selectedFilter = ref('Overview')
 
@@ -130,11 +155,14 @@ const visibleStatuses = computed(() => {
     currentIndex + 2
   )
 })
+
+const getStatusIcon = (label) => {
+  return statusIcons[label] || SuccessIcon
+}
 </script>
 
 <template>
   <div class="rounded-xl shadow-sm bg-primary overflow-hidden">
-
     <!-- Header -->
     <div class="px-5 py-3">
       <h1 class="text-white font-semibold text-[17px]">
@@ -147,28 +175,25 @@ const visibleStatuses = computed(() => {
       class="bg-white rounded-t-lg px-5 py-4 max-h-[450px] overflow-y-auto hide-scrollbar"
     >
       <!-- Filters -->
-<div class="flex flex-wrap items-center gap-2 mb-5">
-
-  <button
-    v-for="filter in filters"
-    :key="filter"
-    @click="selectedFilter = filter"
-    class="px-4 py-1.5 rounded-full text-[13px] font-medium transition-all duration-200 border"
-    :class="selectedFilter === filter
+      <div class="flex flex-wrap items-center gap-2 mb-5">
+        <button
+          v-for="filter in filters"
+          :key="filter"
+          @click="selectedFilter = filter"
+          class="px-4 py-1.5 rounded-full text-[13px] font-medium transition-all duration-200 border"
+          :class="selectedFilter === filter
       ? 'bg-primary text-white border-primary shadow-sm'
       : 'bg-white text-default border-gray-200 hover:border-primary hover:text-primary'"
-  >
-    {{ filter }}
-  </button>
-
-</div>
+        >
+          {{ filter }}
+        </button>
+      </div>
       <div
         v-for="(status, index) in filteredStatuses"
         :key="index"
         class="relative flex items-start gap-4"
         :class="index !== filteredStatuses.length - 1 ? 'pb-5' : ''"
       >
-
         <!-- Timeline Line -->
         <div
           v-if="index !== filteredStatuses.length - 1"
@@ -181,36 +206,47 @@ const visibleStatuses = computed(() => {
           class="z-10 h-7 w-7 rounded-full flex items-center justify-center shrink-0 overflow-visible transition-all duration-300"
           :class="getStatusClasses(status).icon"
         >
+          <!-- Failed -->
+          <template v-if="status.state === 'failed'">
 
-          <!-- Completed -->
-          <template v-if="status.state === 'completed'">
-            <SuccessIcon class="h-4 w-4 text-white" />
+            <component
+              :is="getStatusIcon(status.label)"
+              class="h-4 w-4 text-white"
+            />
+
           </template>
 
           <!-- Current -->
           <template v-else-if="status.state === 'current'">
-
             <div class="relative flex items-center justify-center">
-
-              <!-- Ping -->
+              <!-- Pulse -->
               <div
                 class="absolute h-3 w-3 rounded-full bg-highlight animate-ping"
               ></div>
 
-              <!-- Dot -->
-              <div
-                class="h-3 w-3 rounded-full bg-highlight"
-              ></div>
-
+              <!-- Dynamic Icon -->
+              <component
+                :is="getStatusIcon(status.label)"
+                class="h-4 w-4 text-highlight"
+              />
             </div>
-
           </template>
 
-          <!-- Failed -->
-          <template v-else-if="status.state === 'failed'">
-            <CloseIcon class="h-4 w-4 text-white" />
+          <!-- Pending -->
+          <template v-else-if="status.state === 'pending'">
+            <component
+              :is="getStatusIcon(status.label)"
+              class="h-4 w-4 text-gray-500"
+            />
           </template>
 
+          <!-- Completed -->
+          <template v-else>
+            <component
+              :is="getStatusIcon(status.label)"
+              class="h-4 w-4 text-white"
+            />
+          </template>
         </div>
 
         <!-- Content Card -->
@@ -218,12 +254,8 @@ const visibleStatuses = computed(() => {
           class="flex-1 rounded-lg px-4 py-2 transition-all duration-300 hover:shadow-sm"
           :class="getStatusClasses(status).card"
         >
-
           <!-- Header Row -->
-          <div
-            class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3"
-          >
-
+          <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
             <!-- Label -->
             <p
               class="font-medium text-[13px]"
@@ -242,7 +274,6 @@ const visibleStatuses = computed(() => {
             >
               {{ status.datetime }}
             </p>
-
           </div>
 
           <!-- Remarks -->
@@ -250,7 +281,6 @@ const visibleStatuses = computed(() => {
             v-if="status.remarks"
             class="mt-1.5 border-t border-black/5 pt-1.5"
           >
-
             <p
               class="text-[11px]"
               :class="status.state === 'failed'
@@ -259,13 +289,9 @@ const visibleStatuses = computed(() => {
             >
               {{ status.remarks }}
             </p>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
   </div>
 </template>
