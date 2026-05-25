@@ -1,7 +1,7 @@
 <!-- ProgressTracker.vue -->
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import SuccessIcon from './icons/SuccessIcon.vue'
 import CloseIcon from './icons/CloseIcon.vue'
 
@@ -15,6 +15,35 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+})
+
+const selectedFilter = ref('Overview')
+
+const filters = [
+  'Overview',
+  'Completed',
+  'Pending',
+]
+
+const filteredStatuses = computed(() => {
+
+  switch (selectedFilter.value) {
+
+    case 'Completed':
+      return props.statuses.filter(
+        row => row.state === 'completed'
+      )
+
+    case 'Pending':
+      return props.statuses.filter(
+        row =>
+          row.state === 'current' ||
+          row.state === 'pending'
+      )
+
+    default:
+      return visibleStatuses.value
+  }
 })
 
 const getStatusClasses = (status) => {
@@ -56,12 +85,10 @@ const getLineClass = (current, next) => {
     return 'bg-transparent'
   }
 
-  // Failed flow
   if (next.state === 'failed') {
     return 'bg-red-300'
   }
 
-  // Completed flow
   if (
     current.state === 'completed' &&
     (
@@ -72,9 +99,9 @@ const getLineClass = (current, next) => {
     return 'bg-green-500'
   }
 
-  // Default pending line
   return 'bg-gray-300'
 }
+
 const visibleStatuses = computed(() => {
 
   const currentIndex = props.statuses.findIndex(
@@ -83,7 +110,6 @@ const visibleStatuses = computed(() => {
       row.state === 'failed'
   )
 
-  // No current status found
   if (currentIndex === -1) {
 
     const lastCompletedIndex = props.statuses
@@ -99,7 +125,6 @@ const visibleStatuses = computed(() => {
     )
   }
 
-  // previous + current + next
   return props.statuses.slice(
     Math.max(currentIndex - 1, 0),
     currentIndex + 2
@@ -121,19 +146,34 @@ const visibleStatuses = computed(() => {
     <div
       class="bg-white rounded-t-lg px-5 py-4 max-h-[450px] overflow-y-auto hide-scrollbar"
     >
+      <!-- Filters -->
+<div class="flex flex-wrap items-center gap-2 mb-5">
 
+  <button
+    v-for="filter in filters"
+    :key="filter"
+    @click="selectedFilter = filter"
+    class="px-4 py-1.5 rounded-full text-[13px] font-medium transition-all duration-200 border"
+    :class="selectedFilter === filter
+      ? 'bg-primary text-white border-primary shadow-sm'
+      : 'bg-white text-default border-gray-200 hover:border-primary hover:text-primary'"
+  >
+    {{ filter }}
+  </button>
+
+</div>
       <div
-        v-for="(status, index) in visibleStatuses"
+        v-for="(status, index) in filteredStatuses"
         :key="index"
         class="relative flex items-start gap-4"
-        :class="index !== visibleStatuses.length - 1 ? 'pb-5' : ''"
+        :class="index !== filteredStatuses.length - 1 ? 'pb-5' : ''"
       >
 
         <!-- Timeline Line -->
         <div
-          v-if="index !== visibleStatuses.length - 1"
+          v-if="index !== filteredStatuses.length - 1"
           class="absolute left-[14px] top-7 h-full w-[2px]"
-          :class="getLineClass(status, visibleStatuses[index + 1])"
+          :class="getLineClass(status, filteredStatuses[index + 1])"
         ></div>
 
         <!-- Timeline Icon -->
