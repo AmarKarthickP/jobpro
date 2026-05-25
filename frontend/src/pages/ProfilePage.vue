@@ -1164,9 +1164,11 @@ watch(candidate, (val) => {
             ? `Passport: ${fullName.value}`
             : 'Attach Passport'
     profileImage.value =
-        val?.candidate_image
-            ? `${EXTERNAL_SITE}${val.candidate_image}`
-            : user.image
+      val?.candidate_image
+        ? val.candidate_image.startsWith('/file')
+          ? `${EXTERNAL_SITE}${val.candidate_image}`
+          : val.candidate_image
+        : user.image
 
     bio.value = user.bio
 
