@@ -72,7 +72,8 @@
       </button>
       <!-- Task AI -->
       <router-link v-if="auth.isLoggedIn" to="/task_ai">
-        <task-a-i-button />
+        <!-- <task-a-i-button /> -->
+        <img src="@/assets/logo/task_ai.png" class="h-10 -mt-1" />
       </router-link>
       <router-link to="/home">
         <div class="flex flex-col items-center text-primary">
