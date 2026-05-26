@@ -8,7 +8,7 @@
         <img src="@/assets/logo/teampro.png" class="h-6 z-30" />
       </router-link>
       <!-- extra spacing -->
-      <div class="min-w-[100px]">
+      <div class="min-w-[80px]">
       </div>
       <router-link to="/home" v-slot="{ isActive }">
         <div :class="navClass(isActive)">
@@ -54,7 +54,7 @@
         v-click-outside="() => viewProfileMenu = false"
       >
         <button to="/profile">
-          <div class="flex flex-col items-center text-primary pr-10">
+          <div class="flex flex-col items-center text-primary">
             <avatar :img="userData" class="h-7 w-7 rounded-full" />
             <div class="flex">
               <p class="text-[12px] font-medium">Me</p>
@@ -62,6 +62,12 @@
             </div>
           </div>
         </button>
+      </div>
+      <div class="mr-10 -ml-2">
+        <div @click="openYoutube" class="flex flex-col text-[#ff0000] items-center transition-all duration-500 ease-in-out cursor-pointer">
+          <youtube-icon class="h-7 w-7 pt-1" />
+          <p class="text-[12px] font-medium">Youtube</p>
+        </div>
       </div>
       <button
         v-if="!auth.isLoggedIn"
@@ -130,6 +136,7 @@ import JobIcon from '@/components/icons/JobIcon.vue';
 import MessagingIcon from '@/components/icons/MessagingIcon.vue';
 import NotificationIcon from '@/components/icons/NotificationIcon.vue';
 import Avatar from '@/components/Avatar.vue';
+import YoutubeIcon from '@/components/icons/YoutubeIcon.vue';
 
 const goToLogin = () => {
   window.location.replace('/login')
@@ -168,4 +175,10 @@ const navClass = (isActive) => [
         ? 'text-primary'
         : 'text-default hover:text-primary'
 ]
+
+const openYoutube = () => {
+  if (typeof window !== 'undefined') {
+    window.open('https://www.youtube.com/@JOBPROTEAMPRO/shorts', '_blank')
+  }
+}
 </script>
