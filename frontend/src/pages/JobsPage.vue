@@ -1,5 +1,4 @@
 <template>
-
   <div class="md:grid md:grid-cols-12 md:gap-6">
     <!-- Profile Grid -->
     <div class="md:col-span-3 hidden md:block">
@@ -197,7 +196,37 @@
     <div class="col-span-12 md:col-span-9 mb-10">
       <!-- Sorting -->
       <div class="rounded-lg shadow-sm px-5 pt-3 pb-3 bg-white">
-        <div class="flex items-center">
+        <div class="md:hidden flex items-center gap-3">
+          <div class="relative">
+            <search-icon class="h-4 w-4 text-primary absolute top-4 left-2" />
+            <input
+              type="text"
+              placeholder="Search"
+              v-model="position"
+              @change="getFilteredJobs"
+              @focus="showPositionSuggestions = true"
+              @blur="hidePositionSuggestions"
+              class="bg-background w-full border-0 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 pl-8 pr-2 py-1 transition-all duration-300 ease-in-out"
+            />
+            <div
+              v-if="showPositionSuggestions && filteredPositionOptions.length"
+              class="z-50 mt-2 max-h-[200px] hide-scrollbar overflow-y-auto left-[5%] w-full bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+            >
+              <div
+                v-for="option in filteredPositionOptions"
+                :key="option"
+                @mousedown="selectPositionOption(option)"
+                class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-gray-100 transition-all duration-200"
+              >
+                {{ option }}
+              </div>
+            </div>
+          </div>
+          <div class="bg-background px-2 py-2 mt-2 rounded-lg hover:bg-hoverbg transition-all duration-300 ease-in-out">
+            <filter-icon class="text-primary h-4 w-4" />
+          </div>
+        </div>
+        <div class="items-center hidden md:flex">
           <p class="text-gray-500 font-medium text-lg">Sort by</p>
           <p class="font-medium ml-auto text-lg text-red-600">
             Showing {{ animatedJobsCount }} jobs
@@ -218,7 +247,9 @@
           </button>
         </div>
         <div class="border-t border-gray-300 my-2"></div>
-        <div class="flex flex-wrap items-center gap-2 md:gap-5 justify-center relative">
+        <div
+          class="flex flex-wrap items-center gap-2 md:gap-5 justify-center relative"
+        >
           <div
             class="flex md:justify-center overflow-x-auto md:overflow-visible hide-scrollbar gap-2 md:gap-5 flex-1"
           >
@@ -254,7 +285,9 @@
               </div>
             </button>
           </div>
-          <div class="relative h-5 w-5 md:w-5 h-5 w-5 md:h-5 md:mr-3 hidden md:block">
+          <div
+            class="relative h-5 w-5 md:w-5 h-5 w-5 md:h-5 md:mr-3 hidden md:block"
+          >
             <transition
               mode="out-in"
               enter-active-class="transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)]"
@@ -281,6 +314,12 @@
           </div>
         </div>
       </div>
+
+      <p
+        class="font-medium ml-auto text-center mt-5 text-lg text-red-600 md:hidden"
+      >
+        Showing {{ animatedJobsCount }} jobs
+      </p>
       <TransitionGroup
         tag="div"
         enter-active-class="transition-all duration-500 ease-out"
@@ -332,6 +371,8 @@ import RightIcon from '../components/icons/RightIcon.vue'
 import LeftIcon from '../components/icons/LeftIcon.vue'
 import ListViewIcon from '../components/icons/ListViewIcon.vue'
 import GridViewIcon from '../components/icons/GridViewIcon.vue'
+import FilterIcon from '../components/icons/FilterIcon.vue'
+import SearchIcon from '../components/icons/SearchIcon.vue'
 
 // Assets
 import defaultImage from '@/assets/defaults/profile-image.jpeg'
@@ -704,7 +745,7 @@ function selectLocation(location) {
 // Filter Jobs
 async function getFilteredJobs() {
     if (!allJobs.value.length) return
-    
+
     let additionalFilters = []
 
     if (position.value) {
@@ -752,7 +793,7 @@ async function getFilteredJobs() {
         ">=",
         minSalary.value
     ])
-    
+
     if (experience.value !== null && experience.value !== "") {
         additionalFilters.push([
             "total_experience",
