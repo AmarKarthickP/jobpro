@@ -91,7 +91,7 @@
 </section>
 </template>
 
-<script>
+<script setup>
 // Vue
 import {
     ref,
