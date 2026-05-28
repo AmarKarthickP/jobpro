@@ -76,14 +76,14 @@
                 auth.isLoggedIn ? 'w-[350px] md:w-[1300px]' : 'w-[350px] md:w-[1100px]'
             ]">
         <h1 class="font-semibold md:font-bold text-primary text-[25px]">Our Hiring Companies</h1>
-        <customer-carousel class="mt-5 md:-mt-10" />
+        <customer-carousel class="-mt-2.5 md:-mt-10" />
     </div>
 </section>
 
 <!-- Recent Jobs -->
 <section class="text-center flex justify-center items-center -mt-2 pb-20">
     <div :class="[
-                auth.isLoggedIn ? 'w-[400px] md:w-[1200px]' : 'w-[400px] md:w-[1000px]'
+                auth.isLoggedIn ? 'w-[300px] md:w-[1200px]' : 'w-[300px] md:w-[1000px]'
             ]">
         <h1 class="font-semibold md:font-bold text-primary text-[25px]">Recent Jobs</h1>
         <job-carousel class="mt-10" />

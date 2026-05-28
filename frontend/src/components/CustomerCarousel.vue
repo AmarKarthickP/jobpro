@@ -24,7 +24,7 @@
     </div>
 
     <!-- Row 2 -->
-    <div class="carousel -mt-[100px] md:-mt-[130px]">
+    <div class="carousel -mt-[100px] md:-mt-[100px]">
       <div class="carousel-track right">
 
         <img
@@ -59,27 +59,6 @@
           v-for="num in 17"
           :key="'r1-copy-' + num"
           :src="getImage(num + 34)"
-          class="w-[180px] md:w-[200px] opacity-90"
-        />
-
-      </div>
-    </div>
-
-    <!-- Row 4 -->
-    <div class="carousel -mt-[100px] md:-mt-[130px]">
-      <div class="carousel-track right">
-
-        <img
-          v-for="num in 17"
-          :key="'r2-' + num"
-          :src="getImage(num + 20)"
-          class="w-[180px] md:w-[200px] opacity-90"
-        />
-
-        <img
-          v-for="num in 17"
-          :key="'r2-copy-' + num"
-          :src="getImage(num + 20)"
           class="w-[180px] md:w-[200px] opacity-90"
         />
 
