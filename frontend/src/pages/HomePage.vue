@@ -52,7 +52,7 @@
             </button>
         </div>
 
-        <div class="flex flex-col md:flex-row items-center justify-center md:gap-10 mt-10 ">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-start md:justify-center md:gap-10 mt-10 w-full ml-5 md:ml-0">
             <div class="rounded-xl flex items-center py-6 px-5 gap-3 cursor-default">
                 <world-icon class="w-8 h-8 text-blue-600 absolute" />
                 <p class="font-semibold text-primary ml-12"><span class="text-2xl">{{ countries }}</span><span v-if="countries">+</span> Countries</p>
