@@ -13,7 +13,7 @@
             <img
                 v-if="showImage"
                 src="../assets/defaults/comming-soon-funny.png"
-                class="h-24"
+                class="h-16 md:h-24"
             />
         </transition>
 
