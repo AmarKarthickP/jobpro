@@ -106,7 +106,7 @@
       </router-link>
     </div>
   </div>
-  <div class="mx-28 mt-6">
+  <div class="mx-5 md:mx-28 mt-6">
     <router-view />
   </div>
 

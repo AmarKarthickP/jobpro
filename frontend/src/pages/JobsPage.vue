@@ -1,7 +1,8 @@
 <template>
-  <div class="grid grid-cols-12 gap-6">
+
+  <div class="md:grid md:grid-cols-12 md:gap-6">
     <!-- Profile Grid -->
-    <div class="col-span-3">
+    <div class="md:col-span-3 hidden md:block">
       <div class="sticky top-24">
         <div class="bg-white shadow-sm rounded-lg pb-4">
           <div class="text-right p-5 flex items-center">
@@ -193,7 +194,7 @@
         </div>
       </div>
     </div>
-    <div class="col-span-9 mb-10">
+    <div class="col-span-12 md:col-span-9 mb-10">
       <!-- Sorting -->
       <div class="rounded-lg shadow-sm px-5 pt-3 pb-3 bg-white">
         <div class="flex items-center">
@@ -204,53 +205,56 @@
           <button
             @click="handlePrevPage"
             :disabled="currentPage === 1"
-            class="text-center ml-5 px-3 py-2 rounded-xl flex justify-evenly text-primary text-[14px] font-medium disabled:opacity-40"
+            class="text-center ml-5 px-3 py-2 rounded-xl flex justify-evenly text-primary text-[14px] font-medium disabled:opacity-40 hidden md:block"
           >
             <left-icon class="h-3 w-3" />
           </button>
           <button
             @click="handleNextPage"
             :disabled="currentPage === totalPages"
-            class="text-center px-3 py-2 rounded-xl flex justify-center text-primary text-[14px] font-medium disabled:opacity-40"
+            class="text-center px-3 py-2 rounded-xl flex justify-center text-primary text-[14px] font-medium disabled:opacity-40 hidden md:block"
           >
             <right-icon class="h-3 w-3" />
           </button>
         </div>
         <div class="border-t border-gray-300 my-2"></div>
-        <div class="flex flex-wrap items-center gap-5 justify-center relative">
-          <button
-            v-for="item in [
-            { label: 'Recent', value: 'recent' },
-            { label: 'Openings', value: 'openings' },
-            { label: 'Salary', value: 'salary' },
-            // { label: 'Relevance', value: 'relevance' },
-            { label: 'Experience', value: 'experience' }
-        ]"
-            :key="item.value"
-            @click="handleSort(item.value)"
-            :class="[
-            sortBy === item.value
-                ? 'text-primary bg-hoverbg'
-                : 'text-gray-600',
-            'px-8 py-1.5 text-lg flex items-center gap-3 rounded-md font-medium hover:bg-hoverbg transition-all duration-300 ease-in-out'
-        ]"
+        <div class="flex flex-wrap items-center gap-2 md:gap-5 justify-center relative">
+          <div
+            class="flex md:justify-center overflow-x-auto md:overflow-visible hide-scrollbar gap-2 md:gap-5 flex-1"
           >
-            {{ item.label }}
+            <button
+              v-for="item in [
+              { label: 'Recent', value: 'recent' },
+              { label: 'Openings', value: 'openings' },
+              { label: 'Salary', value: 'salary' },
+              // { label: 'Relevance', value: 'relevance' },
+              { label: 'Experience', value: 'experience' }
+          ]"
+              :key="item.value"
+              @click="handleSort(item.value)"
+              :class="[
+              sortBy === item.value
+                  ? 'text-primary bg-hoverbg'
+                  : 'text-gray-600',
+              'px-3 py-1 md:px-8 md:py-1.5 text-[14px] md:text-lg flex items-center md:gap-3 rounded-md font-medium hover:bg-hoverbg transition-all duration-300 ease-in-out'
+          ]"
+            >
+              {{ item.label }}
 
-            <div class="flex">
-              <up-arrow-icon
-                v-if="
-                    sortBy === item.value &&
-                    sortOrder === 'asc'
-                "
-                class="h-5 w-5"
-              />
+              <div class="flex">
+                <up-arrow-icon
+                  v-if="
+                      sortBy === item.value &&
+                      sortOrder === 'asc'
+                  "
+                  class="h-5 w-5 md:h-5 md:w-5"
+                />
 
-              <down-arrow-icon v-else class="h-5 w-5" />
-            </div>
-          </button>
-
-          <div class="relative w-5 h-5 ml-2">
+                <down-arrow-icon v-else class="h-5 w-5 md:h-5 md:w-5" />
+              </div>
+            </button>
+          </div>
+          <div class="relative h-5 w-5 md:w-5 h-5 w-5 md:h-5 md:mr-3 hidden md:block">
             <transition
               mode="out-in"
               enter-active-class="transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)]"
@@ -264,14 +268,14 @@
                 v-if="view === 'grid'"
                 key="list"
                 @click="view = 'list'"
-                class="h-5 w-5 text-primary cursor-pointer"
+                class="h-5 w-5 md:h-5 h-5 w-5 md:w-5 text-primary cursor-pointer"
               />
 
               <grid-view-icon
                 v-else
                 key="grid"
                 @click="view = 'grid'"
-                class="h-5 w-5 text-primary cursor-pointer"
+                class="h-5 w-5 md:h-5 h-5 w-5 md:w-5 text-primary cursor-pointer"
               />
             </transition>
           </div>
