@@ -83,7 +83,7 @@
 <!-- Recent Jobs -->
 <section class="text-center flex justify-center items-center -mt-2 pb-20">
     <div :class="[
-                auth.isLoggedIn ? 'w-[400px] w-[1200px]' : 'w-[400px] w-[1000px]'
+                auth.isLoggedIn ? 'w-[400px] md:w-[1200px]' : 'w-[400px] md:w-[1000px]'
             ]">
         <h1 class="font-semibold md:font-bold text-primary text-[25px]">Recent Jobs</h1>
         <job-carousel class="mt-10" />

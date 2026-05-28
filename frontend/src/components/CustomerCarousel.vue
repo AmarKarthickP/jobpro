@@ -10,35 +10,77 @@
           v-for="num in 17"
           :key="'r1-' + num"
           :src="getImage(num)"
-          class="w-[100px] md:w-[200px] opacity-90"
+          class="w-[180px] md:w-[200px] opacity-90"
         />
 
         <img
           v-for="num in 17"
           :key="'r1-copy-' + num"
           :src="getImage(num)"
-          class="w-[100px] md:w-[200px] opacity-90"
+          class="w-[180px] md:w-[200px] opacity-90"
         />
 
       </div>
     </div>
 
     <!-- Row 2 -->
-    <div class="carousel -mt-[30px] md:-mt-[130px]">
+    <div class="carousel -mt-[100px] md:-mt-[130px]">
       <div class="carousel-track right">
 
         <img
           v-for="num in 17"
           :key="'r2-' + num"
           :src="getImage(num + 17)"
-          class="w-[100px] md:w-[200px] opacity-90"
+          class="w-[180px] md:w-[200px] opacity-90"
         />
 
         <img
           v-for="num in 17"
           :key="'r2-copy-' + num"
           :src="getImage(num + 17)"
-          class="w-[100px] md:w-[200px] opacity-90"
+          class="w-[180px] md:w-[200px] opacity-90"
+        />
+
+      </div>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="carousel md:hidden -mt-[100px] md:-mt-[130px]">
+      <div class="carousel-track left">
+
+        <img
+          v-for="num in 17"
+          :key="'r1-' + num"
+          :src="getImage(num + 34)"
+          class="w-[180px] md:w-[200px] opacity-90"
+        />
+
+        <img
+          v-for="num in 17"
+          :key="'r1-copy-' + num"
+          :src="getImage(num + 34)"
+          class="w-[180px] md:w-[200px] opacity-90"
+        />
+
+      </div>
+    </div>
+
+    <!-- Row 4 -->
+    <div class="carousel -mt-[100px] md:-mt-[130px]">
+      <div class="carousel-track right">
+
+        <img
+          v-for="num in 17"
+          :key="'r2-' + num"
+          :src="getImage(num + 20)"
+          class="w-[180px] md:w-[200px] opacity-90"
+        />
+
+        <img
+          v-for="num in 17"
+          :key="'r2-copy-' + num"
+          :src="getImage(num + 20)"
+          class="w-[180px] md:w-[200px] opacity-90"
         />
 
       </div>
