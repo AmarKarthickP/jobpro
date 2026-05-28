@@ -1,47 +1,62 @@
 <template>
   <!-- Navabar -->
-  <div
-    class="bg-white py-2 flex justify-center w-full shadow-sm sticky top-0 z-30"
-  >
-    <div class="flex gap-10 relative items-center justify-center">
-      <router-link to="/home">
+  <div class="bg-white py-2 flex justify-center w-full shadow-sm sticky top-0 z-30">
+    <div class="flex gap-5 md:gap-10 relative items-center w-full md:justify-center mx-5 md:mx-0">
+      <router-link to="/home" class="md:hidden w-[70px]">
+        <img src="../assets/logo/jobpro.png" alt="jobpro" />
+      </router-link>
+
+      <router-link to="/home" class="hidden md:block">
         <img src="@/assets/logo/teampro.png" class="h-6 z-30" />
       </router-link>
       <!-- extra spacing -->
-      <div class="min-w-[80px]">
-      </div>
-      <router-link to="/home" v-slot="{ isActive }">
+      <div class="md:min-w-[80px]"></div>
+      <router-link to="/home" v-slot="{ isActive }" class="hidden md:block">
         <div :class="navClass(isActive)">
           <home-icon class="h-7 w-7 pt-1" />
           <p class="text-[12px] font-medium">Home</p>
         </div>
       </router-link>
-      <router-link to="/dashboard" v-if="auth.isLoggedIn" v-slot="{ isActive }">
+      <router-link
+        to="/dashboard"
+        v-if="auth.isLoggedIn"
+        v-slot="{ isActive }"
+        class="hidden md:block"
+      >
         <div :class="navClass(isActive)">
           <dasboard-icon class="h-7 w-7 pt-1" />
           <p class="text-[12px] font-medium">Dashboard</p>
         </div>
       </router-link>
-      <router-link to="/jobs" v-slot="{ isActive }">
+      <router-link to="/jobs" v-slot="{ isActive }" class="hidden md:block">
         <div :class="navClass(isActive)">
           <job-icon class="h-7 w-7 pt-1" />
           <p class="text-[12px] font-medium">Jobs</p>
         </div>
       </router-link>
-      <router-link to="/activity" v-slot="{ isActive }" v-if="auth.isLoggedIn">
+      <router-link
+        to="/activity"
+        v-slot="{ isActive }"
+        class="hidden md:block"
+        v-if="auth.isLoggedIn"
+      >
         <div :class="navClass(isActive)">
           <activity-icon class="h-7 w-7 pt-1" />
           <p class="text-[12px] font-medium">Activity</p>
         </div>
       </router-link>
-      <router-link 
-        v-if="auth.isLoggedIn" to="/refer" v-slot="{ isActive }">
+      <router-link
+        v-if="auth.isLoggedIn"
+        to="/refer"
+        v-slot="{ isActive }"
+        class="hidden md:block"
+      >
         <div :class="navClass(isActive)">
           <refer-icon class="h-7 w-7 pt-1" />
           <p class="text-[12px] font-medium">Refer</p>
         </div>
       </router-link>
-      <router-link to="/notifications" v-slot="{ isActive }">
+      <router-link to="/notifications" v-slot="{ isActive }" class="hidden md:block">
         <div :class="navClass(isActive)">
           <notification-icon class="h-7 w-7 pt-1" />
           <p class="text-[12px] font-medium">Alerts</p>
@@ -51,9 +66,9 @@
         v-if="auth.isLoggedIn"
         class="relative"
         @click="viewProfileMenu = true"
-        v-click-outside="() => viewProfileMenu = false"
+        v-click-outside="() => (viewProfileMenu = false)"
       >
-        <button to="/profile">
+        <button to="/profile" class="hidden md:block">
           <div class="flex flex-col items-center text-primary">
             <avatar :img="userData" class="h-7 w-7 rounded-full" />
             <div class="flex">
@@ -63,25 +78,28 @@
           </div>
         </button>
       </div>
-      <div class="mr-10 -ml-2">
-        <div @click="openYoutube" class="flex flex-col text-[#ff0000] items-center transition-all duration-500 ease-in-out cursor-pointer">
-          <youtube-icon class="h-7 w-7 pt-1" />
-          <p class="text-[12px] font-medium">Youtube</p>
+      <div class="ml-auto md:mr-10 md:-ml-2">
+        <div
+          @click="openYoutube"
+          class="flex flex-col text-[#ff0000] items-center transition-all duration-500 ease-in-out cursor-pointer"
+        >
+          <youtube-icon class="h-7 w-7 md:pt-1" />
+          <p class="text-[12px] font-medium hidden md:block">Youtube</p>
         </div>
       </div>
       <button
         v-if="!auth.isLoggedIn"
         @click="goToLogin"
-        class="bg-primary rounded-xl text-white text-sm px-8 py-2 hover:opacity-50"
+        class="bg-primary w-[100px] md:w-[120px] rounded-xl text-white text-sm md:px-8 py-[7px] md:py-2 hover:opacity-50"
       >
         Sign In
       </button>
       <!-- Task AI -->
       <router-link v-if="auth.isLoggedIn" to="/task_ai">
         <!-- <task-a-i-button /> -->
-        <img src="@/assets/logo/task_ai.png" class="h-10 -mt-1" />
+        <img src="@/assets/logo/task_ai.png" class="h-9 md:h-10 -mt-1" />
       </router-link>
-      <router-link to="/home">
+      <router-link to="/home" class="hidden md:block">
         <div class="flex flex-col items-center text-primary">
           <img src="../assets/logo/jobpro.png" alt="jobpro" class="w-16" />
         </div>
@@ -89,7 +107,7 @@
     </div>
   </div>
   <div class="mx-28 mt-6">
-    <router-view />
+    <!-- <router-view /> -->
   </div>
 
   <!-- Profiel Menu -->
@@ -130,55 +148,53 @@
 </template>
 
 <script setup>
-import DasboardIcon from '@/components/icons/DasboardIcon.vue';
-import HomeIcon from '@/components/icons/HomeIcon.vue'
-import JobIcon from '@/components/icons/JobIcon.vue';
-import MessagingIcon from '@/components/icons/MessagingIcon.vue';
-import NotificationIcon from '@/components/icons/NotificationIcon.vue';
-import Avatar from '@/components/Avatar.vue';
-import YoutubeIcon from '@/components/icons/YoutubeIcon.vue';
+import DasboardIcon from "@/components/icons/DasboardIcon.vue";
+import HomeIcon from "@/components/icons/HomeIcon.vue";
+import JobIcon from "@/components/icons/JobIcon.vue";
+import MessagingIcon from "@/components/icons/MessagingIcon.vue";
+import NotificationIcon from "@/components/icons/NotificationIcon.vue";
+import Avatar from "@/components/Avatar.vue";
+import YoutubeIcon from "@/components/icons/YoutubeIcon.vue";
 
 const goToLogin = () => {
-  window.location.replace('/login')
-}
+  window.location.replace("/login");
+};
 
-import { computed, ref } from 'vue'
-import { auth } from '@/data/auth'
-import { user } from '@/data/user'
+import { computed, ref } from "vue";
+import { auth } from "@/data/auth";
+import { user } from "@/data/user";
 
 const userData = computed(() => ({
-    src: user.image,
-    alt: 'profile',
-    bio: user.bio,
-}))
+  src: user.image,
+  alt: "profile",
+  bio: user.bio,
+}));
 
 function handleSignOut() {
-    localStorage.clear()
-    sessionStorage.clear()
+  localStorage.clear();
+  sessionStorage.clear();
 
-    window.location.replace('/logout')
+  window.location.replace("/logout");
 }
 
-const viewProfileMenu = ref(false)
+const viewProfileMenu = ref(false);
 
-import clickOutside from '@/directives/clickOutside'
-import DownIcon from '../components/icons/DownIcon.vue';
-import router from '../router';
-import ActivityIcon from '../components/icons/ActivityIcon.vue';
-import ReferIcon from '../components/icons/ReferIcon.vue';
-import TaskAIButton from '../components/TaskAIButton.vue';
-const vClickOutside = clickOutside
+import clickOutside from "@/directives/clickOutside";
+import DownIcon from "../components/icons/DownIcon.vue";
+import router from "../router";
+import ActivityIcon from "../components/icons/ActivityIcon.vue";
+import ReferIcon from "../components/icons/ReferIcon.vue";
+import TaskAIButton from "../components/TaskAIButton.vue";
+const vClickOutside = clickOutside;
 
 const navClass = (isActive) => [
-    'flex flex-col items-center transition-all duration-500 ease-in-out',
-    isActive
-        ? 'text-primary'
-        : 'text-default hover:text-primary'
-]
+  "flex flex-col items-center transition-all duration-500 ease-in-out",
+  isActive ? "text-primary" : "text-default hover:text-primary",
+];
 
 const openYoutube = () => {
-  if (typeof window !== 'undefined') {
-    window.open('https://www.youtube.com/@JOBPROTEAMPRO/shorts', '_blank')
+  if (typeof window !== "undefined") {
+    window.open("https://www.youtube.com/@JOBPROTEAMPRO/shorts", "_blank");
   }
-}
+};
 </script>
