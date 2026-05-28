@@ -73,19 +73,19 @@
 <!-- Recent Jobs -->
 <section class="text-center mt-14 flex justify-center items-center">
     <div :class="[
-                auth.isLoggedIn ? 'w-[1300px]' : 'w-[1100px]'
+                auth.isLoggedIn ? 'w-[350px] md:w-[1300px]' : 'w-[350px] md:w-[1100px]'
             ]">
-        <h1 class="font-bold text-primary text-[25px]">Our Hiring Companies</h1>
-        <customer-carousel class="-mt-10" />
+        <h1 class="font-semibold md:font-bold text-primary text-[25px]">Our Hiring Companies</h1>
+        <customer-carousel class="mt-5 md:-mt-10" />
     </div>
 </section>
 
 <!-- Recent Jobs -->
 <section class="text-center flex justify-center items-center -mt-2 pb-20">
     <div :class="[
-                auth.isLoggedIn ? 'w-[1200px]' : 'w-[1000px]'
+                auth.isLoggedIn ? 'w-[400px] w-[1200px]' : 'w-[400px] w-[1000px]'
             ]">
-        <h1 class="font-bold text-primary text-[25px]">Recent Jobs</h1>
+        <h1 class="font-semibold md:font-bold text-primary text-[25px]">Recent Jobs</h1>
         <job-carousel class="mt-10" />
     </div>
 </section>
