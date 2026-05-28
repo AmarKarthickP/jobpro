@@ -145,6 +145,57 @@
       </button>
     </div>
   </transition>
+
+  <!-- Bottom Navbar (Mobile) -->
+  <div class="bg-white fixed bottom-0 left-0 w-full flex justify-evenly py-2 z-30 md:hidden border-t shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+    <router-link to="/home" v-slot="{ isActive }">
+        <div :class="navClass(isActive)">
+          <home-icon class="h-7 w-7" />
+          <p class="text-[12px] font-medium">Home</p>
+        </div>
+      </router-link>
+      <router-link to="/jobs" v-slot="{ isActive }">
+        <div :class="navClass(isActive)">
+          <job-icon class="h-7 w-7" />
+          <p class="text-[12px] font-medium">Jobs</p>
+        </div>
+      </router-link>
+      <router-link
+        to="/activity"
+        v-slot="{ isActive }"
+    
+        v-if="auth.isLoggedIn"
+      >
+        <div :class="navClass(isActive)">
+          <activity-icon class="h-7 w-7" />
+          <p class="text-[12px] font-medium">Activity</p>
+        </div>
+      </router-link>
+      <router-link
+        v-if="auth.isLoggedIn"
+        to="/refer"
+        v-slot="{ isActive }"
+    
+      >
+        <div :class="navClass(isActive)">
+          <refer-icon class="h-7 w-7" />
+          <p class="text-[12px] font-medium">Refer</p>
+        </div>
+      </router-link>
+      <div
+        v-if="auth.isLoggedIn"
+        class="relative"
+        @click="viewProfileMenu = true"
+        v-click-outside="() => (viewProfileMenu = false)"
+      >
+        <button to="/profile">
+          <div class="flex flex-col items-center text-primary">
+            <avatar :img="userData" class="h-7 w-7 rounded-full" />
+          <p class="text-[12px] font-medium">Me</p>
+          </div>
+        </button>
+      </div>
+  </div>
 </template>
 
 <script setup>
