@@ -196,8 +196,8 @@
     <div class="col-span-12 md:col-span-9 mb-10">
       <!-- Sorting -->
       <div class="rounded-lg shadow-sm px-5 pt-3 pb-3 bg-white">
-        <div class="md:hidden flex items-center gap-3">
-          <div class="relative">
+        <div class="md:hidden flex items-center gap-3 -mt-2">
+          <div class="relative w-full">
             <search-icon class="h-4 w-4 text-primary absolute top-4 left-2" />
             <input
               type="text"
