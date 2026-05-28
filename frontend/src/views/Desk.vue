@@ -107,7 +107,7 @@
     </div>
   </div>
   <div class="mx-28 mt-6">
-    <!-- <router-view /> -->
+    <router-view />
   </div>
 
   <!-- Profiel Menu -->
