@@ -947,6 +947,8 @@ function removeFilters() {
   selectedLocation.value = "";
   experience.value = null;
   experienceSearch.value = "";
+  minSalary.value = 0;
+  maxSalary.value = 10000;
 
   getFilteredJobs();
 }
