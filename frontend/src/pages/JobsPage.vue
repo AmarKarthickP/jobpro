@@ -228,11 +228,11 @@
               </div>
             </div>
           </div>
-          <div
+          <button
             class="bg-background px-2 py-2 mt-2.5 rounded-lg hover:bg-hoverbg transition-all duration-300 ease-in-out"
           >
             <filter-icon class="text-primary h-5 w-5" />
-          </div>
+          </button>
         </div>
         <div class="items-center hidden md:flex">
           <p class="text-gray-500 font-medium text-lg">Sort by</p>

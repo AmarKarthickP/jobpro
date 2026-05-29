@@ -307,7 +307,7 @@
       </div>
       <p
         v-if="page!='Activity'"
-        class="pt-2 text-gray-600 text-[13px] md:text-[11px] font-medium text-left min-h-[100px]"
+        class="pt-2 text-gray-600 text-[12px] md:text-[11px] font-medium text-left md:min-h-[100px]"
       >
         {{ truncateText(data.custom_major_key_skills, 200) }}
       </p>
