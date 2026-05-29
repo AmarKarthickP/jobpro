@@ -20,49 +20,53 @@
             </h1>
             <!-- Position -->
             <p class="text-gray-600 mt-3 text-[15px] font-medium">Position</p>
-            <input
-              type="text"
-              placeholder="Position"
-              v-model="position"
-              @change="getFilteredJobs"
-              @focus="showPositionSuggestions = true"
-              @blur="hidePositionSuggestions"
-              class="bg-background w-full border-0 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
-            />
-            <div
-              v-if="showPositionSuggestions && filteredPositionOptions.length"
-              class="z-50 mt-2 max-h-[200px] hide-scrollbar overflow-y-auto left-[5%] w-full bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
-            >
+            <div class="relative">
+              <input
+                type="text"
+                placeholder="Position"
+                v-model="position"
+                @change="getFilteredJobs"
+                @focus="showPositionSuggestions = true"
+                @blur="hidePositionSuggestions"
+                class="bg-background w-full border-0 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+              />
               <div
-                v-for="option in filteredPositionOptions"
-                :key="option"
-                @mousedown="selectPositionOption(option)"
-                class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-gray-100 transition-all duration-200"
+                v-if="showPositionSuggestions && filteredPositionOptions.length"
+                class="z-50 mt-2 absolute max-h-[200px] hide-scrollbar overflow-y-auto w-full bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
               >
-                {{ option }}
+                <div
+                  v-for="option in filteredPositionOptions"
+                  :key="option"
+                  @mousedown="selectPositionOption(option)"
+                  class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-gray-100 transition-all duration-200"
+                >
+                  {{ option }}
+                </div>
               </div>
             </div>
             <!-- Experience -->
-            <input
-              type="text"
-              placeholder="Experience"
-              v-model="experienceSearch"
-              @change="getFilteredJobs"
-              @focus="showExperienceSuggestions = true"
-              @blur="hideExperienceSuggestions"
-              class="bg-background w-full border-0 mt-3 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
-            />
-            <div
-              v-if="showExperienceSuggestions && filteredExperienceOptions.length"
-              class="z-50 mt-2 max-h-[200px] overflow-y-auto left-[5%] w-full hide-scrollbar bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
-            >
+            <div class="relative">
+              <input
+                type="text"
+                placeholder="Experience"
+                v-model="experienceSearch"
+                @change="getFilteredJobs"
+                @focus="showExperienceSuggestions = true"
+                @blur="hideExperienceSuggestions"
+                class="bg-background w-full border-0 mt-3 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+              />
               <div
-                v-for="option in filteredExperienceOptions"
-                :key="option.value"
-                @mousedown="selectExperienceOption(option)"
-                class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-gray-100 transition-all duration-200"
+                v-if="showExperienceSuggestions && filteredExperienceOptions.length"
+                class="z-50 mt-2 absolute max-h-[200px] overflow-y-auto w-full hide-scrollbar bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
               >
-                {{ option.label }}
+                <div
+                  v-for="option in filteredExperienceOptions"
+                  :key="option.value"
+                  @mousedown="selectExperienceOption(option)"
+                  class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-gray-100 transition-all duration-200"
+                >
+                  {{ option.label }}
+                </div>
               </div>
             </div>
             <!-- Location -->
@@ -78,11 +82,11 @@
                 :key="location"
                 @click="selectLocation(location)"
                 :class="[
-                                    selectedLocation === location
-                                        ? 'bg-primary text-white'
-                                        : 'bg-background text-gray-600',
-                                    'cursor-pointer text-[13px] rounded-lg font-medium px-2 py-1 transition-all duration-300 ease-in-out hover:ring-2 hover:ring-gray-400'
-                                ]"
+                  selectedLocation === location
+                    ? 'bg-primary text-white'
+                    : 'bg-background text-gray-600',
+                  'cursor-pointer text-[13px] rounded-lg font-medium px-2 py-1 transition-all duration-300 ease-in-out hover:ring-2 hover:ring-gray-400',
+                ]"
               >
                 {{ location }}
               </div>
@@ -146,9 +150,7 @@
               @change="getFilteredJobs"
             />
             <!-- Qualification -->
-            <p class="text-gray-600 mt-5 text-[15px] font-medium">
-              Qualification
-            </p>
+            <p class="text-gray-600 mt-5 text-[15px] font-medium">Qualification</p>
             <input
               type="text"
               placeholder="Qualification"
@@ -178,9 +180,7 @@
               >
                 <left-icon class="h-3 w-3" />
               </button>
-              <p class="text-[14px] font-medium">
-                {{ currentPage }} / {{ totalPages }}
-              </p>
+              <p class="text-[14px] font-medium">{{ currentPage }} / {{ totalPages }}</p>
               <button
                 @click="handleNextPage"
                 :disabled="currentPage === totalPages"
@@ -210,7 +210,7 @@
             />
             <div
               v-if="showPositionSuggestions && filteredPositionOptions.length"
-              class="z-50 mt-2 max-h-[200px] hide-scrollbar overflow-y-auto left-[5%] w-full bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+              class="z-50 mt-2 max-h-[200px] hide-scrollbar absolute overflow-y-auto w-full bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
             >
               <div
                 v-for="option in filteredPositionOptions"
@@ -222,7 +222,9 @@
               </div>
             </div>
           </div>
-          <div class="bg-background px-2 py-2 mt-2 rounded-lg hover:bg-hoverbg transition-all duration-300 ease-in-out">
+          <div
+            class="bg-background px-2 py-2 mt-2 rounded-lg hover:bg-hoverbg transition-all duration-300 ease-in-out"
+          >
             <filter-icon class="text-primary h-4 w-4" />
           </div>
         </div>
@@ -247,37 +249,30 @@
           </button>
         </div>
         <div class="border-t border-gray-300 my-2"></div>
-        <div
-          class="flex flex-wrap items-center gap-2 md:gap-5 justify-center relative"
-        >
+        <div class="flex flex-wrap items-center gap-2 md:gap-5 justify-center relative">
           <div
             class="flex md:justify-center overflow-x-auto md:overflow-visible hide-scrollbar gap-2 md:gap-5 flex-1"
           >
             <button
               v-for="item in [
-              { label: 'Recent', value: 'recent' },
-              { label: 'Openings', value: 'openings' },
-              { label: 'Salary', value: 'salary' },
-              // { label: 'Relevance', value: 'relevance' },
-              { label: 'Experience', value: 'experience' }
-          ]"
+                { label: 'Recent', value: 'recent' },
+                { label: 'Openings', value: 'openings' },
+                { label: 'Salary', value: 'salary' },
+                // { label: 'Relevance', value: 'relevance' },
+                { label: 'Experience', value: 'experience' },
+              ]"
               :key="item.value"
               @click="handleSort(item.value)"
               :class="[
-              sortBy === item.value
-                  ? 'text-primary bg-hoverbg'
-                  : 'text-gray-600',
-              'px-3 py-1 md:px-8 md:py-1.5 text-[14px] md:text-lg flex items-center md:gap-3 rounded-md font-medium hover:bg-hoverbg transition-all duration-300 ease-in-out'
-          ]"
+                sortBy === item.value ? 'text-primary bg-hoverbg' : 'text-gray-600',
+                'px-3 py-1 md:px-8 md:py-1.5 text-[14px] md:text-lg flex items-center md:gap-3 rounded-md font-medium hover:bg-hoverbg transition-all duration-300 ease-in-out',
+              ]"
             >
               {{ item.label }}
 
               <div class="flex">
                 <up-arrow-icon
-                  v-if="
-                      sortBy === item.value &&
-                      sortOrder === 'asc'
-                  "
+                  v-if="sortBy === item.value && sortOrder === 'asc'"
                   class="h-5 w-5 md:h-5 md:w-5"
                 />
 
@@ -285,9 +280,7 @@
               </div>
             </button>
           </div>
-          <div
-            class="relative h-5 w-5 md:w-5 h-5 w-5 md:h-5 md:mr-3 hidden md:block"
-          >
+          <div class="relative h-5 w-5 md:w-5 h-5 w-5 md:h-5 md:mr-3 hidden md:block">
             <transition
               mode="out-in"
               enter-active-class="transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)]"
@@ -315,9 +308,7 @@
         </div>
       </div>
 
-      <p
-        class="font-medium ml-auto text-center mt-5 text-lg text-red-600 md:hidden"
-      >
+      <p class="font-medium ml-auto text-center mt-5 text-lg text-red-600 md:hidden">
         Showing {{ animatedJobsCount }} jobs
       </p>
       <TransitionGroup
@@ -329,9 +320,11 @@
         leave-from-class="opacity-100 scale-100"
         leave-to-class="opacity-0 scale-95"
         move-class="transition-all duration-500 ease-in-out"
-        :class="view == 'grid'
-        ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5'
-        : 'flex flex-col gap-5'"
+        :class="
+          view == 'grid'
+            ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5'
+            : 'flex flex-col gap-5'
+        "
       >
         <div v-for="job in paginatedJobs" :key="`${job.name}-${job.status}`">
           <job-card
@@ -344,651 +337,480 @@
           />
         </div>
       </TransitionGroup>
-      <div
-        v-if="jobs.length == 0"
-        class="flex items-center justify-center mt-5"
-      >
+      <div v-if="jobs.length == 0" class="flex items-center justify-center mt-5">
         <loader class="text-[40px]" />
       </div>
     </div>
   </div>
 </template>
 <script setup>
-
 // Components
-import ProfileCard from '@/components/ProfileCard.vue'
-import QuickLinkCard from '@/components/QuickLinkCard.vue'
-import Avatar from '../components/Avatar.vue'
-import JobCard from '../components/JobCard.vue'
-import Slider from '../components/Slider.vue'
-import Loader from '../components/Loader.vue'
+import ProfileCard from "@/components/ProfileCard.vue";
+import QuickLinkCard from "@/components/QuickLinkCard.vue";
+import Avatar from "../components/Avatar.vue";
+import JobCard from "../components/JobCard.vue";
+import Slider from "../components/Slider.vue";
+import Loader from "../components/Loader.vue";
 
 // Icons
-import UpArrowIcon from '@/components/icons/UpArrowIcon.vue'
-import DownArrowIcon from '@/components/icons/DownArrowIcon.vue'
-import DownIcon from '@/components/icons/DownIcon.vue'
-import RightIcon from '../components/icons/RightIcon.vue'
-import LeftIcon from '../components/icons/LeftIcon.vue'
-import ListViewIcon from '../components/icons/ListViewIcon.vue'
-import GridViewIcon from '../components/icons/GridViewIcon.vue'
-import FilterIcon from '../components/icons/FilterIcon.vue'
-import SearchIcon from '../components/icons/SearchIcon.vue'
+import UpArrowIcon from "@/components/icons/UpArrowIcon.vue";
+import DownArrowIcon from "@/components/icons/DownArrowIcon.vue";
+import DownIcon from "@/components/icons/DownIcon.vue";
+import RightIcon from "../components/icons/RightIcon.vue";
+import LeftIcon from "../components/icons/LeftIcon.vue";
+import ListViewIcon from "../components/icons/ListViewIcon.vue";
+import GridViewIcon from "../components/icons/GridViewIcon.vue";
+import FilterIcon from "../components/icons/FilterIcon.vue";
+import SearchIcon from "../components/icons/SearchIcon.vue";
 
 // Assets
-import defaultImage from '@/assets/defaults/profile-image.jpeg'
+import defaultImage from "@/assets/defaults/profile-image.jpeg";
 
 // Vue
-import {
-    ref,
-    computed,
-    onMounted,
-    watch
-} from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { ref, computed, onMounted, watch } from "vue";
+import { useRouter, useRoute } from "vue-router";
 
 // Session
-import { auth } from '@/data/auth'
+import { auth } from "@/data/auth";
 
 // Data
-import { getJobs } from '@/data/jobs'
-import { user } from '@/data/user'
-import { getCandidate } from '@/data/candidate'
+import { getJobs } from "@/data/jobs";
+import { user } from "@/data/user";
+import { getCandidate } from "@/data/candidate";
 
 // Main State
-const jobs = ref([])
-const allJobs = ref([])
-const selectedJob = ref(null)
+const jobs = ref([]);
+const allJobs = ref([]);
+const selectedJob = ref(null);
 
-const minSalary = ref(0)
-const maxSalary = ref(10000)
+const minSalary = ref(0);
+const maxSalary = ref(10000);
 
-const animatedJobsCount = ref(0)
-const view = ref("grid")
-const isCVAttached = ref(false)
-const candidateName = ref('')
+const animatedJobsCount = ref(0);
+const view = ref("grid");
+const isCVAttached = ref(false);
+const candidateName = ref("");
 
-const currentPage = ref(1)
-const jobsPerPage = 12
+const currentPage = ref(1);
+const jobsPerPage = 12;
 
-const sortBy = ref("recent")
-const sortOrder = ref("desc")
+const sortBy = ref("recent");
+const sortOrder = ref("desc");
 
-const route = useRoute()
-
-
+const route = useRoute();
 
 // Filters
-const position = ref("")
-const salaryType = ref("")
-const qualification = ref("")
-const currency = ref("")
-const selectedLocation = ref("")
-const experience = ref(null)
-const experienceSearch = ref("")
-
-
+const position = ref("");
+const salaryType = ref("");
+const qualification = ref("");
+const currency = ref("");
+const selectedLocation = ref("");
+const experience = ref(null);
+const experienceSearch = ref("");
 
 // Suggestion Dropdown States
-const showPositionSuggestions = ref(false)
-const showSalaryTypeSuggestions = ref(false)
-const showQualificationSuggestions = ref(false)
-const showCurrencySuggestions = ref(false)
-const showExperienceSuggestions = ref(false)
-
-
+const showPositionSuggestions = ref(false);
+const showSalaryTypeSuggestions = ref(false);
+const showQualificationSuggestions = ref(false);
+const showCurrencySuggestions = ref(false);
+const showExperienceSuggestions = ref(false);
 
 // Static Options
-const salaryTypeOptions = [
-    "Fixed",
-    "Range",
-    "Negotiable",
-    "Confidential"
-]
+const salaryTypeOptions = ["Fixed", "Range", "Negotiable", "Confidential"];
 
 const qualificationOptions = [
-    "Vocational Skills",
-    "SSLC (10th Pass)",
-    "12th Pass",
-    "Post Graduate",
-    "Graduate",
-    "PhD",
-    "Diploma",
-    "ITI",
-    "ITI / Diploma"
-]
+  "Vocational Skills",
+  "SSLC (10th Pass)",
+  "12th Pass",
+  "Post Graduate",
+  "Graduate",
+  "PhD",
+  "Diploma",
+  "ITI",
+  "ITI / Diploma",
+];
 
 const experienceOptions = [
   { label: "Fresher", value: 0 },
   ...Array.from({ length: 30 }, (_, i) => ({
     label: `${i + 1} Year${i + 1 > 1 ? "s" : ""}`,
-    value: i + 1
-  }))
-]
-
-
+    value: i + 1,
+  })),
+];
 
 // Fetch Jobs
 onMounted(async () => {
-    position.value = route.query.position || ''
-    experience.value = route.query.experience || ''
-    selectedLocation.value = route.query.location || ''
+  position.value = route.query.position || "";
+  experience.value = route.query.experience || "";
+  selectedLocation.value = route.query.location || "";
 
-    const data = await getJobs()
+  const data = await getJobs();
 
-    allJobs.value = data
-    jobs.value = data
+  allJobs.value = data;
+  jobs.value = data;
 
-    await getFilteredJobs()
-})
-
-
+  await getFilteredJobs();
+});
 
 // Dynamic Options
 const positionOptions = computed(() => {
-    const subjects = allJobs.value.map(job => job.subject)
-    return [...new Set(subjects)]
-})
+  const subjects = allJobs.value.map((job) => job.subject);
+  return [...new Set(subjects)];
+});
 
 const currencyOptions = computed(() => {
-    const currencies = allJobs.value.map(job => job.currency)
-    return [...new Set(currencies)]
-})
+  const currencies = allJobs.value.map((job) => job.currency);
+  return [...new Set(currencies)];
+});
 
 const locations = computed(() => {
-    const territories = allJobs.value.map(job => job.territory)
-    return [...new Set(territories)]
-})
+  const territories = allJobs.value.map((job) => job.territory);
+  return [...new Set(territories)];
+});
 
 // Jobs Pagination
 const totalPages = computed(() => {
-    return Math.ceil(jobs.value.length / jobsPerPage)
-})
+  return Math.ceil(jobs.value.length / jobsPerPage);
+});
 
 const paginatedJobs = computed(() => {
-    const start = (currentPage.value - 1) * jobsPerPage
-    const end = start + jobsPerPage
+  const start = (currentPage.value - 1) * jobsPerPage;
+  const end = start + jobsPerPage;
 
-    return jobs.value.slice(start, end)
-})
+  return jobs.value.slice(start, end);
+});
 
-const candidate = ref([])
+const candidate = ref([]);
 
 // Animates the no of jobs from 0 to x
 function animateCounter(target) {
+  const duration = 500;
+  const start = animatedJobsCount.value;
+  const startTime = performance.now();
 
-    const duration = 500
-    const start = animatedJobsCount.value
-    const startTime = performance.now()
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
 
-    function update(currentTime) {
+    animatedJobsCount.value = Math.floor(start + (target - start) * progress);
 
-        const elapsed = currentTime - startTime
-        const progress = Math.min(elapsed / duration, 1)
-
-        animatedJobsCount.value = Math.floor(
-            start + (target - start) * progress
-        )
-
-        if (progress < 1) {
-            requestAnimationFrame(update)
-        }
-
+    if (progress < 1) {
+      requestAnimationFrame(update);
     }
+  }
 
-    requestAnimationFrame(update)
-
+  requestAnimationFrame(update);
 }
 
 // Reusable Filter Helper
 function createFilteredOptions(options, model) {
-
-    return computed(() => {
-
-        if (!model.value) {
-            return options.value || options
-        }
-
-        return (options.value || options).filter(option =>
-            option.toLowerCase().includes(
-                model.value.toLowerCase()
-            )
-        )
-
-    })
-
-}
-
-
-
-// Filtered Suggestions
-const filteredPositionOptions =
-    createFilteredOptions(positionOptions, position)
-
-const filteredCurrencyOptions =
-    createFilteredOptions(currencyOptions, currency)
-
-const filteredQualificationOptions =
-    createFilteredOptions(qualificationOptions, qualification)
-
-const filteredSalaryTypeOptions =
-    createFilteredOptions(salaryTypeOptions, salaryType)
-
-const filteredExperienceOptions = computed(() => {
-
-    if (!experienceSearch.value) {
-        return experienceOptions
+  return computed(() => {
+    if (!model.value) {
+      return options.value || options;
     }
 
-    return experienceOptions.filter(option =>
-        option.label.toLowerCase().includes(
-            experienceSearch.value.toLowerCase()
-        )
-    )
+    return (options.value || options).filter((option) =>
+      option.toLowerCase().includes(model.value.toLowerCase())
+    );
+  });
+}
 
-})
+// Filtered Suggestions
+const filteredPositionOptions = createFilteredOptions(positionOptions, position);
+
+const filteredCurrencyOptions = createFilteredOptions(currencyOptions, currency);
+
+const filteredQualificationOptions = createFilteredOptions(
+  qualificationOptions,
+  qualification
+);
+
+const filteredSalaryTypeOptions = createFilteredOptions(salaryTypeOptions, salaryType);
+
+const filteredExperienceOptions = computed(() => {
+  if (!experienceSearch.value) {
+    return experienceOptions;
+  }
+
+  return experienceOptions.filter((option) =>
+    option.label.toLowerCase().includes(experienceSearch.value.toLowerCase())
+  );
+});
 
 // Reusable Select Helper
 function selectOption(model, value, showRef) {
-    model.value = value
-    showRef.value = false
+  model.value = value;
+  showRef.value = false;
 }
-
-
 
 // Reusable Hide Helper
 function hideSuggestions(model, options, showRef) {
+  setTimeout(() => {
+    const validOption = (options.value || options).find(
+      (option) => option.toLowerCase().trim() === model.value.toLowerCase().trim()
+    );
 
-    setTimeout(() => {
+    if (validOption) {
+      model.value = validOption;
+    }
 
-        const validOption = (options.value || options).find(
-            option =>
-                option.toLowerCase().trim() ===
-                model.value.toLowerCase().trim()
-        )
-
-        if (validOption) {
-            model.value = validOption
-        }
-
-        showRef.value = false
-
-    }, 100)
-
+    showRef.value = false;
+  }, 100);
 }
-
-
 
 // Position
 function selectPositionOption(option) {
-    selectOption(
-        position,
-        option,
-        showPositionSuggestions
-    )
+  selectOption(position, option, showPositionSuggestions);
 }
 
 function hidePositionSuggestions() {
-    hideSuggestions(
-        position,
-        positionOptions,
-        showPositionSuggestions
-    )
+  hideSuggestions(position, positionOptions, showPositionSuggestions);
 }
-
-
 
 // Salary Type
 function selectSalaryTypeOption(option) {
-    selectOption(
-        salaryType,
-        option,
-        showSalaryTypeSuggestions
-    )
+  selectOption(salaryType, option, showSalaryTypeSuggestions);
 }
 
 function hideSalaryTypeSuggestions() {
-    hideSuggestions(
-        salaryType,
-        salaryTypeOptions,
-        showSalaryTypeSuggestions
-    )
+  hideSuggestions(salaryType, salaryTypeOptions, showSalaryTypeSuggestions);
 }
-
-
 
 // Qualification
 function selectQualificationOption(option) {
-    selectOption(
-        qualification,
-        option,
-        showQualificationSuggestions
-    )
+  selectOption(qualification, option, showQualificationSuggestions);
 }
 
 function hideQualificationSuggestions() {
-    hideSuggestions(
-        qualification,
-        qualificationOptions,
-        showQualificationSuggestions
-    )
+  hideSuggestions(qualification, qualificationOptions, showQualificationSuggestions);
 }
-
-
 
 // Currency
 function selectCurrencyOption(option) {
-    selectOption(
-        currency,
-        option,
-        showCurrencySuggestions
-    )
+  selectOption(currency, option, showCurrencySuggestions);
 }
 
 function hideCurrencySuggestions() {
-    hideSuggestions(
-        currency,
-        currencyOptions,
-        showCurrencySuggestions
-    )
+  hideSuggestions(currency, currencyOptions, showCurrencySuggestions);
 }
 
 // Currency
 function selectExperienceOption(option) {
-    experience.value = option.value
-    experienceSearch.value = option.label
-    showExperienceSuggestions.value = false
+  experience.value = option.value;
+  experienceSearch.value = option.label;
+  showExperienceSuggestions.value = false;
 }
 
 const experienceDisplay = computed(() => {
-    const option = experienceOptions.find(
-        item => item.value === experience.value
-    )
+  const option = experienceOptions.find((item) => item.value === experience.value);
 
-    return option ? option.label : ""
-})
+  return option ? option.label : "";
+});
 
 function hideExperienceSuggestions() {
+  setTimeout(() => {
+    const validOption = experienceOptions.find(
+      (option) =>
+        option.label.toLowerCase().trim() === experienceSearch.value.toLowerCase().trim()
+    );
 
-    setTimeout(() => {
+    if (validOption) {
+      experience.value = validOption.value;
+      experienceSearch.value = validOption.label;
+    }
 
-        const validOption = experienceOptions.find(
-            option =>
-                option.label.toLowerCase().trim() ===
-                experienceSearch.value.toLowerCase().trim()
-        )
-
-        if (validOption) {
-            experience.value = validOption.value
-            experienceSearch.value = validOption.label
-        }
-
-        showExperienceSuggestions.value = false
-
-    }, 100)
-
+    showExperienceSuggestions.value = false;
+  }, 100);
 }
-
 
 // Location
 function selectLocation(location) {
-
-    if (selectedLocation.value !== location) {
-        selectedLocation.value = location
-    } else {
-        selectedLocation.value = ""
-    }
-
+  if (selectedLocation.value !== location) {
+    selectedLocation.value = location;
+  } else {
+    selectedLocation.value = "";
+  }
 }
-
-
 
 // Filter Jobs
 async function getFilteredJobs() {
-    if (!allJobs.value.length) return
+  if (!allJobs.value.length) return;
 
-    let additionalFilters = []
+  let additionalFilters = [];
 
-    if (position.value) {
-        additionalFilters.push([
-            "subject",
-            "like",
-            `%${position.value}%`
-        ])
-    }
+  if (position.value) {
+    additionalFilters.push(["subject", "like", `%${position.value}%`]);
+  }
 
-    if (salaryType.value) {
-        additionalFilters.push([
-            "salary_type",
-            "=",
-            salaryType.value
-        ])
-    }
+  if (salaryType.value) {
+    additionalFilters.push(["salary_type", "=", salaryType.value]);
+  }
 
-    if (qualification.value) {
-        additionalFilters.push([
-            "qualification_type",
-            "=",
-            qualification.value
-        ])
-    }
+  if (qualification.value) {
+    additionalFilters.push(["qualification_type", "=", qualification.value]);
+  }
 
-    if (currency.value) {
-        additionalFilters.push([
-            "currency",
-            "=",
-            currency.value
-        ])
-    }
+  if (currency.value) {
+    additionalFilters.push(["currency", "=", currency.value]);
+  }
 
-    if (selectedLocation.value) {
-        additionalFilters.push([
-            "territory",
-            "=",
-            selectedLocation.value
-        ])
-    }
+  if (selectedLocation.value) {
+    additionalFilters.push(["territory", "=", selectedLocation.value]);
+  }
 
-    additionalFilters.push([
-        "amount",
-        ">=",
-        minSalary.value
-    ])
+  additionalFilters.push(["amount", ">=", minSalary.value]);
 
-    if (experience.value !== null && experience.value !== "") {
-        additionalFilters.push([
-            "total_experience",
-            "=",
-            experience.value
-        ])
-    }
+  if (experience.value !== null && experience.value !== "") {
+    additionalFilters.push(["total_experience", "=", experience.value]);
+  }
 
-    additionalFilters.push([
-        "amount",
-        "<=",
-        maxSalary.value
-    ])
-    jobs.value = await getJobs(additionalFilters, candidateName.value)
-
+  additionalFilters.push(["amount", "<=", maxSalary.value]);
+  jobs.value = await getJobs(additionalFilters, candidateName.value);
 }
 
 function scrollToTop() {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    })
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
 }
 
 function handlePrevPage() {
-
-    if (currentPage.value > 1) {
-        currentPage.value--
-        scrollToTop()
-    }
-
+  if (currentPage.value > 1) {
+    currentPage.value--;
+    scrollToTop();
+  }
 }
 
 function handleNextPage() {
-
-    if (currentPage.value < totalPages.value) {
-        currentPage.value++
-        scrollToTop()
-    }
-
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+    scrollToTop();
+  }
 }
 
 function handleSort(type) {
+  if (sortBy.value === type) {
+    sortOrder.value = sortOrder.value === "asc" ? "desc" : "asc";
+  } else {
+    sortBy.value = type;
+    sortOrder.value = "desc";
+  }
 
-    if (sortBy.value === type) {
-
-        sortOrder.value =
-            sortOrder.value === "asc"
-                ? "desc"
-                : "asc"
-
-    } else {
-
-        sortBy.value = type
-        sortOrder.value = "desc"
-
-    }
-
-    sortJobs()
-
+  sortJobs();
 }
 
 function sortJobs() {
+  jobs.value.sort((a, b) => {
+    let valueA;
+    let valueB;
 
-    jobs.value.sort((a, b) => {
+    switch (sortBy.value) {
+      case "recent":
+        valueA = new Date(a.created_on);
+        valueB = new Date(b.created_on);
+        break;
 
-        let valueA
-        let valueB
+      case "openings":
+        valueA = a.vac || 0;
+        valueB = b.vac || 0;
+        break;
 
-        switch (sortBy.value) {
+      case "salary":
+        valueA = a.amount || 0;
+        valueB = b.amount || 0;
+        break;
 
-            case "recent":
-                valueA = new Date(a.created_on)
-                valueB = new Date(b.created_on)
-                break
+      case "relevance":
+        valueA = a.relevance || 0;
+        valueB = b.relevance || 0;
+        break;
 
-            case "openings":
-                valueA = a.vac || 0
-                valueB = b.vac || 0
-                break
+      case "experience":
+        valueA = a.total_experience || 0;
+        valueB = b.total_experience || 0;
+        break;
 
-            case "salary":
-                valueA = a.amount || 0
-                valueB = b.amount || 0
-                break
+      default:
+        valueA = 0;
+        valueB = 0;
+    }
 
-            case "relevance":
-                valueA = a.relevance || 0
-                valueB = b.relevance || 0
-                break
+    if (sortOrder.value === "asc") {
+      return valueA > valueB ? 1 : -1;
+    }
 
-            case "experience":
-                valueA = a.total_experience || 0
-                valueB = b.total_experience || 0
-                break
-
-            default:
-                valueA = 0
-                valueB = 0
-
-        }
-
-        if (sortOrder.value === "asc") {
-            return valueA > valueB ? 1 : -1
-        }
-
-        return valueA < valueB ? 1 : -1
-
-    })
-
+    return valueA < valueB ? 1 : -1;
+  });
 }
 
 function removeFilters() {
-    position.value = ""
-    salaryType.value = ""
-    qualification.value = ""
-    currency.value = ""
-    selectedLocation.value = ""
-    experience.value = null
-    experienceSearch.value = ""
+  position.value = "";
+  salaryType.value = "";
+  qualification.value = "";
+  currency.value = "";
+  selectedLocation.value = "";
+  experience.value = null;
+  experienceSearch.value = "";
 
-    getFilteredJobs()
+  getFilteredJobs();
 }
 
 // Filter Watch
-watch(
-    [
-        salaryType,
-        qualification,
-        currency,
-        selectedLocation,
-    ],
-    () => {
-        getFilteredJobs()
-    }
-)
-
+watch([salaryType, qualification, currency, selectedLocation], () => {
+  getFilteredJobs();
+});
 
 // Counter Animation Watch
 watch(
-    () => jobs.value.length,
-    (newValue) => {
-        animateCounter(newValue)
-    },
-    { immediate: true }
-)
+  () => jobs.value.length,
+  (newValue) => {
+    animateCounter(newValue);
+  },
+  { immediate: true }
+);
 // URL Query Watch
 watch(
-    () => route.query,
-    (query) => {
+  () => route.query,
+  (query) => {
+    position.value = query.position || "";
+    selectedLocation.value = query.location || "";
 
-        position.value = query.position || ''
-        selectedLocation.value = query.location || ''
+    experience.value =
+      query.experience !== undefined && query.experience !== ""
+        ? Number(query.experience)
+        : null;
 
-        experience.value =
-            query.experience !== undefined &&
-            query.experience !== ''
-                ? Number(query.experience)
-                : null
+    const selectedExperience = experienceOptions.find(
+      (item) => item.value === experience.value
+    );
 
-        const selectedExperience = experienceOptions.find(
-            item => item.value === experience.value
-        )
+    experienceSearch.value = selectedExperience?.label || "";
 
-        experienceSearch.value =
-            selectedExperience?.label || ''
-
-        getFilteredJobs()
-
-    },
-    { immediate: true }
-)
+    getFilteredJobs();
+  },
+  { immediate: true }
+);
 // Candidate fetch
 watch(
-    () => user.email,
-    async (email) => {
-        if (!email) return
+  () => user.email,
+  async (email) => {
+    if (!email) return;
 
-        candidate.value = await getCandidate(email)
-    },
-    { immediate: true }
-)
+    candidate.value = await getCandidate(email);
+  },
+  { immediate: true }
+);
 // Set value for fields
 watch(candidate, (val) => {
-  candidateName.value = val?.name || '',
-  isCVAttached.value =
-        val?.custom_updated__un_masked_cv
-            ? true
-            : false
-})
+  (candidateName.value = val?.name || ""),
+    (isCVAttached.value = val?.custom_updated__un_masked_cv ? true : false);
+});
 watch(
   candidateName,
   async (value) => {
-    await getFilteredJobs()
+    await getFilteredJobs();
   },
   { immediate: true }
-)
+);
 </script>
