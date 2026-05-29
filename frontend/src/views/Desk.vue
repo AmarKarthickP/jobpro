@@ -1,8 +1,8 @@
 <template>
   <!-- Navabar -->
   <div class="bg-white py-2 flex justify-center w-full shadow-sm sticky top-0 z-30">
-    <div class="flex gap-5 md:gap-10 relative items-center w-full md:justify-center mx-5 md:mx-0">
-      <router-link to="/home" class="md:hidden w-[70px]">
+    <div class="flex gap-5 md:gap-10 relative items-center w-full md:justify-center mx-5 md:mx-0 pt-5 md:pt-0">
+      <router-link to="/home" class="md:hidden w-[80px]">
         <img src="../assets/logo/jobpro.png" alt="jobpro" />
       </router-link>
 
