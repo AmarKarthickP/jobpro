@@ -204,7 +204,7 @@
       >
         <div class="md:hidden flex items-center gap-3 -mt-2">
           <div class="relative w-full">
-            <search-icon class="h-5 w-5 text-primary absolute top-4 left-2" />
+            <search-icon class="h-5 w-5 text-default absolute top-4 left-2" />
             <input
               type="text"
               placeholder="Search"
@@ -230,8 +230,25 @@
           </div>
           <button @click="showPopUpFilter=true"
             class="bg-background px-2 py-2 mt-2.5 rounded-lg hover:bg-hoverbg active:bg-hoverbg transition-all duration-300 ease-in-out"
-          >
-            <filter-icon class="text-primary h-5 w-5" />
+          > 
+            <filter-icon 
+              :class="[
+                (
+                  position ||
+                  experience ||
+                  selectedLocation ||
+                  salarType ||
+                  currency ||
+                  qualification ||
+                  minSalary !== 0 ||
+                  maxSalary !== 10000
+                )
+                  ? 'text-primary bg-hoverbg'
+                  : 'text-default',
+
+                'h-5 w-5',
+              ]"
+            />
           </button>
         </div>
         <div class="items-center hidden md:flex">
