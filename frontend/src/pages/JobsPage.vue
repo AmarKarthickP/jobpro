@@ -195,10 +195,16 @@
     </div>
     <div class="col-span-12 md:col-span-9 mb-10">
       <!-- Sorting -->
-      <div class="rounded-lg shadow-sm px-5 pt-3 pb-3 bg-white">
+      <div
+        ref="stickyCard"
+        :class="[
+          'rounded-lg shadow-sm px-5 pt-3 pb-3 bg-white sticky top-[75px] z-30 md:static transition-all duration-100 ease-in-out',
+          isStuck ? 'rounded-none -mx-5 md:rounded-lg md:mx-0' : 'rounded-lg'
+        ]"
+      >
         <div class="md:hidden flex items-center gap-3 -mt-2">
           <div class="relative w-full">
-            <search-icon class="h-4 w-4 text-primary absolute top-4 left-2" />
+            <search-icon class="h-5 w-5 text-primary absolute top-4 left-2" />
             <input
               type="text"
               placeholder="Search"
@@ -206,7 +212,7 @@
               @change="getFilteredJobs"
               @focus="showPositionSuggestions = true"
               @blur="hidePositionSuggestions"
-              class="bg-background w-full border-0 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 pl-8 pr-2 py-1 transition-all duration-300 ease-in-out"
+              class="bg-background w-full border-0 mt-2 text-[14px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 pl-8 pr-2 py-1.5 transition-all duration-300 ease-in-out"
             />
             <div
               v-if="showPositionSuggestions && filteredPositionOptions.length"
@@ -223,9 +229,9 @@
             </div>
           </div>
           <div
-            class="bg-background px-2 py-2 mt-2 rounded-lg hover:bg-hoverbg transition-all duration-300 ease-in-out"
+            class="bg-background px-2 py-2 mt-2.5 rounded-lg hover:bg-hoverbg transition-all duration-300 ease-in-out"
           >
-            <filter-icon class="text-primary h-4 w-4" />
+            <filter-icon class="text-primary h-5 w-5" />
           </div>
         </div>
         <div class="items-center hidden md:flex">
@@ -367,7 +373,7 @@ import SearchIcon from "../components/icons/SearchIcon.vue";
 import defaultImage from "@/assets/defaults/profile-image.jpeg";
 
 // Vue
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
 // Session
@@ -457,6 +463,23 @@ const positionOptions = computed(() => {
   const subjects = allJobs.value.map((job) => job.subject);
   return [...new Set(subjects)];
 });
+
+const stickyCard = ref(null)
+const isStuck = ref(false)
+
+const checkSticky = () => {
+  if (!stickyCard.value) return
+
+  isStuck.value = stickyCard.value.getBoundingClientRect().top <= 75
+}
+
+onMounted(() => {
+  window.addEventListener("scroll", checkSticky)
+})
+
+onUnmounted(() => {
+  window.removeEventListener("scroll", checkSticky)
+})
 
 const currencyOptions = computed(() => {
   const currencies = allJobs.value.map((job) => job.currency);
