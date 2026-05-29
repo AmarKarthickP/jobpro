@@ -9,22 +9,32 @@
   </transition>
 
 
-  <!-- Sheet -->
+  <!-- Bottom Sheet -->
   <transition name="slide-up">
     <div
       v-if="modelValue"
-      class="
-        fixed bottom-0 left-0 right-0
-        bg-white
-        rounded-t-3xl
-        z-50
-        p-5
-        shadow-[0_-10px_30px_rgba(0,0,0,0.05)]
-        overflow-y-auto
-      "
+      :style="{ transform: `translateY(${dragY}px)` }"
+      :class="[
+        'fixed bottom-0 left-0 right-0',
+        'bg-white rounded-t-3xl',
+        'z-50 p-5',
+        'shadow-[0_-10px_30px_rgba(0,0,0,0.05)]',
+        'overflow-y-auto',
+        isDragging ? '' : 'transition-transform duration-200'
+      ]"
     >
-      <!-- Handle -->
-      <div class="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-5"></div>
+
+      <!-- Drag Handle -->
+      <div
+        @touchstart="startDrag"
+        @touchmove.prevent="drag"
+        @touchend="endDrag"
+        class="py-3 cursor-grab"
+      >
+        <div
+          class="w-12 h-1 bg-gray-300 rounded-full mx-auto"
+        />
+      </div>
 
 
       <!-- Header -->
@@ -32,9 +42,14 @@
         <h2 class="text-[15px] font-semibold text-primary">
           <span class="text-highlight">
             {{ title }}
-            <span v-if="title > 1">Jobs</span>
-            <span v-else>Job</span>
+            <span v-if="title > 1">
+              Jobs
+            </span>
+            <span v-else>
+              Job
+            </span>
           </span>
+
           Available Now
         </h2>
       </div>
@@ -42,17 +57,27 @@
 
       <!-- Dynamic Content -->
       <slot />
-      
-      <button @click="close" class="text-primary rounded-lg py-1.5 w-full text-lg font-medium">
+
+
+      <button
+        @click="close"
+        class="text-primary rounded-lg py-1.5 w-full text-lg font-medium"
+      >
         Close
       </button>
+
     </div>
   </transition>
 </template>
 
 
 <script setup>
-import { watch, onUnmounted } from "vue"
+import {
+  ref,
+  watch,
+  onUnmounted
+} from "vue"
+
 
 const props = defineProps({
   modelValue: {
@@ -61,7 +86,7 @@ const props = defineProps({
   },
 
   title: {
-    type: String,
+    type: [String, Number],
     default: "Filters"
   }
 })
@@ -72,25 +97,65 @@ const emit = defineEmits([
 ])
 
 
+const dragY = ref(0)
+const startY = ref(0)
+const isDragging = ref(false)
+
+
+const startDrag = (event) => {
+  isDragging.value = true
+  startY.value = event.touches[0].clientY
+}
+
+
+const drag = (event) => {
+  const currentY = event.touches[0].clientY
+
+  const distance =
+    currentY - startY.value
+
+
+  if (distance > 0) {
+    dragY.value = distance
+  }
+}
+
+
+const endDrag = () => {
+  isDragging.value = false
+
+  if (dragY.value > 120) {
+    close()
+
+    setTimeout(() => {
+      dragY.value = 0
+    }, 200)
+
+    return
+  }
+
+
+  dragY.value = 0
+}
+
+
 const close = () => {
   emit("update:modelValue", false)
 }
 
 
-// Lock background scroll
+// Prevent background scroll
 watch(
   () => props.modelValue,
+
   (value) => {
-    if (value) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = ""
-    }
+    document.body.style.overflow =
+      value ? "hidden" : ""
   }
 )
 
 
-// Safety cleanup
+// cleanup
 onUnmounted(() => {
   document.body.style.overflow = ""
 })
@@ -103,11 +168,13 @@ onUnmounted(() => {
   transition: all 0.25s ease;
 }
 
+
 .slide-up-enter-from,
 .slide-up-leave-to {
   transform: translateY(100%);
   opacity: 0;
 }
+
 
 .slide-up-enter-to,
 .slide-up-leave-from {
@@ -120,6 +187,7 @@ onUnmounted(() => {
 .fade-leave-active {
   transition: opacity 0.2s ease;
 }
+
 
 .fade-enter-from,
 .fade-leave-to {
