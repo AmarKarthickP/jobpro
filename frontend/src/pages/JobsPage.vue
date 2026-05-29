@@ -228,8 +228,8 @@
               </div>
             </div>
           </div>
-          <button
-            class="bg-background px-2 py-2 mt-2.5 rounded-lg hover:bg-hoverbg transition-all duration-300 ease-in-out"
+          <button @click="showPopUpFilter=true"
+            class="bg-background px-2 py-2 mt-2.5 rounded-lg hover:bg-hoverbg active:bg-hoverbg transition-all duration-300 ease-in-out"
           >
             <filter-icon class="text-primary h-5 w-5" />
           </button>
@@ -348,6 +348,176 @@
       </div>
     </div>
   </div>
+
+  <BottomSheet
+    v-model="showPopUpFilter"
+    :title="animatedJobsCount"
+  >
+
+    <div class="space-y-2">
+
+      <!-- Position -->
+            <p class="text-gray-600 mt-3 text-[15px] font-medium">Position</p>
+            <div class="relative">
+              <input
+                type="text"
+                placeholder="Position"
+                v-model="position"
+                @change="getFilteredJobs"
+                @focus="showPositionSuggestions = true"
+                @blur="hidePositionSuggestions"
+                class="bg-background w-full border-0 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+              />
+              <div
+                v-if="showPositionSuggestions && filteredPositionOptions.length"
+                class="z-50 mt-2 absolute max-h-[200px] hide-scrollbar overflow-y-auto w-full bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+              >
+                <div
+                  v-for="option in filteredPositionOptions"
+                  :key="option"
+                  @mousedown="selectPositionOption(option)"
+                  class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-gray-100 transition-all duration-200"
+                >
+                  {{ option }}
+                </div>
+              </div>
+            </div>
+            <!-- Experience -->
+            <div class="relative">
+              <input
+                type="text"
+                placeholder="Experience"
+                v-model="experienceSearch"
+                @change="getFilteredJobs"
+                @focus="showExperienceSuggestions = true"
+                @blur="hideExperienceSuggestions"
+                class="bg-background w-full border-0 mt-3 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+              />
+              <div
+                v-if="showExperienceSuggestions && filteredExperienceOptions.length"
+                class="z-50 mt-2 absolute max-h-[200px] overflow-y-auto w-full hide-scrollbar bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+              >
+                <div
+                  v-for="option in filteredExperienceOptions"
+                  :key="option.value"
+                  @mousedown="selectExperienceOption(option)"
+                  class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-gray-100 transition-all duration-200"
+                >
+                  {{ option.label }}
+                </div>
+              </div>
+            </div>
+            <!-- Location -->
+            <p
+              v-if="locations.length > 0"
+              class="text-gray-600 mt-3 text-[15px] font-medium"
+            >
+              Location
+            </p>
+            <div class="flex flex-wrap gap-3 mt-3">
+              <div
+                v-for="location in locations"
+                :key="location"
+                @click="selectLocation(location)"
+                :class="[
+                  selectedLocation === location
+                    ? 'bg-primary text-white'
+                    : 'bg-background text-gray-600',
+                  'cursor-pointer text-[13px] rounded-lg font-medium px-2 py-1 transition-all duration-300 ease-in-out hover:ring-2 hover:ring-gray-400',
+                ]"
+              >
+                {{ location }}
+              </div>
+            </div>
+            <!-- Salary Type -->
+            <p class="text-gray-600 mt-5 text-[15px] font-medium">Salary</p>
+            <div class="flex gap-3 relative">
+              <!-- Salary Type -->
+              <input
+                type="text"
+                placeholder="Salary Type"
+                v-model="salaryType"
+                @focus="showSalaryTypeSuggestions = true"
+                @blur="hideSalaryTypeSuggestions"
+                class="bg-background w-full border-0 text-[13px] rounded-lg mt-2 text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+              />
+              <div
+                v-if="showSalaryTypeSuggestions && filteredSalaryTypeOptions.length"
+                class="absolute z-50 mt-2 top-10 w-[48%] bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+              >
+                <div
+                  v-for="option in filteredSalaryTypeOptions"
+                  :key="option"
+                  @mousedown="selectSalaryTypeOption(option)"
+                  class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-gray-100 transition-all duration-200"
+                >
+                  {{ option }}
+                </div>
+              </div>
+              <!-- Currency -->
+              <input
+                type="text"
+                placeholder="Currency"
+                v-model="currency"
+                @focus="showCurrencySuggestions = true"
+                @blur="hideCurrencySuggestions"
+                class="bg-background w-full border-0 text-[13px] rounded-lg mt-2 text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+              />
+              <div
+                v-if="showCurrencySuggestions && filteredCurrencyOptions.length"
+                class="absolute z-50 mt-2 top-10 right-0 w-[48%] bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+              >
+                <div
+                  v-for="option in filteredCurrencyOptions"
+                  :key="option"
+                  @mousedown="selectCurrencyOption(option)"
+                  class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-gray-100 transition-all duration-200"
+                >
+                  {{ option }}
+                </div>
+              </div>
+            </div>
+            <Slider
+              class="w-full mt-2"
+              label="Amount"
+              :min="0"
+              :max="10000"
+              :step="1"
+              v-model:minValue="minSalary"
+              v-model:maxValue="maxSalary"
+              @change="getFilteredJobs"
+            />
+            <!-- Qualification -->
+            <p class="text-gray-600 mt-5 text-[15px] font-medium">Qualification</p>
+            <input
+              type="text"
+              placeholder="Qualification"
+              v-model="qualification"
+              @focus="showQualificationSuggestions = true"
+              @blur="hideQualificationSuggestions"
+              class="bg-background w-full border-0 mt-2 text-[13px] rounded-lg text-primary font-medium outline-none focus:ring-2 focus:ring-gray-400 px-2 py-1 transition-all duration-300 ease-in-out"
+            />
+            <div
+              v-if="showQualificationSuggestions && filteredQualificationOptions.length"
+              class="absolute z-50 mt-2 bottom-[135px] left-[5%] w-[90%] bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+            >
+              <div
+                v-for="option in filteredQualificationOptions"
+                :key="option"
+                @mousedown="selectQualificationOption(option)"
+                class="px-3 py-1 text-[13px] text-gray-700 cursor-pointer hover:bg-gray-100 transition-all duration-200"
+              >
+                {{ option }}
+              </div>
+            </div>
+
+      <button @click="removeFilters" class="text-red-600 rounded-lg py-1.5 w-full text-lg font-medium">
+        Clear all
+      </button>
+
+    </div>
+
+  </BottomSheet>
 </template>
 <script setup>
 // Components
@@ -357,6 +527,7 @@ import Avatar from "../components/Avatar.vue";
 import JobCard from "../components/JobCard.vue";
 import Slider from "../components/Slider.vue";
 import Loader from "../components/Loader.vue";
+import BottomSheet from "../components/BottomSheet.vue";
 
 // Icons
 import UpArrowIcon from "@/components/icons/UpArrowIcon.vue";
@@ -388,6 +559,7 @@ import { getCandidate } from "@/data/candidate";
 const jobs = ref([]);
 const allJobs = ref([]);
 const selectedJob = ref(null);
+const showPopUpFilter = ref(false);
 
 const minSalary = ref(0);
 const maxSalary = ref(10000);

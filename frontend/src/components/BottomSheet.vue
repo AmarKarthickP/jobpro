@@ -19,8 +19,7 @@
         rounded-t-3xl
         z-50
         p-5
-        shadow-xl
-        max-h-[80vh]
+        shadow-[0_-10px_30px_rgba(0,0,0,0.05)]
         overflow-y-auto
       "
     >
@@ -30,7 +29,7 @@
 
       <!-- Header -->
       <div class="flex justify-center items-center mb-5">
-        <h2 class="text-lg font-semibold text-primary">
+        <h2 class="text-[15px] font-semibold text-primary">
           <span class="text-highlight">
             {{ title }}
             <span v-if="title > 1">Jobs</span>
