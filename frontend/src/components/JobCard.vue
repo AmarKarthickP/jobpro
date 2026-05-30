@@ -491,11 +491,8 @@
           v-if="page=='Activity'"
           class="relative cursor-pointer overflow-hidden text-center mt-3 ml-auto w-[50%] bg-[#ffebdb] py-1.5 rounded-lg text-[#e56700] text-[11px] font-medium"
         >
-
           <!-- Text -->
-          <span class="relative z-10">
-            Job ID: {{ data.name }}
-          </span>
+          <span class="relative z-10"> Job ID: {{ data.name }} </span>
         </badge>
         <button
           v-if="page=='Activity' && data.status!='IDB'"
@@ -550,13 +547,20 @@
   >
     <div
       v-if="showJobDetails"
-      class="fixed top-0 right-0 h-full w-[500px] bg-white shadow-2xl z-50 rounded-l-2xl transform-gpu"
+      class="fixed top-0 right-0 h-full md:w-[500px] bg-white shadow-2xl z-50 rounded-l-2xl transform-gpu"
     >
       <!-- Header -->
-      <div class="flex items-center px-5 gap-5 py-4 border-b">
-        <p class="text-2xl font-medium text-primary">
-          Job details - <span>{{ data.name }}</span>
-        </p>
+      <div
+        class="flex justify-between md:justify-start items-center px-5 gap-5 pb-3 pt-10 md:pb-4 md:pt-4 border-b"
+      >
+        <div class="flex gap-2 items-center">
+          <button @click="showJobDetails=false" class="md:hidden">
+            <left-icon class="h-3 w-3 text-default" />
+          </button>
+          <p class="md:text-2xl font-medium text-primary">
+            Job details - <span>{{ data.name }}</span>
+          </p>
+        </div>
         <badge
           class="relative overflow-hidden text-xs bg-[#ffebdb] rounded-lg px-3 py-1 text-[#e56700]"
         >
@@ -571,7 +575,7 @@
 
         <button
           @click="showJobDetails = false"
-          class="text-gray-500 hover:text-black ml-auto"
+          class="hidden md:block text-gray-500 hover:text-black ml-auto"
         >
           ✕
         </button>
@@ -716,6 +720,7 @@
 
 
 
+
                 }}<span v-if="data.specialization">
                   (need specialization in {{ data.specialization }})</span
                 >
@@ -724,6 +729,7 @@
                 Experience:
                 <span
                   >{{ data.minimum_experience
+
 
 
 
@@ -753,7 +759,7 @@
           ></p>
         </div>
 
-        <div class="mt-3 mb-10">
+        <div class="mt-3 mb-14 md:mb-10">
           <h1 class="font-semibold text-primary text-xl">About Company</h1>
           <p
             class="pt-2 pl-2 text-gray-600 text-[13px] md:text-[15px] font-medium text-left"
@@ -793,7 +799,7 @@
         </div>
 
         <div
-          class="flex w-[90%] gap-5 mt-3 fixed bottom-0 bg-white pb-5 pt-1 bg-white after:content-[''] after:absolute after:left-0 after:top-[-24px] after:w-full after:h-6 after:bg-gradient-to-t after:from-white after:to-transparent after:pointer-events-none"
+          class="flex flex-col md:flex-row w-[90%] gap-2 md:gap-5 mt-3 fixed bottom-0 bg-white pb-5 pt-1 bg-white after:content-[''] after:absolute after:left-0 after:top-[-24px] after:w-full after:h-6 after:bg-gradient-to-t after:from-white after:to-transparent after:pointer-events-none"
         >
           <button
             @click="handleApplyJob"
@@ -868,6 +874,7 @@ import AccommodationIcon from './icons/AccommodationIcon.vue';
 import BusIcon from './icons/BusIcon.vue';
 import FlightTicketIcon from './icons/FlightTicketIcon.vue';
 import RibbonRightIcon from './icons/RibbonRightIcon.vue';
+import LeftIcon from './icons/LeftIcon.vue';
 // Components
 import Dialog from './Dialog.vue';
 import FileUpload from './FileUpload.vue';
