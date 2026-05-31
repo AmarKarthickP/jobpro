@@ -704,7 +704,7 @@
           class="mt-4 h-[250px] w-full bg-cover rounded-lg"
           :src="data.custom_customer_location_image"
         />
-        &nbsp;
+        &nbsp; 
         <div class="">
           <div class="">
             <h1 class="font-semibold text-primary text-xl">Highlights</h1>
@@ -860,7 +860,7 @@
 
 <script setup>
 // vue
-import { ref, watch, onUnmounted } from 'vue'
+import { ref, watch, onUnmounted, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 // Utils
@@ -947,6 +947,12 @@ const statusMapping = {
   "Interviewed": "Interview Completed",
   "Proposed PSL": "Offer in Progress",
   "Result Pending": "Waiting List",
+}
+
+const handlePopState = () => {
+  if (showJobDetails.value) {
+    showJobDetails.value = false
+  }
 }
 
 function getMappedStatus(status) {
@@ -1057,7 +1063,15 @@ const handleResumeUpload = async (file) => {
 }
 
 watch(showJobDetails, (value) => {
-    document.body.style.overflow = value ? 'hidden' : ''
+  document.body.style.overflow = value ? 'hidden' : ''
+
+  if (value) {
+    history.pushState(
+      { jobDetails: true },
+      '',
+      window.location.href
+    )
+  }
 })
 watch(
   () => props.isCVAttached,
@@ -1067,5 +1081,10 @@ watch(
 )
 onUnmounted(() => {
     document.body.style.overflow = ''
+    window.removeEventListener('popstate', handlePopState)
+
+})
+onMounted(() => {
+  window.addEventListener('popstate', handlePopState)
 })
 </script>
