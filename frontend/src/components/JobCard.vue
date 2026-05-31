@@ -584,7 +584,7 @@
       <!-- Content -->
       <div class="px-5 pb-5 overflow-y-auto h-[calc(100%-70px)]">
         <div
-          class="sticky top-0 z-20 relative pt-5 bg-white after:content-[''] after:absolute after:left-0 after:bottom-[-24px] after:w-full after:h-6 after:bg-gradient-to-b after:from-white after:to-transparent after:pointer-events-none"
+          class="md:sticky top-0 z-20 relative pt-5 bg-white after:content-[''] after:absolute after:left-0 after:bottom-[-24px] after:w-full md:after:h-6 after:bg-gradient-to-b after:from-white after:to-transparent after:pointer-events-none"
         >
           <p class="text-xl font-semibold text-primary">{{ data.subject }}</p>
           <p class="mt-1 text-gray-600 font-medium">{{ data.customer }}</p>
@@ -700,9 +700,9 @@
             </badge>
           </div>
         </div>
-        <img
+        <img v-if="data.custom_customer_location_image"
           class="mt-4 h-[250px] w-full bg-cover rounded-lg"
-          src="https://i.postimg.cc/t4mkfwWj/no-image-2.png"
+          :src="data.custom_customer_location_image"
         />
         &nbsp;
         <div class="">
