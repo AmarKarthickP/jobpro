@@ -193,7 +193,7 @@
         </div>
       </div>
     </div>
-    <div class="col-span-12 md:col-span-9 mb-10">
+    <div class="col-span-12 md:col-span-9 mb-10 pb-10 md:pb-0">
       <!-- Sorting -->
       <div
         ref="stickyCard"
