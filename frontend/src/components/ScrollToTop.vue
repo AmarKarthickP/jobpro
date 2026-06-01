@@ -10,9 +10,9 @@
     <button
       v-if="showButton"
       @click="scrollToTop"
-      class="fixed bottom-20 right-10 md:bottom-6 md:right-6 z-50 bg-primary text-white rounded-xl p-3 shadow-lg transition-all duration-300 ease-in-out"
+      class="fixed bottom-20 right-10 md:bottom-6 md:right-6 z-50 bg-primary md:bg-white md:bg-white text-white rounded-xl p-3 shadow-lg transition-all duration-300 ease-in-out"
     >
-      <RightIcon class="text-white h-4 w-4 -rotate-90" />
+      <RightIcon class="md:text-primary h-4 w-4 -rotate-90" />
     </button>
   </Transition>
 </template>
