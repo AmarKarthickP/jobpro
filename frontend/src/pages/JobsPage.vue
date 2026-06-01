@@ -334,7 +334,7 @@
         class="h-20 flex items-center justify-center"
       >
         <Loader
-          v-if="loading"
+          v-if="loading || loadingFilters"
           class="text-[40px]"
         />
       </div>
@@ -552,6 +552,8 @@ import { getFilterValues } from "../data/jobs.js";
 const jobs = ref([]);
 const selectedJob = ref(null);
 const showPopUpFilter = ref(false);
+const initialized = ref(false)
+const loadingFilters = ref(true)
 
 const minSalary = ref(0);
 const maxSalary = ref(10000);
@@ -620,7 +622,13 @@ onMounted(async () => {
   experience.value = route.query.experience || "";
   selectedLocation.value = route.query.location || "";
 
-  filterValues.value = await getFilterValues()
+  try {
+    filterValues.value = await getFilterValues()
+  } finally {
+    loadingFilters.value = false
+  }
+  initialized.value = true
+
   await loadJobs(true)
   observer = new IntersectionObserver(
     ([entry]) => {
@@ -839,20 +847,6 @@ function scrollToTop() {
   });
 }
 
-function handlePrevPage() {
-  if (currentPage.value > 1) {
-    currentPage.value--;
-    scrollToTop();
-  }
-}
-
-function handleNextPage() {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++;
-    scrollToTop();
-  }
-}
-
 function handleSort(type) {
   if (sortBy.value === type) {
     sortOrder.value = sortOrder.value === "asc" ? "desc" : "asc";
@@ -939,6 +933,8 @@ watch(
 watch(
   () => route.query,
   (query) => {
+    if (!initialized.value) return
+
     position.value = query.position || "";
     selectedLocation.value = query.location || "";
 
@@ -954,9 +950,8 @@ watch(
     experienceSearch.value = selectedExperience?.label || "";
 
     getFilteredJobs();
-  },
-  { immediate: true }
-);
+  }
+)
 
 const loadJobs = async (reset = false) => {
   if (loading.value) return
@@ -1033,9 +1028,10 @@ watch(candidate, (val) => {
 });
 watch(
   candidateName,
-  async (value) => {
+  async () => {
+    if (!initialized.value) return
+
     await getFilteredJobs();
-  },
-  { immediate: true }
-);
+  }
+)
 </script>
