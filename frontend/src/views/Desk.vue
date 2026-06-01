@@ -81,10 +81,10 @@
       <div class="ml-auto md:mr-10 md:-ml-2">
         <div
           @click="openYoutube"
-          class="flex flex-col text-[#ff0000] items-center transition-all duration-500 ease-in-out cursor-pointer"
+          class=" hidden md:flex flex-col text-[#ff0000] items-center transition-all duration-500 ease-in-out cursor-pointer"
         >
           <youtube-icon class="h-7 w-7 md:pt-1" />
-          <p class="text-[12px] font-medium hidden md:block">Youtube</p>
+          <p class="text-[12px] font-medium">Youtube</p>
         </div>
       </div>
       <button
@@ -182,19 +182,12 @@
           <p class="text-[12px] font-medium">Refer</p>
         </div>
       </router-link>
-      <div
-        v-if="auth.isLoggedIn"
-        class="relative"
-        @click="viewProfileMenu = true"
-        v-click-outside="() => (viewProfileMenu = false)"
-      >
-        <button to="/profile">
-          <div class="flex flex-col items-center text-primary">
-            <avatar :img="userData" class="h-7 w-7 rounded-full" />
-          <p class="text-[12px] font-medium">Me</p>
-          </div>
-        </button>
-      </div>
+      <router-link v-if="auth.isLoggedIn" to="/profile">
+        <div class="flex flex-col items-center text-primary">
+          <avatar :img="userData" class="h-7 w-7 rounded-full" />
+        <p class="text-[12px] font-medium">Me</p>
+        </div>
+      </router-link>
   </div>
 </template>
 
