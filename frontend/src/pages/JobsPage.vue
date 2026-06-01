@@ -331,11 +331,11 @@
       </TransitionGroup>
       <div
         ref="loadMoreTrigger"
-        class="h-20 flex items-center justify-center"
+        class="flex items-center justify-center"
       >
         <Loader
           v-if="loading || loadingFilters"
-          class="text-[40px]"
+          class="text-[40px] mt-8"
         />
       </div>
     </div>
