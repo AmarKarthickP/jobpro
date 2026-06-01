@@ -510,6 +510,7 @@
     </div>
 
   </BottomSheet>
+  <ScrollToTop />
 </template>
 <script setup>
 // Components
@@ -520,6 +521,7 @@ import JobCard from "../components/JobCard.vue";
 import Slider from "../components/Slider.vue";
 import Loader from "../components/Loader.vue";
 import BottomSheet from "../components/BottomSheet.vue";
+import ScrollToTop from "../components/ScrollToTop.vue";
 
 // Icons
 import UpArrowIcon from "@/components/icons/UpArrowIcon.vue";
