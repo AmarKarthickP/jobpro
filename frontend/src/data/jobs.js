@@ -1,23 +1,14 @@
 let memoryCache = {}
 const CACHE_DURATION = 1000 * 60 * 10
 
-export async function getJobs(additionalFilters = [], candidate = null) {
-
-    const key = JSON.stringify(additionalFilters, candidate)
-
-    const cached = memoryCache[key]
-
-    if (
-        cached &&
-        Date.now() - cached.time < CACHE_DURATION
-    ) {
-        return cached.data
-    }
-
+export async function getJobs(additionalFilters = [], candidate = null, start = 1, pageLength = 12) {
     const params = new URLSearchParams({
         additional_filters: JSON.stringify(additionalFilters),
-        candidate: candidate || ""
+        candidate: candidate || "",
+        start: start,
+        page_length: pageLength,
     })
+    
 
     try {
 
@@ -35,11 +26,6 @@ export async function getJobs(additionalFilters = [], candidate = null) {
         const jobs =
             result.message ||
             []
-
-        memoryCache[key] = {
-            data: jobs,
-            time: Date.now()
-        }
 
         return jobs
 
