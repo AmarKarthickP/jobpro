@@ -510,7 +510,7 @@
     </div>
 
   </BottomSheet>
-  <ScrollToTop />
+  <ScrollToTop v-show="!showPopUpFilter" />
 </template>
 <script setup>
 // Components
