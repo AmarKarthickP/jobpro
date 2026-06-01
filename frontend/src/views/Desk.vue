@@ -216,7 +216,7 @@
       </div>
 
       <nav class="p-4 space-y-2">
-        <button class="w-full text-left p-3 rounded-lg hover:bg-gray-100">
+        <button v-if="auth.isLoggedIn" @click="showMenu=false, router.push('/home');" class="w-full text-left p-3 rounded-lg hover:bg-gray-100">
           <img src="../assets/logo/task_ai.png" class="h-9" />
         </button>
 
@@ -225,7 +225,7 @@
           <p class="text-primary font-medium pt-0.5">@JOBPROTEAMPRO</p>
         </button>
 
-        <button class="w-full text-left p-3 rounded-lg hover:bg-gray-100 text-priumary flex items-center gap-3">
+        <button v-if="auth.isLoggedIn" class="w-full text-left p-3 rounded-lg hover:bg-gray-100 text-priumary flex items-center gap-3">
           <sign-out-icon class="h-7 w-7 text-red-500" />
           <p @click="handleSignOut" class="text-primary font-medium pt-0.5">Sign out</p>
         </button>
