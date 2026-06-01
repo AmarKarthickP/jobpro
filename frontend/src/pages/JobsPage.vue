@@ -161,7 +161,7 @@
             />
             <div
               v-if="showQualificationSuggestions && filteredQualificationOptions.length"
-              class="absolute z-50 mt-2 bottom-28 left-[5%] w-[90%] bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+              class="absolute z-50 mt-2 left-[5%] h-32 w-[90%] bg-white border border-gray-200 rounded-xl shadow-lg overflow-y-auto hide-scrollbar"
             >
               <div
                 v-for="option in filteredQualificationOptions"
