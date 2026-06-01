@@ -172,23 +172,6 @@
                 {{ option }}
               </div>
             </div>
-            <div class="mt-5 flex gap-5 items-center justify-center">
-              <button
-                @click="handlePrevPage"
-                :disabled="currentPage === 1"
-                class="text-center px-5 bg-primary py-2 rounded-xl flex justify-evenly text-white text-[14px] font-medium disabled:opacity-40"
-              >
-                <left-icon class="h-3 w-3" />
-              </button>
-              <p class="text-[14px] font-medium">{{ currentPage }} / {{ totalPages }}</p>
-              <button
-                @click="handleNextPage"
-                :disabled="currentPage === totalPages"
-                class="text-center px-5 bg-primary py-2 rounded-xl flex justify-center text-white text-[14px] font-medium disabled:opacity-40"
-              >
-                <right-icon class="h-3 w-3" />
-              </button>
-            </div>
           </div>
         </div>
       </div>
@@ -256,20 +239,6 @@
           <p class="font-medium ml-auto text-lg text-red-600">
             Showing {{ animatedJobsCount }} jobs
           </p>
-          <button
-            @click="handlePrevPage"
-            :disabled="currentPage === 1"
-            class="text-center ml-5 px-3 py-2 rounded-xl flex justify-evenly text-primary text-[14px] font-medium disabled:opacity-40 hidden md:block"
-          >
-            <left-icon class="h-3 w-3" />
-          </button>
-          <button
-            @click="handleNextPage"
-            :disabled="currentPage === totalPages"
-            class="text-center px-3 py-2 rounded-xl flex justify-center text-primary text-[14px] font-medium disabled:opacity-40 hidden md:block"
-          >
-            <right-icon class="h-3 w-3" />
-          </button>
         </div>
         <div class="border-t border-gray-300 my-2"></div>
         <div class="flex flex-wrap items-center gap-2 md:gap-5 justify-center relative">
@@ -349,7 +318,7 @@
             : 'flex flex-col gap-5'
         "
       >
-        <div v-for="job in paginatedJobs" :key="`${job.name}-${job.status}`">
+        <div v-for="job in jobs" :key="`${job.name}-${job.status}`">
           <job-card
             :data="job"
             :view="view"
@@ -360,8 +329,14 @@
           />
         </div>
       </TransitionGroup>
-      <div v-if="jobs.length == 0" class="flex items-center justify-center mt-5">
-        <loader class="text-[40px]" />
+      <div
+        ref="loadMoreTrigger"
+        class="h-20 flex items-center justify-center"
+      >
+        <Loader
+          v-if="loading"
+          class="text-[40px]"
+        />
       </div>
     </div>
   </div>
@@ -586,8 +561,13 @@ const view = ref("grid");
 const isCVAttached = ref(false);
 const candidateName = ref("");
 
-const currentPage = ref(1);
-const jobsPerPage = 12;
+// Load jobs on scroll variables
+const start = ref(0)
+const pageLength = 12
+const loading = ref(false)
+const hasMore = ref(true)
+const loadMoreTrigger = ref(null)
+let observer
 
 const sortBy = ref("recent");
 const sortOrder = ref("desc");
@@ -639,17 +619,30 @@ onMounted(async () => {
   experience.value = route.query.experience || "";
   selectedLocation.value = route.query.location || "";
 
-  const data = await getJobs();
+  await loadJobs(true)
+  observer = new IntersectionObserver(
+    ([entry]) => {
+      if (
+        entry.isIntersecting &&
+        hasMore.value &&
+        !loading.value
+      ) {
+        loadJobs()
+      }
+    },
+    {
+      rootMargin: "300px",
+    }
+  )
 
-  allJobs.value = data;
-  jobs.value = data;
-
-  await getFilteredJobs();
+  if (loadMoreTrigger.value) {
+    observer.observe(loadMoreTrigger.value)
+  }
 });
 
 // Dynamic Options
 const positionOptions = computed(() => {
-  const subjects = allJobs.value.map((job) => job.subject);
+  const subjects = jobs.value.map((job) => job.subject);
   return [...new Set(subjects)];
 });
 
@@ -668,29 +661,30 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener("scroll", checkSticky)
+  observer?.disconnect()
 })
 
 const currencyOptions = computed(() => {
-  const currencies = allJobs.value.map((job) => job.currency);
+  const currencies = jobs.value.map((job) => job.currency);
   return [...new Set(currencies)];
 });
 
 const locations = computed(() => {
-  const territories = allJobs.value.map((job) => job.territory);
+  const territories = jobs.value.map((job) => job.territory);
   return [...new Set(territories)];
 });
 
 // Jobs Pagination
-const totalPages = computed(() => {
-  return Math.ceil(jobs.value.length / jobsPerPage);
-});
+// const totalPages = computed(() => {
+//   return Math.ceil(jobs.value.length / jobsPerPage);
+// });
 
-const paginatedJobs = computed(() => {
-  const start = (currentPage.value - 1) * jobsPerPage;
-  const end = start + jobsPerPage;
+// const paginatedJobs = computed(() => {
+//   const start = (currentPage.value - 1) * jobsPerPage;
+//   const end = start + jobsPerPage;
 
-  return jobs.value.slice(start, end);
-});
+//   return jobs.value.slice(start, end);
+// });
 
 const candidate = ref([]);
 
@@ -845,39 +839,46 @@ function selectLocation(location) {
 }
 
 // Filter Jobs
+// async function getFilteredJobs() {
+//   if (!allJobs.value.length) return;
+
+//   let additionalFilters = [];
+
+//   if (position.value) {
+//     additionalFilters.push(["subject", "like", `%${position.value}%`]);
+//   }
+
+//   if (salaryType.value) {
+//     additionalFilters.push(["salary_type", "=", salaryType.value]);
+//   }
+
+//   if (qualification.value) {
+//     additionalFilters.push(["qualification_type", "=", qualification.value]);
+//   }
+
+//   if (currency.value) {
+//     additionalFilters.push(["currency", "=", currency.value]);
+//   }
+
+//   if (selectedLocation.value) {
+//     additionalFilters.push(["territory", "=", selectedLocation.value]);
+//   }
+
+//   additionalFilters.push(["amount", ">=", minSalary.value]);
+
+//   if (experience.value !== null && experience.value !== "") {
+//     additionalFilters.push(["total_experience", "=", experience.value]);
+//   }
+
+//   additionalFilters.push(["amount", "<=", maxSalary.value]);
+//   jobs.value = await getJobs(additionalFilters, candidateName.value);
+// }
+
 async function getFilteredJobs() {
-  if (!allJobs.value.length) return;
+  start.value = 0
+  hasMore.value = true
 
-  let additionalFilters = [];
-
-  if (position.value) {
-    additionalFilters.push(["subject", "like", `%${position.value}%`]);
-  }
-
-  if (salaryType.value) {
-    additionalFilters.push(["salary_type", "=", salaryType.value]);
-  }
-
-  if (qualification.value) {
-    additionalFilters.push(["qualification_type", "=", qualification.value]);
-  }
-
-  if (currency.value) {
-    additionalFilters.push(["currency", "=", currency.value]);
-  }
-
-  if (selectedLocation.value) {
-    additionalFilters.push(["territory", "=", selectedLocation.value]);
-  }
-
-  additionalFilters.push(["amount", ">=", minSalary.value]);
-
-  if (experience.value !== null && experience.value !== "") {
-    additionalFilters.push(["total_experience", "=", experience.value]);
-  }
-
-  additionalFilters.push(["amount", "<=", maxSalary.value]);
-  jobs.value = await getJobs(additionalFilters, candidateName.value);
+  await loadJobs(true)
 }
 
 function scrollToTop() {
@@ -1005,6 +1006,65 @@ watch(
   },
   { immediate: true }
 );
+
+const loadJobs = async (reset = false) => {
+  if (loading.value) return
+
+  loading.value = true
+
+  try {
+    let additionalFilters = []
+
+    if (position.value) {
+      additionalFilters.push(["subject", "like", `%${position.value}%`])
+    }
+
+    if (salaryType.value) {
+      additionalFilters.push(["salary_type", "=", salaryType.value])
+    }
+
+    if (qualification.value) {
+      additionalFilters.push(["qualification_type", "=", qualification.value])
+    }
+
+    if (currency.value) {
+      additionalFilters.push(["currency", "=", currency.value])
+    }
+
+    if (selectedLocation.value) {
+      additionalFilters.push(["territory", "=", selectedLocation.value])
+    }
+
+    if (experience.value !== null && experience.value !== "") {
+      additionalFilters.push(["total_experience", "=", experience.value])
+    }
+
+    additionalFilters.push(["amount", ">=", minSalary.value])
+    additionalFilters.push(["amount", "<=", maxSalary.value])
+
+    const response = await getJobs(
+      additionalFilters,
+      candidateName.value,
+      start.value,
+      pageLength
+    )
+    
+    if (reset) {
+      jobs.value = response
+    } else {
+      jobs.value.push(...response)
+    }
+
+    if (response.length < pageLength) {
+      hasMore.value = false
+    } else {
+      start.value += pageLength
+    }
+  } finally {
+    loading.value = false
+  }
+}
+
 // Candidate fetch
 watch(
   () => user.email,

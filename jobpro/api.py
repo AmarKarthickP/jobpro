@@ -10,13 +10,15 @@ api_key = frappe.conf.get("teampro_api_key")
 api_secret = frappe.conf.get("teampro_api_secret")
 
 @frappe.whitelist(allow_guest=True)
-def get_tasks(additional_filters=None, candidate=None):
+def get_tasks(additional_filters=None, candidate=None, start = 0, page_length = 12):
 	try:
 		response = requests.get(
 			f"{base_url}/api/method/teampro.jobpro_api.get_tasks",
 			params={
 				"additional_filters": additional_filters,
-				"candidate": candidate
+				"candidate": candidate,
+				"start": start,
+				"page_length": page_length
 			},
 			headers={
 				"Authorization": f"token {api_key}:{api_secret}"
