@@ -35,6 +35,29 @@ def get_tasks(additional_filters=None, candidate=None, start = 0, page_length = 
 			message=frappe.get_traceback()
 		)
 		frappe.throw("Unable to fetch options from tasks from external server")
+  
+def test_check():
+    return get_filter_values() 
+  
+@frappe.whitelist(allow_guest=1)
+def get_filter_values():
+	try:
+		response = requests.get(
+			f"{base_url}/api/method/teampro.jobpro_api.get_filter_values",
+			headers={
+				"Authorization": f"token {api_key}:{api_secret}"
+			}
+		)
+		response.raise_for_status()
+		data = response.json()
+		return data.get("message")
+
+	except requests.exceptions.RequestException as e:
+		frappe.log_error(
+			title="External Filters API Error",
+			message=frappe.get_traceback()
+		)
+		frappe.throw("Unable to fetch filter values from external server")
 		
 def get_inr_price(currency, amount):
 	if not currency or not amount:

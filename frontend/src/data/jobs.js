@@ -83,3 +83,42 @@ export async function getAppliedJobs(candidate) {
         return []
     }
 }
+
+export async function getFilterValues() {
+    const key = "job_filter_values"
+
+    const cached = memoryCache[key]
+
+    if (
+        cached &&
+        Date.now() - cached.time < CACHE_DURATION
+    ) {
+        return cached.data
+    }
+
+    try {
+        const response = await fetch(
+            "/api/method/jobpro.api.get_filter_values"
+        )
+
+        const result = await response.json()
+
+        if (!response.ok) {
+            console.error("API Error:", result)
+            return {}
+        }
+
+        const filterValues = result.message || {}
+
+        memoryCache[key] = {
+            data: filterValues,
+            time: Date.now()
+        }
+
+        return filterValues
+
+    } catch (error) {
+        console.error("Fetch Error:", error)
+        return {}
+    }
+}

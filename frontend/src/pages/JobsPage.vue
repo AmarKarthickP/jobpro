@@ -546,10 +546,10 @@ import { auth } from "@/data/auth";
 import { getJobs } from "@/data/jobs";
 import { user } from "@/data/user";
 import { getCandidate } from "@/data/candidate";
+import { getFilterValues } from "../data/jobs.js";
 
 // Main State
 const jobs = ref([]);
-const allJobs = ref([]);
 const selectedJob = ref(null);
 const showPopUpFilter = ref(false);
 
@@ -571,6 +571,7 @@ let observer
 
 const sortBy = ref("recent");
 const sortOrder = ref("desc");
+const filterValues = ref({});
 
 const route = useRoute();
 
@@ -619,6 +620,7 @@ onMounted(async () => {
   experience.value = route.query.experience || "";
   selectedLocation.value = route.query.location || "";
 
+  filterValues.value = await getFilterValues()
   await loadJobs(true)
   observer = new IntersectionObserver(
     ([entry]) => {
@@ -642,9 +644,8 @@ onMounted(async () => {
 
 // Dynamic Options
 const positionOptions = computed(() => {
-  const subjects = jobs.value.map((job) => job.subject);
-  return [...new Set(subjects)];
-});
+  return filterValues.value.positions || []
+})
 
 const stickyCard = ref(null)
 const isStuck = ref(false)
@@ -665,26 +666,12 @@ onUnmounted(() => {
 })
 
 const currencyOptions = computed(() => {
-  const currencies = jobs.value.map((job) => job.currency);
-  return [...new Set(currencies)];
-});
+  return filterValues.value.currencies || []
+})
 
 const locations = computed(() => {
-  const territories = jobs.value.map((job) => job.territory);
-  return [...new Set(territories)];
-});
-
-// Jobs Pagination
-// const totalPages = computed(() => {
-//   return Math.ceil(jobs.value.length / jobsPerPage);
-// });
-
-// const paginatedJobs = computed(() => {
-//   const start = (currentPage.value - 1) * jobsPerPage;
-//   const end = start + jobsPerPage;
-
-//   return jobs.value.slice(start, end);
-// });
+  return filterValues.value.locations || []
+})
 
 const candidate = ref([]);
 
@@ -837,42 +824,6 @@ function selectLocation(location) {
     selectedLocation.value = "";
   }
 }
-
-// Filter Jobs
-// async function getFilteredJobs() {
-//   if (!allJobs.value.length) return;
-
-//   let additionalFilters = [];
-
-//   if (position.value) {
-//     additionalFilters.push(["subject", "like", `%${position.value}%`]);
-//   }
-
-//   if (salaryType.value) {
-//     additionalFilters.push(["salary_type", "=", salaryType.value]);
-//   }
-
-//   if (qualification.value) {
-//     additionalFilters.push(["qualification_type", "=", qualification.value]);
-//   }
-
-//   if (currency.value) {
-//     additionalFilters.push(["currency", "=", currency.value]);
-//   }
-
-//   if (selectedLocation.value) {
-//     additionalFilters.push(["territory", "=", selectedLocation.value]);
-//   }
-
-//   additionalFilters.push(["amount", ">=", minSalary.value]);
-
-//   if (experience.value !== null && experience.value !== "") {
-//     additionalFilters.push(["total_experience", "=", experience.value]);
-//   }
-
-//   additionalFilters.push(["amount", "<=", maxSalary.value]);
-//   jobs.value = await getJobs(additionalFilters, candidateName.value);
-// }
 
 async function getFilteredJobs() {
   start.value = 0
