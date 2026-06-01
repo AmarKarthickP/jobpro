@@ -131,7 +131,12 @@ const leftMobileJobs = computed(() => jobs.value.slice(30, 40))
 
 onMounted(async () => {
   try {
-    const data = await getJobs()
+    const data = await getJobs(
+      [],
+      null,
+      0,
+      40
+    )
     jobs.value = data
   } finally {
     loading.value = false
