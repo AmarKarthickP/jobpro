@@ -30,7 +30,7 @@
           class="hidden md:block"
         >
           <div :class="navClass(isActive)">
-            <dasboard-icon class="h-7 w-7 pt-1" />
+            <dashboard-icon class="h-7 w-7 pt-1" />
             <p class="text-[12px] font-medium">Dashboard</p>
           </div>
         </router-link>
@@ -236,7 +236,7 @@
 </template>
 
 <script setup>
-import DasboardIcon from "@/components/icons/DasboardIcon.vue";
+import DashboardIcon from "@/components/icons/DashboardIcon.vue";
 import HomeIcon from "@/components/icons/HomeIcon.vue";
 import JobIcon from "@/components/icons/JobIcon.vue";
 import MessagingIcon from "@/components/icons/MessagingIcon.vue";
