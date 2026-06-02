@@ -93,7 +93,7 @@
               </p>
             </div>
           </div>
-          <div class="hidden md:absolute top-0 right-0 p-5 pt-6">
+          <div class="hidden md:block absolute top-0 right-0 p-5 pt-6">
             <div class="bg-white rounded-lg w-[330px] h-[200px] shadow-lg p-3">
               <div class="flex items-center">
                 <h1 class="text-primary font-semibold relative">About me</h1>
@@ -111,7 +111,7 @@
         </div>
       </div>
     </div>
-    <div class="bg-white col-span-12 rounded-xl">
+    <div class="md:hidden bg-white col-span-12 rounded-xl">
       <div class="bg-primary h-20 rounded-t-xl w-full">
         <div>
           <AttachImage
