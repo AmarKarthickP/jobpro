@@ -19,10 +19,31 @@
                     {{ card.label }}
                 </p>
 
-                <h1 class="font-semibold text-lg text-gray-800">
+                <h1 class="font-semibold text-lg text-primary">
                     {{ card.value }}
                 </h1>
             </div>
+        </div>
+    </div>
+    <!-- Guide Section -->
+    <div class="grid grid-cols-12 mt-5 gap-5">
+        <div class="col-span-8 bg-white rounded-xl p-5">
+            <div class="flex">
+                <h2 class="text-primary text-[16px] font-medium mb-3">
+                    Turn referrals into rewards with <span class="text-highlight">REFERPRO</span>
+                </h2>
+                <img src="@/assets/logo/teampro.png" class="h-6 ml-auto" />
+                <img src="@/assets/logo/jobpro.png" class="h-6 ml-2" />
+            </div>
+            
+        </div>
+        <!-- Invite Friends Section -->
+        <div class="col-span-4 bg-white rounded-xl p-5">
+            <h2 class="font-semibold text-primary">Invite friends!</h2>
+            <p class="text-[14px] mt-3 font-medium text-primary/90">At <span class="text-highlight">REFERPRO</span>, we believe in the power of connections! Now you can help your friends find their dream jobs and earn rewards in the process.</p>
+            <button class="bg-primary text-[14px] w-full hover:bg-primary/90 text-white font-medium mt-5 py-1.5 px-4 rounded-lg transition-colors duration-300">
+                Invite Friends
+            </button>
         </div>
     </div>
 </template>
