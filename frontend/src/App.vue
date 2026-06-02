@@ -1,18 +1,33 @@
 <template>
-  <div class="bg-background min-h-[100vh]">
+  <div
+    :class="[
+      route.path.startsWith('/refer')
+        ? 'bg-white'
+        : 'bg-background',
+      'min-h-screen'
+    ]"
+  >
     <router-view />
   </div>
 </template>
 
+<script setup>
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+</script>
+
 <style>
 div {
-    font-family: "Poppins";
+  font-family: "Poppins";
 }
+
 .hide-scrollbar {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and old Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
+
 .hide-scrollbar::-webkit-scrollbar {
-    display: none; /* Chrome, Safari */
+  display: none;
 }
 </style>
