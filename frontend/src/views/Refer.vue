@@ -31,7 +31,7 @@
         </h1>
     </div>
 
-    <div class="flex gap-5">
+    <div class="flex md:gap-5">
         <!-- Sidebar -->
         <aside
             class="overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
@@ -106,7 +106,7 @@
 
         <!-- Content -->
         <main
-            class="flex-1 bg-white h-[80vh] rounded-xl p-5 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+            class="flex-1 bg-primary/5 h-[80vh] rounded-xl p-5 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
         >
             <router-view />
         </main>
