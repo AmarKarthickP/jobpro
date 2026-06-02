@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { auth } from '../src/data/auth'
 
 import Desk from './views/Desk.vue'
+import Refer from './views/Refer.vue'
 import Test from './views/TestView.vue'
 import HomePage from './pages/HomePage.vue'
 import JobsPage from './pages/JobsPage.vue'
@@ -9,7 +10,6 @@ import ProfilePage from './pages/ProfilePage.vue'
 import ActivityPage from './pages/ActivityPage.vue'
 import DashboardPage from './pages/DashboardPage.vue'
 import NotificationsPage from './pages/NotificationsPage.vue'
-import ReferPage from './pages/ReferPage.vue'
 import TaskAIPage from './pages/TaskAIPage.vue'
 
 const routes = [
@@ -61,16 +61,16 @@ const routes = [
       },
 
       {
-        path: 'refer',
-        name: 'refer',
-        component: ReferPage,
-        meta: { requiresAuth: true }
-      },
-
-      {
         path: 'task_ai',
         name: 'task_ai',
         component: TaskAIPage,
+      },
+
+      {
+        path: 'refer',
+        name: 'refer',
+        component: Refer,
+        meta: { requiresAuth: true }
       },
     ]
   }
