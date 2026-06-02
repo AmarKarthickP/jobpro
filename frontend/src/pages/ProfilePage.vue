@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-12 gap-6">
-    <div class="col-span-12 bg-white rounded-xl shadow-sm relative">
+    <div class="col-span-12 bg-white rounded-xl shadow-sm hidden md:block md:relative">
       <div ref="profileCard" class="relative rounded-t-xl overflow-hidden">
         <div
           class="absolute inset-x-0 top-0 h-2/5 bg-primary text-white pr-10 pt-5"
@@ -93,7 +93,7 @@
               </p>
             </div>
           </div>
-          <div class="absolute top-0 right-0 p-5 pt-6">
+          <div class="hidden md:absolute top-0 right-0 p-5 pt-6">
             <div class="bg-white rounded-lg w-[330px] h-[200px] shadow-lg p-3">
               <div class="flex items-center">
                 <h1 class="text-primary font-semibold relative">About me</h1>
@@ -111,10 +111,21 @@
         </div>
       </div>
     </div>
+    <div class="bg-white col-span-12 rounded-xl">
+      <div class="bg-primary h-20 rounded-t-xl w-full">
+        <div>
+          <AttachImage
+            :modelValue="userData"
+            :loading="photoUploading"
+            @file-selected="handlePhotoChange"
+          />
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="grid grid-cols-12 gap-6 mt-6 pb-10">
-    <div class="col-span-3">
+    <div class="hidden md:block md:col-span-3">
       <div class="bg-white shadow-sm rounded-xl p-5 relative sticky top-24">
         <transition
           mode="out-in"
@@ -191,7 +202,7 @@
         </div>
       </div>
     </div>
-    <div class="col-span-9">
+    <div class="col-span-12 md:col-span-9 mb-10 md:mb-0">
       <!-- Resume Upload -->
       <div ref="resumeSection" class="p-6 bg-white rounded-xl">
         <div class="flex items-center">
