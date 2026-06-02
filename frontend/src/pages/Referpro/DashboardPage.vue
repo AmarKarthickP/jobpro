@@ -1,4 +1,5 @@
 <template>
+    <div>
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-5">
         <div
             v-for="card in stats"
@@ -25,19 +26,19 @@
             </div>
         </div>
     </div>
-    <!-- Guide Section -->
     <div class="grid grid-cols-12 mt-8 gap-5">
+        <!-- Guide Section -->
         <div class="col-span-8 bg-white rounded-xl p-5">
             <div class="flex">
-                <h2 class="text-primary text-[16px] font-medium mb-3">
-                    Turn referrals into rewards with <span class="text-highlight">REFERPRO</span>
+                <h2 class="text-primary/60 text-[16px] font-medium mb-3">
+                    Turn referrals into rewards with REFERPRO
                 </h2>
                 <img src="@/assets/logo/teampro.png" class="h-6 ml-auto" />
                 <img src="@/assets/logo/jobpro.png" class="h-6 ml-2" />
             </div>
             <div class="flex items-center py-8 overflow-x-auto hide-scrollbar">
                 <template v-for="(step, index) in steps" :key="step.title">
-                    <div class="flex flex-col items-center text-center min-w-[200px]">
+                    <div class="flex flex-col items-center text-center min-w-[150px]">
                         <div :class="[step.bg, 'p-3 rounded-full mb-3']">
                             <component
                                 :is="step.icon"
@@ -49,7 +50,7 @@
                             {{ step.title }}
                         </h2>
 
-                        <p class="text-gray-500 text-xs mt-1">
+                        <p class="text-gray-500 text-[13px] mt-1">
                             {{ step.description }}
                         </p>
                     </div>
@@ -63,12 +64,12 @@
         </div>
         <!-- Invite Friends Section -->
         <div class="col-span-4 bg-white rounded-xl p-5 flex flex-col">
-            <h2 class="font-semibold text-primary">
+            <h2 class="font-semibold text-primary text-[18px]">
                 Invite Friends!
             </h2>
 
-            <p class="text-[14px] mt-3 font-medium text-primary/90">
-                At <span class="text-highlight">REFERPRO</span>, we believe in the
+            <p class="text-[16px] mt-3 font-medium text-primary/60">
+                At <span class="text-primary">REFERPRO</span>, we believe in the
                 power of connections! Now you can help your friends find their dream
                 jobs and earn rewards in the process.
             </p>
@@ -81,6 +82,75 @@
                 </button>
             </div>
         </div>
+    </div>
+    
+    <!-- Referrals Section -->
+    <div class="col-span-12 bg-white rounded-xl p-5 mt-8">
+        <h2 class="text-primary font-medium text-[18px]">Referrals</h2>
+        <table class="w-full">
+            <!-- table header -->
+            <tr class="text-gray-500 font-medium border-b">
+                <td class="py-2.5 px-4 text-left">Name</td>
+                <td class="py-2.5 px-4 text-left">ID</td>
+                <td class="py-2.5 px-4 text-left">Email</td>
+                <td class="py-2.5 px-4 text-left">Points</td>
+                <td class="py-2.5 px-4 text-left">Status</td>
+                <td class="py-2.5 px-4 text-left">Action</td>
+            </tr>
+            <!-- table data -->
+            <tr class="font-medium text-primary">
+                <td class="py-2.5 px-4 text-left">Amar Karthick P</td>
+                <td class="py-2.5 px-4 text-left">CD208180</td>
+                <td class="py-2.5 px-4 text-left">amar.p@groupteampro.com</td>
+                <td class="py-2.5 px-4 text-left">100</td>
+                <td class="py-2.5 px-4 text-left">
+                    <span class="bg-green-100 text-green-800 py-1 px-2 rounded-full text-sm">
+                        Under Review
+                    </span>
+                </td>
+                <td class="py-2.5 px-4 text-left">
+                    <button class="bg-[#fffbea] text-[#faa300] border-2 border-[#faa300] rounded-lg px-3 py-1 text-sm font-medium flex items-center gap-1 hover:bg-[#fffbea]/90 transition-colors duration-300">
+                        <img src="@/assets/defaults/rupee-coin.png" class="h-5" />
+                        Claim
+                    </button>
+                </td>
+            </tr>
+            <tr class="font-medium text-primary">
+                <td class="py-2.5 px-4 text-left">Amar Karthick P</td>
+                <td class="py-2.5 px-4 text-left">CD208180</td>
+                <td class="py-2.5 px-4 text-left">amar.p@groupteampro.com</td>
+                <td class="py-2.5 px-4 text-left">100</td>
+                <td class="py-2.5 px-4 text-left">
+                    <span class="bg-green-100 text-green-800 py-1 px-2 rounded-full text-sm">
+                        Under Review
+                    </span>
+                </td>
+                <td class="py-2.5 px-4 text-left">
+                    <button class="bg-[#fffbea] text-[#faa300] border-2 border-[#faa300] rounded-lg px-3 py-1 text-sm font-medium flex items-center gap-1 hover:bg-[#fffbea]/90 transition-colors duration-300">
+                        <img src="@/assets/defaults/rupee-coin.png" class="h-5" />
+                        Claim
+                    </button>
+                </td>
+            </tr>
+            <tr class="font-medium text-primary">
+                <td class="py-2.5 px-4 text-left">Amar Karthick P</td>
+                <td class="py-2.5 px-4 text-left">CD208180</td>
+                <td class="py-2.5 px-4 text-left">amar.p@groupteampro.com</td>
+                <td class="py-2.5 px-4 text-left">100</td>
+                <td class="py-2.5 px-4 text-left">
+                    <span class="bg-green-100 text-green-800 py-1 px-2 rounded-full text-sm">
+                        Under Review
+                    </span>
+                </td>
+                <td class="py-2.5 px-4 text-left">
+                    <button class="bg-[#fffbea] text-[#faa300] border-2 border-[#faa300] rounded-lg px-3 py-1 text-sm font-medium flex items-center gap-1 hover:bg-[#fffbea]/90 transition-colors duration-300">
+                        <img src="@/assets/defaults/rupee-coin.png" class="h-5" />
+                        Claim
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
     </div>
 </template>
 
