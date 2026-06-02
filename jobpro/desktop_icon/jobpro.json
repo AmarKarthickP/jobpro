@@ -1,0 +1,21 @@
+{
+ "app": "jobpro",
+ "bg_color": "gray",
+ "creation": "2026-06-02 11:08:12.795311",
+ "docstatus": 0,
+ "doctype": "Desktop Icon",
+ "hidden": 0,
+ "icon_image": "/files/jobpro-title.png",
+ "icon_type": "Link",
+ "idx": 0,
+ "label": "JOBPRO",
+ "link": "/jobpro",
+ "link_type": "External",
+ "modified": "2026-06-02 11:09:03.220318",
+ "modified_by": "Administrator",
+ "name": "JOBPRO",
+ "owner": "Administrator",
+ "restrict_removal": 0,
+ "roles": [],
+ "standard": 1
+}
