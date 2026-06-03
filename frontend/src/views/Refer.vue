@@ -1,31 +1,23 @@
 <template>
     <div class="-mx-16">
     <div class="flex items-center gap-3 mb-5 pl-3">
-        <Transition
-            mode="out-in"
-            enter-active-class="transition-all duration-300 ease-out"
-            enter-from-class="opacity-0 scale-75 rotate-[-90deg]"
-            enter-to-class="opacity-100 scale-100 rotate-0"
-            leave-active-class="transition-all duration-200 ease-in"
-            leave-from-class="opacity-100 scale-100 rotate-0"
-            leave-to-class="opacity-0 scale-75 rotate-90"
-        >
-            <SidebarIcon
-                v-if="!sidebarOpen"
-                key="open"
-                @click="sidebarOpen = true"
-                class="w-6 h-6 text-primary cursor-pointer"
-                title="open sidebar"
-            />
+        <Transition :name="transitionName" mode="out-in">
+    <SidebarIcon
+        v-if="!sidebarOpen"
+        key="open"
+        @click="sidebarOpen = true"
+        class="w-6 h-6 text-primary cursor-pointer"
+        title="open sidebar"
+    />
 
-            <SidebarCloseIcon
-                v-else
-                key="close"
-                @click="sidebarOpen = false"
-                class="w-6 h-6 text-primary cursor-pointer"
-                title="close sidebar"
-            />
-        </Transition>
+    <SidebarCloseIcon
+        v-else
+        key="close"
+        @click="sidebarOpen = false"
+        class="w-6 h-6 text-primary cursor-pointer"
+        title="close sidebar"
+    />
+</Transition>
 
         <h1 class="text-2xl font-medium text-primary">
             {{ pageTitle }}
@@ -132,6 +124,10 @@ import BranchIcon from '../components/icons/BranchIcon.vue'
 
 const sidebarOpen = ref(true)
 
+const transitionName = computed(() =>
+    sidebarOpen.value ? "sidebar-close" : "sidebar-open"
+);
+
 const route = useRoute()
 
 const navClass = (isActive) => {
@@ -159,3 +155,60 @@ const pageTitle = computed(() => {
     return titles[route.name] || 'ReferPRO'
 })
 </script>
+
+<style scoped>
+/* Open Sidebar */
+/* Hamburger -> Close */
+.sidebar-open-enter-active,
+.sidebar-open-leave-active {
+    transition: all 0.3s ease;
+}
+
+.sidebar-open-enter-from {
+    opacity: 0;
+    transform: scale(1) rotate(0deg);
+    transform: scale(0.75) rotate(90deg);
+}
+
+.sidebar-open-enter-to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+.sidebar-open-leave-from {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+.sidebar-open-leave-to {
+    opacity: 0;
+    transform: scale(0.75) rotate(-90deg);
+}
+
+/* Close Sidebar */
+/* Close -> Hamburger */
+.sidebar-close-enter-active,
+.sidebar-close-leave-active {
+    transition: all 0.3s ease;
+}
+
+.sidebar-close-enter-from {
+    opacity: 0;
+    transform: scale(0.75) rotate(-90deg);
+}
+
+.sidebar-close-enter-to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+.sidebar-close-leave-from {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+.sidebar-close-leave-to {
+    opacity: 0;
+    transform: scale(0.75) rotate(90deg);
+}
+</style>
