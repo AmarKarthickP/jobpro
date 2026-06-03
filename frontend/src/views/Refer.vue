@@ -1,6 +1,6 @@
 <template>
-    <div class="-mx-10">
-    <div class="flex items-center gap-3 mb-5">
+    <div class="-mx-16">
+    <div class="flex items-center gap-3 mb-5 pl-3">
         <Transition
             mode="out-in"
             enter-active-class="transition-all duration-300 ease-out"
