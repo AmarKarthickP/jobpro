@@ -492,19 +492,19 @@
           }}
         </button>
         <badge
-          v-if="page!='Activity' || page!='OpenVacancy'"
+          v-if="page=='Activity' || page=='OpenVacancy'"
           class="relative cursor-pointer overflow-hidden text-center mt-3 ml-auto w-[50%] bg-[#ffebdb] py-1.5 rounded-lg text-[#e56700] text-[11px] font-medium"
         >
           <!-- Text -->
           <span class="relative z-10"> Job ID: {{ data.name }} </span>
         </badge>
-        <!-- Invite -->
+        <!-- Refer -->
         <button
           v-if="page=='OpenVacancy'"
           class="overflow-hidden text-center mt-3 ml-auto w-[50%] bg-primary py-1.5 rounded-lg text-white text-[11px] font-medium flex gap-3 items-center justify-center"
         >
           <add-user-icon class="h-4 w-4" />
-          Invite Friend
+          Refer
         </button>
         <button
           v-if="page=='Activity' && data.status!='IDB'"
