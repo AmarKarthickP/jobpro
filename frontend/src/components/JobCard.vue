@@ -216,7 +216,7 @@
           </badge>
 
           <button
-            v-if="page!='Activity'"
+            v-if="page!='Activity'&&page!='OpenVacancy'"
             @click="showJobDetails=true"
             class="flex items-center gap-2 font-medium pr-10 ml-auto text-[13px] text-gray-600 hover:text-primary"
           >
@@ -293,10 +293,14 @@
           >
         </badge>
       </div>
-      <p class="text-[13px] font-medium text-primary mt-2 capitalize truncate">
+      <p
+        :class="['font-medium text-primary mt-2 capitalize truncate', page=='OpenVacancy'?'text-[15px]':'text-[13px]']"
+      >
         {{ data.subject }}
       </p>
-      <p class="text-[12px] text-gray-600 font-medium capitalize truncate">
+      <p
+        :class="['text-gray-600 font-medium capitalize ', page=='OpenVacancy'?'text-[13px]':'text-[12px] truncate']"
+      >
         {{ data.customer }}
       </p>
       <div
@@ -306,7 +310,7 @@
         <p>{{ data.territory }}</p>
       </div>
       <p
-        v-if="page!='Activity'"
+        v-if="page!='Activity' && page!='OpenVacancy'"
         class="pt-2 text-gray-600 text-[12px] md:text-[11px] font-medium text-left md:min-h-[100px]"
       >
         {{ truncateText(data.custom_major_key_skills, 200) }}
@@ -467,7 +471,7 @@
       </div>
       <div class="flex gap-3 mb-2">
         <button
-          v-if="page!='Activity'"
+          v-if="page!='Activity'&&page!='OpenVacancy'"
           @click="showJobDetails=true"
           class="text-center mt-3 w-full border border-primary py-1.5 rounded-lg text-primary text-[11px] font-medium"
         >
@@ -475,7 +479,7 @@
         </button>
         <button
           @click="handleApplyJob"
-          v-if="page!='Activity'"
+          v-if="page!='Activity' && page!='OpenVacancy'"
           :disabled="isSaving"
           class="text-center mt-3 w-full bg-primary py-1.5 rounded-lg text-white text-[11px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
         >
@@ -488,12 +492,20 @@
           }}
         </button>
         <badge
-          v-if="page=='Activity'"
+          v-if="page!='Activity' || page!='OpenVacancy'"
           class="relative cursor-pointer overflow-hidden text-center mt-3 ml-auto w-[50%] bg-[#ffebdb] py-1.5 rounded-lg text-[#e56700] text-[11px] font-medium"
         >
           <!-- Text -->
           <span class="relative z-10"> Job ID: {{ data.name }} </span>
         </badge>
+        <!-- Invite -->
+        <button
+          v-if="page=='OpenVacancy'"
+          class="overflow-hidden text-center mt-3 ml-auto w-[50%] bg-primary py-1.5 rounded-lg text-white text-[11px] font-medium flex gap-3 items-center justify-center"
+        >
+          <add-user-icon class="h-4 w-4" />
+          Invite Friend
+        </button>
         <button
           v-if="page=='Activity' && data.status!='IDB'"
           class="relative cursor-default overflow-hidden text-center mt-3 ml-auto w-[50%] bg-primary py-1.5 rounded-lg text-white text-[11px] font-medium"
@@ -700,11 +712,12 @@
             </badge>
           </div>
         </div>
-        <img v-if="data.custom_customer_location_image"
+        <img
+          v-if="data.custom_customer_location_image"
           class="mt-4 h-[250px] w-full bg-cover rounded-lg"
           :src="data.custom_customer_location_image"
         />
-        &nbsp; 
+        &nbsp;
         <div class="">
           <div class="">
             <h1 class="font-semibold text-primary text-xl">Highlights</h1>
@@ -717,10 +730,6 @@
                 {{ data.qualification_type
 
 
-
-
-
-
                 }}<span v-if="data.specialization">
                   (need specialization in {{ data.specialization }})</span
                 >
@@ -729,10 +738,6 @@
                 Experience:
                 <span
                   >{{ data.minimum_experience
-
-
-
-
 
 
                   }}<span v-if="data.maximum_experience>0"
@@ -860,12 +865,24 @@
 
 <script setup>
 // vue
-import { ref, watch, onUnmounted, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import {
+    ref,
+    watch,
+    onUnmounted,
+    onMounted
+} from 'vue'
+import {
+    useRouter
+} from 'vue-router'
 
 // Utils
-import { timeAgo } from '@/utils/date'
-import { uploadFile, handleSave } from '@/utils/document'
+import {
+    timeAgo
+} from '@/utils/date'
+import {
+    uploadFile,
+    handleSave
+} from '@/utils/document'
 // Icons
 import DownIcon from '@/components/icons/DownIcon.vue';
 import SuitcaseIcon from './icons/SuitcaseIcon.vue';
@@ -875,6 +892,7 @@ import BusIcon from './icons/BusIcon.vue';
 import FlightTicketIcon from './icons/FlightTicketIcon.vue';
 import RibbonRightIcon from './icons/RibbonRightIcon.vue';
 import LeftIcon from './icons/LeftIcon.vue';
+import AddUserIcon from './icons/AddUserIcon.vue';
 // Components
 import Dialog from './Dialog.vue';
 import FileUpload from './FileUpload.vue';
@@ -888,28 +906,28 @@ const props = defineProps({
         required: true
     },
     view: {
-      type: String,
-      default: 'grid'
+        type: String,
+        default: 'grid'
     },
     page: {
-      type: String,
-      default: ''
+        type: String,
+        default: ''
     },
     selected: {
-      type: Boolean,
-      default: false,
+        type: Boolean,
+        default: false,
     },
     isLoggedIn: {
-      type: Boolean,
-      default: false,
+        type: Boolean,
+        default: false,
     },
     isCVAttached: {
-      type: Boolean,
-      default: false,
+        type: Boolean,
+        default: false,
     },
     candidateName: {
-      type: String,
-      default: '',
+        type: String,
+        default: '',
     },
 })
 
@@ -936,90 +954,88 @@ const resumeFileName = ref('Attach Resume')
 
 // Status Mapping
 const statusMapping = {
-  "Sourced": "Received CV",
-  "Pending QC": "Under Review",
-  "Submit(SPOC)": "Shared with Recruiter",
-  "Submitted(Client)": "Sent to Employer",
-  "Shortlisted": "Shortlisted",
-  "Linedup": "Interview Scheduled",
-  "Linedup Confirmed": "Interview Confirmed",
-  "Reported": "Joined Interview",
-  "Interviewed": "Interview Completed",
-  "Proposed PSL": "Offer in Progress",
-  "Result Pending": "Waiting List",
+    "Sourced": "Received CV",
+    "Pending QC": "Under Review",
+    "Submit(SPOC)": "Shared with Recruiter",
+    "Submitted(Client)": "Sent to Employer",
+    "Shortlisted": "Shortlisted",
+    "Linedup": "Interview Scheduled",
+    "Linedup Confirmed": "Interview Confirmed",
+    "Reported": "Joined Interview",
+    "Interviewed": "Interview Completed",
+    "Proposed PSL": "Offer in Progress",
+    "Result Pending": "Waiting List",
 }
 
 const handlePopState = () => {
-  if (showJobDetails.value) {
-    showJobDetails.value = false
-  }
+    if (showJobDetails.value) {
+        showJobDetails.value = false
+    }
 }
 
 function getMappedStatus(status) {
-  return statusMapping[status] || status
+    return statusMapping[status] || status
 }
 
 function truncateText(text, length) {
-    return text && text.length > length
-      ? text.substring(0, length) + "..."
-      : text;
+    return text && text.length > length ?
+        text.substring(0, length) + "..." :
+        text;
 }
 
 // Methods
 async function handleApplyJob() {
-  if (props.data.already_applied) {
-    router.push({
-        path: '/activity',
-        query: {
-            jobId: props.data.name,
+    if (props.data.already_applied) {
+        router.push({
+            path: '/activity',
+            query: {
+                jobId: props.data.name,
+            }
+        })
+        return
+    }
+    if (!props.isLoggedIn) {
+        const currentPath =
+            window.location.pathname + window.location.search
+        const redirectUrl = encodeURIComponent(currentPath)
+        window.location.href = `/login?redirect-to=${redirectUrl}`
+        return
+    } else {
+        if (!localCVAttached.value) {
+            showAttachCVDialog.value = true
+        } else {
+            await handleSave({
+                endpoint: '/api/method/jobpro.api.apply_job',
+                payload: {
+                    candidate: props.candidateName,
+                    task: props.data.name,
+                },
+
+                onStart: () => {
+                    isSaving.value = true
+                },
+
+                onSuccess: () => {
+                    toastType.value = 'success'
+                    toastTitle.value = 'Applied'
+                    toastMessage.value = 'Application has been registered successfully'
+                    showToast.value = true
+                    props.data.already_applied = 1
+                },
+
+                onError: () => {
+                    toastType.value = 'error'
+                    toastTitle.value = 'Application Failed'
+                    toastMessage.value = 'There was an error applying for the job'
+                    showToast.value = true
+                },
+
+                onFinally: () => {
+                    isSaving.value = false
+                }
+            })
         }
-    })
-    return
-  }
-  if (!props.isLoggedIn) {
-    const currentPath =
-      window.location.pathname + window.location.search
-    const redirectUrl = encodeURIComponent(currentPath)
-    window.location.href = `/login?redirect-to=${redirectUrl}`
-    return
-  }
-  else {
-    if (!localCVAttached.value) {
-      showAttachCVDialog.value = true
     }
-    else {
-      await handleSave({
-        endpoint: '/api/method/jobpro.api.apply_job',
-          payload: {
-              candidate: props.candidateName,
-              task: props.data.name,
-          },
-
-          onStart: () => {
-              isSaving.value = true
-          },
-
-          onSuccess: () => {
-              toastType.value = 'success'
-              toastTitle.value = 'Applied'
-              toastMessage.value = 'Application has been registered successfully'
-              showToast.value = true
-              props.data.already_applied = 1
-          },
-
-          onError: () => {
-              toastType.value = 'error'
-              toastTitle.value = 'Application Failed'
-              toastMessage.value = 'There was an error applying for the job'
-              showToast.value = true
-          },
-
-          onFinally: () => {
-              isSaving.value = false
-          }
-      })
-    }
-  }
 }
 
 // Handle file uploads
@@ -1063,21 +1079,22 @@ const handleResumeUpload = async (file) => {
 }
 
 watch(showJobDetails, (value) => {
-  document.body.style.overflow = value ? 'hidden' : ''
+    document.body.style.overflow = value ? 'hidden' : ''
 
-  if (value) {
-    history.pushState(
-      { jobDetails: true },
-      '',
-      window.location.href
-    )
-  }
+    if (value) {
+        history.pushState({
+                jobDetails: true
+            },
+            '',
+            window.location.href
+        )
+    }
 })
 watch(
-  () => props.isCVAttached,
-  (value) => {
-    localCVAttached.value = value
-  }
+    () => props.isCVAttached,
+    (value) => {
+        localCVAttached.value = value
+    }
 )
 onUnmounted(() => {
     document.body.style.overflow = ''
@@ -1085,6 +1102,6 @@ onUnmounted(() => {
 
 })
 onMounted(() => {
-  window.addEventListener('popstate', handlePopState)
+    window.addEventListener('popstate', handlePopState)
 })
 </script>

@@ -169,6 +169,7 @@
                 :isCVAttached="isCVAttached"
                 :candidateName="candidateName"
                 @show-details="selectedJob = job"
+                page="OpenVacancy"
               />
             </div>
           </TransitionGroup>
