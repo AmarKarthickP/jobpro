@@ -1,7 +1,14 @@
 <template>
   <div>
     <!-- Filters & Sortings -->
-    <div ref="stickyCard" :class="['px-5 pt-3 pb-3 bg-white sticky -top-5 z-30 shadow-sm', isStuck ? 'rounded-none -mx-5' : 'rounded-lg']">
+    <div ref="stickyTrigger"></div>
+    <div
+      ref="stickyCard"
+      :class="[
+        'px-5 pt-5 pb-3 bg-white sticky -top-5 z-30 transition-all duration-300',
+        isStuck ? 'rounded-b-none shadow -mx-5 bg-white' : 'rounded-lg'
+      ]"
+    >
       <div class="flex items-center">
         <div class="flex items-center relative">
           <search-icon class="h-5 w-5 text-gray text-primary absolute left-2.5" />
@@ -65,6 +72,10 @@
       </div>
     </div>
     <!-- Job Cards & Details -->
+    
+    <div ref="loadMoreTrigger" class="flex items-center justify-center">
+      <Loader v-if="loading || loadingFilters" class="text-[40px] mt-8" />
+    </div>
     <div class="grid grid-cols-12 gap-10 mt-8 mx-8">
       <!-- Job Cards -->
       <div class="col-span-5 grid grid-cols-1 gap-5 rounded-lg -mt-5">
@@ -78,11 +89,11 @@
           </div>
         </TransitionGroup>
         <div ref="loadMoreTrigger" class="flex items-center justify-center">
-          <Loader v-if="loading || loadingFilters" class="text-[40px] mt-8" />
+          <Loader v-if="(loading || loadingFilters) && jobs.length" class="text-[40px] mt-8" />
         </div>
       </div>
       <!-- Job Details -->
-      <div v-if="selectedJob" class="col-span-7 bg-white rounded-lg shadow-sm sticky top-24 max-h-[65vh]  overflow-y-auto hide-scrollbar transition-all duration-300 ease-in-out">
+      <div v-if="selectedJob" class="col-span-7 bg-white rounded-lg shadow-sm sticky top-28 max-h-[65vh]  overflow-y-auto hide-scrollbar transition-all duration-300 ease-in-out">
         <!-- Content -->
         <div class="px-5 pb-5 relative">
           <badge class="absolute font-medium top-5 right-10 cursor-default bg-[#ffebdb] text-[#e56700] rounded-lg text-sm px-3 py-1">Job ID: {{ selectedJob.name }}</badge>
@@ -183,12 +194,17 @@
   const loadMoreTrigger = ref(null)
   let observer
   // sticky filters
+  const stickyTrigger = ref(null)
   const stickyCard = ref(null)
   const isStuck = ref(false)
-  const checkSticky = () => {
-    if (!stickyCard.value) return
-    isStuck.value = stickyCard.value.getBoundingClientRect().top <= 75
-  }
+ const checkSticky = () => {
+  if (!stickyCard.value) return
+
+  const rect = stickyCard.value.getBoundingClientRect()
+
+  console.log(rect.top)
+  isStuck.value = rect.top <= 0
+}
   // sorting
   const sortBy = ref("recent");
   const sortOrder = ref("desc");
@@ -427,7 +443,16 @@
   }
   // events
   onMounted(() => {
-    window.addEventListener("scroll", checkSticky)
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isStuck.value = !entry.isIntersecting
+      },
+      { threshold: 0 }
+    )
+
+    if (stickyTrigger.value) {
+      observer.observe(stickyTrigger.value)
+    }
   })
   onUnmounted(() => {
     window.removeEventListener("scroll", checkSticky)
@@ -458,4 +483,12 @@
   watch([position, qualification, location, experience], () => {
     getFilteredJobs();
   });
+  // Counter Animation Watch
+  watch(
+    () => jobs.value.length,
+    (newValue) => {
+      animateCounter(newValue);
+    },
+    { immediate: true }
+  );
 </script>
