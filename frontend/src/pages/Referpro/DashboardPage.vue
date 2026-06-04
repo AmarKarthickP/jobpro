@@ -88,67 +88,69 @@
     <div class="col-span-12 bg-white rounded-xl p-5 mt-8">
         <h2 class="text-primary font-medium text-[18px]">Referrals</h2>
         <table class="w-full">
-            <!-- table header -->
-            <tr class="text-gray-500 font-medium border-b">
-                <td class="py-2.5 px-4 text-left">Name</td>
-                <td class="py-2.5 px-4 text-left">ID</td>
-                <td class="py-2.5 px-4 text-left">Email</td>
-                <td class="py-2.5 px-4 text-left">Points</td>
-                <td class="py-2.5 px-4 text-left">Status</td>
-                <td class="py-2.5 px-4 text-left">Action</td>
-            </tr>
-            <!-- table data -->
-            <tr class="font-medium text-primary">
-                <td class="py-2.5 px-4 text-left">Amar Karthick P</td>
-                <td class="py-2.5 px-4 text-left">CD208180</td>
-                <td class="py-2.5 px-4 text-left">amar.p@groupteampro.com</td>
-                <td class="py-2.5 px-4 text-left">100</td>
-                <td class="py-2.5 px-4 text-left">
-                    <span class="bg-green-100 text-green-800 py-1 px-2 rounded-full text-sm">
-                        Under Review
-                    </span>
-                </td>
-                <td class="py-2.5 px-4 text-left">
-                    <button class="bg-[#fffbea] text-[#faa300] border-2 border-[#faa300] rounded-lg px-3 py-1 text-sm font-medium flex items-center gap-1 hover:bg-[#fffbea]/90 transition-colors duration-300">
-                        <img src="@/assets/defaults/rupee-coin.png" class="h-5" />
-                        Claim
-                    </button>
-                </td>
-            </tr>
-            <tr class="font-medium text-primary">
-                <td class="py-2.5 px-4 text-left">Amar Karthick P</td>
-                <td class="py-2.5 px-4 text-left">CD208180</td>
-                <td class="py-2.5 px-4 text-left">amar.p@groupteampro.com</td>
-                <td class="py-2.5 px-4 text-left">100</td>
-                <td class="py-2.5 px-4 text-left">
-                    <span class="bg-green-100 text-green-800 py-1 px-2 rounded-full text-sm">
-                        Under Review
-                    </span>
-                </td>
-                <td class="py-2.5 px-4 text-left">
-                    <button class="bg-[#fffbea] text-[#faa300] border-2 border-[#faa300] rounded-lg px-3 py-1 text-sm font-medium flex items-center gap-1 hover:bg-[#fffbea]/90 transition-colors duration-300">
-                        <img src="@/assets/defaults/rupee-coin.png" class="h-5" />
-                        Claim
-                    </button>
-                </td>
-            </tr>
-            <tr class="font-medium text-primary">
-                <td class="py-2.5 px-4 text-left">Amar Karthick P</td>
-                <td class="py-2.5 px-4 text-left">CD208180</td>
-                <td class="py-2.5 px-4 text-left">amar.p@groupteampro.com</td>
-                <td class="py-2.5 px-4 text-left">100</td>
-                <td class="py-2.5 px-4 text-left">
-                    <span class="bg-green-100 text-green-800 py-1 px-2 rounded-full text-sm">
-                        Under Review
-                    </span>
-                </td>
-                <td class="py-2.5 px-4 text-left">
-                    <button class="bg-[#fffbea] text-[#faa300] border-2 border-[#faa300] rounded-lg px-3 py-1 text-sm font-medium flex items-center gap-1 hover:bg-[#fffbea]/90 transition-colors duration-300">
-                        <img src="@/assets/defaults/rupee-coin.png" class="h-5" />
-                        Claim
-                    </button>
-                </td>
-            </tr>
+            <tbody>
+                <!-- table header -->
+                <tr class="text-gray-500 font-medium border-b">
+                    <td class="py-2.5 px-4 text-left">Name</td>
+                    <td class="py-2.5 px-4 text-left">ID</td>
+                    <td class="py-2.5 px-4 text-left">Email</td>
+                    <td class="py-2.5 px-4 text-left">Points</td>
+                    <td class="py-2.5 px-4 text-left">Status</td>
+                    <td class="py-2.5 px-4 text-left">Action</td>
+                </tr>
+                <!-- table data -->
+                <tr class="font-medium text-primary/80">
+                    <td class="py-2.5 px-4 text-left">Amar Karthick P</td>
+                    <td class="py-2.5 px-4 text-left">CD208180</td>
+                    <td class="py-2.5 px-4 text-left">amar.p@groupteampro.com</td>
+                    <td class="py-2.5 px-4 text-left">100</td>
+                    <td class="py-2.5 px-4 text-left">
+                        <span class="bg-green-100 text-green-800 py-1 px-2 rounded-full text-sm">
+                            Under Review
+                        </span>
+                    </td>
+                    <td class="py-2.5 px-4 text-left">
+                        <button class="bg-[#fffbea] text-[#faa300] border-2 border-[#faa300] rounded-lg px-3 py-1 text-sm font-medium flex items-center gap-1 hover:bg-[#fffbea]/90 transition-colors duration-300">
+                            <img src="@/assets/defaults/rupee-coin.png" class="h-5" />
+                            Claim
+                        </button>
+                    </td>
+                </tr>
+                <tr class="font-medium text-primary/80">
+                    <td class="py-2.5 px-4 text-left">Amar Karthick P</td>
+                    <td class="py-2.5 px-4 text-left">CD208180</td>
+                    <td class="py-2.5 px-4 text-left">amar.p@groupteampro.com</td>
+                    <td class="py-2.5 px-4 text-left">100</td>
+                    <td class="py-2.5 px-4 text-left">
+                        <span class="bg-green-100 text-green-800 py-1 px-2 rounded-full text-sm">
+                            Under Review
+                        </span>
+                    </td>
+                    <td class="py-2.5 px-4 text-left">
+                        <button class="bg-[#fffbea] text-[#faa300] border-2 border-[#faa300] rounded-lg px-3 py-1 text-sm font-medium flex items-center gap-1 hover:bg-[#fffbea]/90 transition-colors duration-300">
+                            <img src="@/assets/defaults/rupee-coin.png" class="h-5" />
+                            Claim
+                        </button>
+                    </td>
+                </tr>
+                <tr class="font-medium text-primary/80">
+                    <td class="py-2.5 px-4 text-left">Amar Karthick P</td>
+                    <td class="py-2.5 px-4 text-left">CD208180</td>
+                    <td class="py-2.5 px-4 text-left">amar.p@groupteampro.com</td>
+                    <td class="py-2.5 px-4 text-left">100</td>
+                    <td class="py-2.5 px-4 text-left">
+                        <span class="bg-green-100 text-green-800 py-1 px-2 rounded-full text-sm">
+                            Under Review
+                        </span>
+                    </td>
+                    <td class="py-2.5 px-4 text-left">
+                        <button class="bg-[#fffbea] text-[#faa300] border-2 border-[#faa300] rounded-lg px-3 py-1 text-sm font-medium flex items-center gap-1 hover:bg-[#fffbea]/90 transition-colors duration-300">
+                            <img src="@/assets/defaults/rupee-coin.png" class="h-5" />
+                            Claim
+                        </button>
+                    </td>
+                </tr>
+            </tbody>    
         </table>
     </div>
     </div>
