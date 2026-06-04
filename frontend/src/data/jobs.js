@@ -1,14 +1,13 @@
 let memoryCache = {}
 const CACHE_DURATION = 1000 * 60 * 10
 
-export async function getJobs(additionalFilters = [], candidate = null, start = 1, pageLength = 12) {
+export async function getJobs(additionalFilters = [], candidate = null, start = 0, pageLength = 12) {
     const params = new URLSearchParams({
         additional_filters: JSON.stringify(additionalFilters),
         candidate: candidate || "",
         start: start,
         page_length: pageLength,
     })
-    
 
     try {
 

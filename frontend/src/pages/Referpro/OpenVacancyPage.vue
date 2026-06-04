@@ -6,7 +6,7 @@
       ref="stickyCard"
       :class="[
         'px-5 pt-5 pb-3 bg-white sticky -top-5 z-30 transition-all duration-300',
-        isStuck ? 'rounded-b-none shadow -mx-5 bg-white' : 'rounded-lg'
+        isStuck ? 'rounded-b-none border-b -mx-5 bg-white' : 'rounded-lg'
       ]"
     >
       <div class="flex items-center">
@@ -72,11 +72,10 @@
       </div>
     </div>
     <!-- Job Cards & Details -->
-    
-    <div ref="loadMoreTrigger" class="flex items-center justify-center">
+    <div class="flex items-center justify-center">
       <Loader v-if="loading || loadingFilters" class="text-[40px] mt-8" />
     </div>
-    <div class="grid grid-cols-12 gap-10 mt-8 mx-8">
+    <div class="grid grid-cols-12 gap-5 mt-8">
       <!-- Job Cards -->
       <div class="col-span-5 grid grid-cols-1 gap-5 rounded-lg -mt-5">
         <TransitionGroup tag="div" enter-active-class="transition-all duration-500 ease-out" enter-from-class="opacity-0 translate-y-4 scale-95" enter-to-class="opacity-100 translate-y-0 scale-100" leave-active-class="transition-all duration-400 ease-in-out" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95" move-class="transition-all duration-500 ease-in-out" :class="
@@ -192,7 +191,8 @@
   const loading = ref(false)
   const hasMore = ref(true)
   const loadMoreTrigger = ref(null)
-  let observer
+  let loadMoreObserver
+  let stickyObserver
   // sticky filters
   const stickyTrigger = ref(null)
   const stickyCard = ref(null)
@@ -418,7 +418,7 @@
       if (experience.value !== null && experience.value !== "") {
         additionalFilters.push(["total_experience", "=", experience.value])
       }
-      const response = await getJobs(additionalFilters, start.value, pageLength)
+      const response = await getJobs(additionalFilters, null, start.value, pageLength)
       if (reset) {
         jobs.value = response
       } else {
@@ -442,21 +442,10 @@
     }
   }
   // events
-  onMounted(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        isStuck.value = !entry.isIntersecting
-      },
-      { threshold: 0 }
-    )
-
-    if (stickyTrigger.value) {
-      observer.observe(stickyTrigger.value)
-    }
-  })
   onUnmounted(() => {
     window.removeEventListener("scroll", checkSticky)
-    observer?.disconnect()
+    loadMoreObserver?.disconnect()
+    stickyObserver?.disconnect()
   })
   onMounted(async () => {
     try {
@@ -466,7 +455,8 @@
     }
     initialized.value = true
     await loadJobs(true)
-    observer = new IntersectionObserver(
+
+    loadMoreObserver = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && hasMore.value && !loading.value) {
           loadJobs()
@@ -475,7 +465,17 @@
         rootMargin: "300px",
       })
     if (loadMoreTrigger.value) {
-      observer.observe(loadMoreTrigger.value)
+      loadMoreObserver.observe(loadMoreTrigger.value)
+    }
+    
+    stickyObserver  = new IntersectionObserver(
+      ([entry]) => {
+        isStuck.value = !entry.isIntersecting
+      },
+      { threshold: 0 }
+    )
+    if (stickyTrigger.value) {
+      stickyObserver .observe(stickyTrigger.value)
     }
   });
   // watchers
