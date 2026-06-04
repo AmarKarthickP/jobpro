@@ -99,7 +99,7 @@
 
         <!-- Content -->
         <main
-            class="flex-1 bg-primary/5 h-[80vh] rounded-xl p-10 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] overflow-auto hide-scrollbar"
+            class="flex-1 bg-primary/5 h-[80vh] rounded-xl p-5 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] overflow-auto hide-scrollbar"
         >
             <router-view />
         </main>
