@@ -797,7 +797,7 @@ function hideCurrencySuggestions() {
   hideSuggestions(currency, currencyOptions, showCurrencySuggestions);
 }
 
-// Currency
+// Experience
 function selectExperienceOption(option) {
   experience.value = option.value;
   experienceSearch.value = option.label;
