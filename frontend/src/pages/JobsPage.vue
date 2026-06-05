@@ -534,9 +534,6 @@ import GridViewIcon from "../components/icons/GridViewIcon.vue";
 import FilterIcon from "../components/icons/FilterIcon.vue";
 import SearchIcon from "../components/icons/SearchIcon.vue";
 
-// Assets
-import defaultImage from "@/assets/defaults/profile-image.jpeg";
-
 // Vue
 import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
