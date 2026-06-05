@@ -38,6 +38,61 @@
         </button>
       </div>
     </div>
+    <!-- Guide Section -->
+    <div>
+      <h1 class="text-primary font-semibold text-3xl">How to Refer</h1>
+      <p class="font-medium text-primary/60">Help your friends start their career in just 4 steps.</p>
+      <div class="flex items-center justify-between mt-5">
+        <!-- Step 1 -->
+        <div class="bg-white rounded-lg font-medium pl-5 pb-5 flex pr-10 relative w-[250px]">
+          <div>
+            <p class="text-primary/60 text-lg mt-5">STEP 1</p>
+            <div class="bg-orange-50 w-12 flex items-center justify-center p-3 rounded-xl mt-2">
+              <LinkIcon class="text-orange-600 h-5 w-5" />
+            </div>
+            <h2 class="text-primary font-semibold text-2xl mt-3">Share Your Link</h2>
+            <p class="text-primary/50 text-[13px]">Copy your referral link and share</p>
+          </div>
+          <img src="@/assets/decoratives/animation_frame_1.avif" class="absolute top-0 right-0 h-[80px] w-[130px]" />
+        </div>
+        <!-- Step 2 -->
+        <div class="bg-white rounded-lg font-medium pl-5 pb-5 flex pr-10 relative w-[250px]">
+          <div>
+            <p class="text-primary/60 text-lg mt-5">STEP 2</p>
+            <div class="bg-indigo-50 w-12 flex items-center justify-center p-3 rounded-xl mt-2">
+              <LinkIcon class="text-indigo-600 h-5 w-5" />
+            </div>
+            <h2 class="text-primary font-semibold text-2xl mt-3">Registration</h2>
+            <p class="text-primary/50 text-[13px]">Candidate completes registration</p>
+          </div>
+          <img src="@/assets/decoratives/animation_frame_3.avif" class="absolute top-0 right-0 h-[80px] w-[130px]" />
+        </div>
+        <!-- Step 3 -->
+        <div class="bg-white rounded-lg font-medium pl-5 pb-5 flex pr-10 relative w-[250px]">
+          <div>
+            <p class="text-primary/60 text-lg mt-5">STEP 3</p>
+            <div class="bg-fuchsia-50 w-12 flex items-center justify-center p-3 rounded-xl mt-2">
+              <LinkIcon class="text-fuchsia-600 h-5 w-5" />
+            </div>
+            <h2 class="text-primary font-semibold text-2xl mt-3">Review</h2>
+            <p class="text-primary/50 text-[13px]">Profile is reviewed by recruiters</p>
+          </div>
+          <img src="https://d14qv6cm1t62pm.cloudfront.net/nxtrewards/animation_frame_2.avif" class="absolute top-0 right-0 h-[80px] w-[130px]" />
+        </div>
+        <!-- Step 4 -->
+        <div class="bg-white rounded-lg font-medium pl-5 pb-5 flex pr-10 relative w-[220px]">
+          <div>
+            <p class="text-primary/60 text-lg mt-5">STEP 4</p>
+            <div class="bg-whatsapp/5 w-12 flex items-center justify-center p-3 rounded-xl mt-2">
+              <LinkIcon class="text-whatsapp h-5 w-5" />
+            </div>
+            <h2 class="text-primary font-semibold text-2xl mt-3">Earn Rewards</h2>
+            <p class="text-primary/50 text-[13px]">Receive rewards once they placed</p>
+          </div>
+          <img src="@/assets/decoratives/animation_frame_4.avif" class="absolute top-0 right-0 h-[80px] w-[130px]" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
