@@ -40,9 +40,9 @@
     </div>
     <!-- Guide Section -->
     <div>
-      <h1 class="text-primary font-semibold text-3xl">How to Refer</h1>
+      <h1 class="text-primary font-semibold text-3xl">How To Refer</h1>
       <p class="font-medium text-primary/60">Help your friends start their career in just 4 steps.</p>
-      <div class="flex items-center justify-between mt-5">
+      <div class="flex items-center justify-between mt-8">
         <!-- Step 1 -->
         <div class="bg-white rounded-lg font-medium pl-5 pb-5 flex pr-10 relative w-[250px]">
           <div>
@@ -60,7 +60,7 @@
           <div>
             <p class="text-primary/60 text-lg mt-5">STEP 2</p>
             <div class="bg-indigo-50 w-12 flex items-center justify-center p-3 rounded-xl mt-2">
-              <LinkIcon class="text-indigo-600 h-5 w-5" />
+              <AddUserIcon class="text-indigo-600 h-5 w-5" />
             </div>
             <h2 class="text-primary font-semibold text-2xl mt-3">Registration</h2>
             <p class="text-primary/50 text-[13px]">Candidate completes registration</p>
@@ -72,7 +72,7 @@
           <div>
             <p class="text-primary/60 text-lg mt-5">STEP 3</p>
             <div class="bg-fuchsia-50 w-12 flex items-center justify-center p-3 rounded-xl mt-2">
-              <LinkIcon class="text-fuchsia-600 h-5 w-5" />
+              <StarIcon class="text-fuchsia-600 h-5 w-5" />
             </div>
             <h2 class="text-primary font-semibold text-2xl mt-3">Review</h2>
             <p class="text-primary/50 text-[13px]">Profile is reviewed by recruiters</p>
@@ -84,12 +84,38 @@
           <div>
             <p class="text-primary/60 text-lg mt-5">STEP 4</p>
             <div class="bg-whatsapp/5 w-12 flex items-center justify-center p-3 rounded-xl mt-2">
-              <LinkIcon class="text-whatsapp h-5 w-5" />
+              <InrIcon class="text-whatsapp h-5 w-5" />
             </div>
             <h2 class="text-primary font-semibold text-2xl mt-3">Earn Rewards</h2>
             <p class="text-primary/50 text-[13px]">Receive rewards once they placed</p>
           </div>
           <img src="@/assets/decoratives/animation_frame_4.avif" class="absolute top-0 right-0 h-[80px] w-[130px]" />
+        </div>
+      </div>
+    </div>
+    <!-- Candidate Guide Section -->
+    <div>
+      <h1 class="text-primary font-semibold text-3xl">Candidate Placement Process</h1>
+      <p class="font-medium text-primary/60">Placement is a 4-Stage Process</p>
+      <div class="flex items-center justify-center mt-4 font-medium">
+        <div class="flex items-center justify-center mt-5 overflow-x-auto hide-scrollbar">
+            <template v-for="(step, index) in steps" :key="step.title">
+                <div class="flex flex-col items-center text-center min-w-[150px]">
+                    <p class="text-primary/60 text-lg">{{ step.step }}</p>
+                    <div :class="[step.bg, 'p-3 rounded-xl mb-3 mt-4']">
+                        <component
+                            :is="step.icon"
+                            :class="[step.color, 'w-6 h-6']"
+                        />
+                    </div>
+                    <h2 class="text-primary font-semibold text-[16px] mt-3">{{ step.title }}</h2>
+                </div>
+                
+                <div
+                    v-if="index < steps.length - 1"
+                    class="h-px min-w-[60px] flex-1 bg-primary/20"
+                />
+            </template>
         </div>
       </div>
     </div>
@@ -101,4 +127,46 @@
 import LinkIcon from '@/components/icons/LinkIcon.vue'
 import CopyIcon from '@/components/icons/CopyIcon.vue'
 import FriendIcon from '@/components/icons/FriendIcon.vue'
+import StarShineIcon from '@/components/icons/StarShineIcon.vue'
+import InrIcon from '@/components/icons/InrIcon.vue'
+import BranchIcon from '@/components/icons/BranchIcon.vue'
+import JobIcon from '@/components/icons/JobIcon.vue'
+import AddUserIcon from '@/components/icons/AddUserIcon.vue'
+import StarIcon from '@/components/icons/StarIcon.vue'
+import SendIcon from '@/components/icons/SendIcon.vue'
+
+const steps = [
+    {
+        step: 'STEP 1',
+        title: 'Registration',
+        description: 'Candidate completes registration',
+        icon: AddUserIcon,
+        bg: 'bg-nxtwave',
+        color: 'text-white'
+    },
+    {
+        step: 'STEP 2',
+        title: 'Applies For Job',
+        description: 'Candidate gets hired',
+        icon: JobIcon,
+        bg: 'bg-nxtwave',
+        color: 'text-white'
+    },
+    {
+        step: 'STEP 3',
+        title: 'Review',
+        description: 'Profile is reviewed by recruiters',
+        icon: StarIcon,
+        bg: 'bg-nxtwave',
+        color: 'text-white'
+    },
+    {
+        step: 'STEP 4',
+        title: 'Get Rewarded',
+        description: 'Receive your referral reward',
+        icon: InrIcon,
+        bg: 'bg-nxtwave',
+        color: 'text-white'
+    }
+]
 </script>
