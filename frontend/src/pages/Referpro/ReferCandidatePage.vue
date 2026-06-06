@@ -172,10 +172,37 @@
         </div>
       </div>
     </div>
+    <!-- FAQ Section -->
+    <div class="mt-8">
+      <h1 class="text-center text-3xl font-semibold text-primary">Frequently Asked Questions</h1>
+      <div class="mx-32 mt-8 space-y-8">
+        <div @click="showAnswer = !showAnswer" class="bg-white rounded-xl px-8 py-4 space-y-4 cursor-pointer">
+          <!-- Question -->
+          <div class="flex items-center">
+            <p class="text-primary font-medium text-2xl">I have made a referral, but the reward isn't credited, why?</p>
+            <right-icon class="h-3.5 w-3.5 rotate-90 ml-auto" />
+          </div>
+          <!-- Answer -->
+          <div v-if="showAnswer" class="space-y-4">
+            <div class="border-t border-gray-300 mt-2"></div>
+            <p class="text-primary/60 font-medium text-[16px]">
+              Possible reasons include:
+              Your friend did not placed for a job yet
+              Your bank details are not verified
+              You haven't redeemed the reward amount
+              If none of these apply, please use the support button on this page for assistance.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
+// vue
+import { ref } from "vue";
+
 // icons
 import LinkIcon from '@/components/icons/LinkIcon.vue'
 import CopyIcon from '@/components/icons/CopyIcon.vue'
@@ -188,7 +215,12 @@ import AddUserIcon from '@/components/icons/AddUserIcon.vue'
 import StarIcon from '@/components/icons/StarIcon.vue'
 import SendIcon from '@/components/icons/SendIcon.vue'
 import GiftIcon from '@/components/icons/GiftIcon.vue'
+import RightIcon from '@/components/icons/RightIcon.vue'
 
+// states
+const showAnswer = ref(false)
+
+// steps
 const steps = [
     {
         step: 'STEP 1',
