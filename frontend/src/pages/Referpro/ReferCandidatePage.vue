@@ -146,6 +146,32 @@
         </div>
       </div>
     </div>
+    <!-- Refer Friend Section -->
+    <div class="bg-white rounded-xl">
+      <div class="grid grid-cols-12 items-center">
+        <div class="col-span-7 text-primary font-medium space-y-4 p-5">
+          <h2 class="text-3xl font-semibold">Refer You Friend Now</h2>
+          <p class="text-xl text-pirmary/50">
+            All your referrals and their progress will appear once you start sharing. You can earn upto 5,000 per successful referral
+          </p>
+          <div class="flex items-center gap-3">
+            <button class="rounded-lg bg-primary border-2 border-primary text-white px-10 py-1.5 font-medium text-[15px]">
+              Refer Your Friend
+            </button>
+            <button class="rounded-lg bg-white border-2 border-primary text-primary px-10 py-1.5 font-medium text-[15px]">
+              Refer Your Friend
+            </button>
+          </div>
+        </div>
+        <div class="col-span-5 bg-gradient-to-r from-white to-orange-100 rounded-xl relative">
+          <div class="flex -space-x-8 mt-5 ml-[90px]">
+            <img src="@/assets/people/administrator.png" class="h-[200px] z-10"/>
+            <img src="@/assets/people/labour.png" class="h-[200px] z-20"/>
+            <img src="@/assets/people/engineer.png" class="h-[200px] z-10"/>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
