@@ -100,7 +100,7 @@
       <div class="flex items-center justify-center mt-4 font-medium">
         <div class="flex items-center justify-center mt-5 overflow-x-auto hide-scrollbar">
             <template v-for="(step, index) in steps" :key="step.title">
-                <div class="flex flex-col items-center text-center min-w-[150px]">
+                <div class="flex flex-col items-center text-center min-w-[150px] relative mb-10">
                     <p class="text-primary/60 text-lg">{{ step.step }}</p>
                     <div :class="[step.bg, 'p-3 rounded-xl mb-3 mt-4']">
                         <component
@@ -109,6 +109,10 @@
                         />
                     </div>
                     <h2 class="text-primary font-semibold text-[16px] mt-3">{{ step.title }}</h2>
+                    <div v-if="step.reward" class="bg-green-700 mt-2 absolute -bottom-10 rounded-full px-5 py-1 flex gap-2 items-center cu">
+                      <GiftIcon class="text-white h-3 w-3" />
+                      <p class="text-white text-sm">Earn Reward</p>
+                    </div>
                 </div>
                 
                 <div
@@ -116,6 +120,29 @@
                     class="h-px min-w-[60px] flex-1 bg-primary/20"
                 />
             </template>
+        </div>
+      </div>
+    </div>
+    <!-- Milestone Section -->
+    <div class="bg-nxtwave rounded-xl px-5 pt-5 pb-8 font-medium">
+      <h1 class="text-white font-semibold text-3xl">Referral Milestones</h1>
+      <p class="font-medium text-white">Earn more as you refer more</p>
+      <div class="flex items-center justify-evenly mt-8">
+        <div class="bg-highlight/60 rounded-xl p-5">
+          <p class="bg-white rounded-full py-1.5 px-5 text-lg text-primary">1st Successful Referral</p>
+          <p class="text-white text-3xl mt-3 font-bold">₹ 3,000</p>
+          <p class="text-white text-[13px]">Earnings per referral</p>
+        </div>
+        <div class="bg-highlight/80 rounded-xl p-5">
+          <p class="bg-white rounded-full py-1.5 px-5 text-lg text-primary">5th Successful Referral</p>
+          <p class="text-white text-3xl mt-3 font-bold">₹ 4,000</p>
+          <p class="text-white text-[13px]">Earnings per referral</p>
+        </div>
+        <div class="bg-highlight rounded-xl p-5 relative">
+          <img src="@/assets/decoratives/medal.png" class="absolute h-10 -top-4 right-2" />
+          <p class="bg-white rounded-full py-1.5 px-5 text-lg text-primary">10th Successful Referral</p>
+          <p class="text-white text-3xl mt-3 font-bold">₹ 5,000</p>
+          <p class="text-white text-[13px]">Earnings per referral</p>
         </div>
       </div>
     </div>
@@ -134,6 +161,7 @@ import JobIcon from '@/components/icons/JobIcon.vue'
 import AddUserIcon from '@/components/icons/AddUserIcon.vue'
 import StarIcon from '@/components/icons/StarIcon.vue'
 import SendIcon from '@/components/icons/SendIcon.vue'
+import GiftIcon from '@/components/icons/GiftIcon.vue'
 
 const steps = [
     {
@@ -142,23 +170,26 @@ const steps = [
         description: 'Candidate completes registration',
         icon: AddUserIcon,
         bg: 'bg-nxtwave',
-        color: 'text-white'
+        color: 'text-white',
+        reward: 0
     },
     {
         step: 'STEP 2',
-        title: 'Applies For Job',
+        title: 'Applies for Job',
         description: 'Candidate gets hired',
         icon: JobIcon,
         bg: 'bg-nxtwave',
-        color: 'text-white'
+        color: 'text-white',
+        reward: 0
     },
     {
         step: 'STEP 3',
-        title: 'Review',
+        title: 'Reviewed by Recruiters',
         description: 'Profile is reviewed by recruiters',
         icon: StarIcon,
         bg: 'bg-nxtwave',
-        color: 'text-white'
+        color: 'text-white',
+        reward: 0
     },
     {
         step: 'STEP 4',
@@ -166,7 +197,8 @@ const steps = [
         description: 'Receive your referral reward',
         icon: InrIcon,
         bg: 'bg-nxtwave',
-        color: 'text-white'
+        color: 'text-white',
+        reward: 1
     }
 ]
 </script>
