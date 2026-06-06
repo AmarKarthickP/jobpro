@@ -6,6 +6,10 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "type",
+  "column_break_dhoa",
+  "order",
+  "section_break_qtjx",
   "question",
   "answer"
  ],
@@ -13,18 +17,45 @@
   {
    "fieldname": "question",
    "fieldtype": "Small Text",
+   "in_list_view": 1,
    "label": "Question"
   },
   {
    "fieldname": "answer",
    "fieldtype": "Text Editor",
+   "in_list_view": 1,
    "label": "Answer"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Type",
+   "options": "\nJOBPRO\nREFERPRO",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_dhoa",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "order",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Order",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_qtjx",
+   "fieldtype": "Section Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-06-06 11:05:39.717895",
+ "modified": "2026-06-06 11:40:31.183250",
  "modified_by": "Administrator",
  "module": "JOBPRO",
  "name": "JOBPRO FAQ",
