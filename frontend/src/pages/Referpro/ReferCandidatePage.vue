@@ -251,7 +251,7 @@
             <button
               class="rounded-lg bg-white border-2 border-primary text-primary px-10 py-1.5 font-medium text-[15px]"
             >
-              Refer Your Friend
+              My Referrals
             </button>
           </div>
         </div>
@@ -274,9 +274,81 @@
       <h1 class="text-center text-3xl font-semibold text-primary">
         Frequently Asked Questions
       </h1>
+      <!-- FAQ 1 -->
       <div class="mx-32 mt-8 space-y-8">
-        <div
-          @click="showAnswer = !showAnswer"
+        <div @click="activeFaq = activeFaq === 1 ? null : 1"
+          class="bg-white rounded-xl px-8 py-4 space-y-4 cursor-pointer transition-all duration-300 ease-in-out"
+        >
+          <!-- Question -->
+          <div class="flex items-center">
+            <p class="text-primary font-medium text-2xl">
+              When am I eligible for receiving referral rewards?
+            </p>
+            <right-icon :class="['h-3.5 w-3.5 ml-auto transition-all duration-500 ease-in-out', showAnswer ? '-rotate-90': 'rotate-90' ]" />
+          </div>
+          <!-- Answer -->
+          <Transition mode="out-in" @enter="enter" @leave="leave">
+            <div v-if="activeFaq === 1" class="overflow-hidden">
+              <div class="border-t border-gray-300 mt-2 pt-4">
+                <p class="text-primary/60 font-medium text-[16px]">
+                  As an registered user of JOBPRO, you are always eligible to refer others and start earning referral rewards immediately.
+                </p>
+              </div>
+            </div>
+          </Transition>
+        </div>
+      </div>
+      <!-- FAQ 2 -->
+      <div class="mx-32 mt-8 space-y-8">
+        <div @click="activeFaq = activeFaq === 2 ? null : 2"
+          class="bg-white rounded-xl px-8 py-4 space-y-4 cursor-pointer transition-all duration-300 ease-in-out"
+        >
+          <!-- Question -->
+          <div class="flex items-center">
+            <p class="text-primary font-medium text-2xl">
+              Where is my unique code or link?
+            </p>
+            <right-icon :class="['h-3.5 w-3.5 ml-auto transition-all duration-500 ease-in-out', showAnswer ? '-rotate-90': 'rotate-90' ]" />
+          </div>
+          <!-- Answer -->
+          <Transition mode="out-in" @enter="enter" @leave="leave">
+            <div v-if="activeFaq === 2" class="overflow-hidden">
+              <div class="border-t border-gray-300 mt-2 pt-4">
+                <p class="text-primary/60 font-medium text-[16px]">
+                  Your unique link and code are located at the top of this page.    
+                </p>
+              </div>
+            </div>
+          </Transition>
+        </div>
+      </div>
+      <!-- FAQ 3 -->
+      <div class="mx-32 mt-8 space-y-8">
+        <div @click="activeFaq = activeFaq === 3 ? null : 3"
+          class="bg-white rounded-xl px-8 py-4 space-y-4 cursor-pointer transition-all duration-300 ease-in-out"
+        >
+          <!-- Question -->
+          <div class="flex items-center">
+            <p class="text-primary font-medium text-2xl">
+              What happens after I have shared my unique link?
+            </p>
+            <right-icon :class="['h-3.5 w-3.5 ml-auto transition-all duration-500 ease-in-out', showAnswer ? '-rotate-90': 'rotate-90' ]" />
+          </div>
+          <!-- Answer -->
+          <Transition mode="out-in" @enter="enter" @leave="leave">
+            <div v-if="activeFaq === 3" class="overflow-hidden">
+              <div class="border-t border-gray-300 mt-2 pt-4">
+                <p class="text-primary/60 font-medium text-[16px]">
+                  Once you share your unique link, your friend needs to register for the JOBPRO. Following registration, he/she has to apply for a job. The JOBPRO team will reach out to your friends to assist them with the process and ensure they have all the necessary information to make the best decision for their career.
+                </p>
+              </div>
+            </div>
+          </Transition>
+        </div>
+      </div>
+      <!-- FAQ 4 -->
+      <div class="mx-32 mt-8 space-y-8">
+        <div @click="activeFaq = activeFaq === 4 ? null : 4"
           class="bg-white rounded-xl px-8 py-4 space-y-4 cursor-pointer transition-all duration-300 ease-in-out"
         >
           <!-- Question -->
@@ -288,13 +360,17 @@
           </div>
           <!-- Answer -->
           <Transition mode="out-in" @enter="enter" @leave="leave">
-            <div v-if="showAnswer" class="overflow-hidden">
+            <div v-if="activeFaq === 4" class="overflow-hidden">
               <div class="border-t border-gray-300 mt-2 pt-4">
                 <p class="text-primary/60 font-medium text-[16px]">
-                  Possible reasons include: Your friend did not place for a job
-                  yet. Your bank details are not verified. You haven't redeemed
-                  the reward amount.
+                  Possible reasons include:
                 </p>
+                <ul class="text-primary/60 font-medium text-[16px] list-disc list-inside">
+                  <li>Your friend has not placed an order yet</li>
+                  <li>Your bank details are not verified</li>
+                  <li>You haven't redeemed the reward amount</li>
+                </ul>
+                <p class="text-primary/60 font-medium text-[16px]">If none of these apply, please use the support button on this page for assistance.</p>
               </div>
             </div>
           </Transition>
@@ -324,6 +400,7 @@ import RightIcon from '@/components/icons/RightIcon.vue'
 
 // states
 const showAnswer = ref(false)
+const activeFaq = ref(null)
 
 // steps
 const steps = [
