@@ -26,8 +26,10 @@ app_license = "mit"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/jobpro/css/jobpro.css"
-# app_include_js = "/assets/jobpro/js/jobpro.js"
-
+web_include_js = [
+    "/assets/jobpro/js/login.js",
+]
+signup_form_template = "jobpro/templates/signup.html"
 # include js, css files in header of web template
 # web_include_css = "/assets/jobpro/css/jobpro.css"
 # web_include_js = "/assets/jobpro/js/jobpro.js"

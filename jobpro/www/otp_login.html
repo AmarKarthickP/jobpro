@@ -1,0 +1,382 @@
+{% extends "templates/web.html" %}
+{% block navbar %}
+{% endblock %}
+{% block head_include %}
+{{ include_style('login.bundle.css') }}
+
+<style>
+	.otp-wrapper {
+		max-width: 400px;
+		margin: auto;
+	}
+
+	.otp-input {
+		letter-spacing: 10px;
+		font-size: 26px;
+		text-align: center;
+		font-weight: 600;
+	}
+
+	.otp-step {
+		display: none;
+	}
+
+	.otp-step.active {
+		display: block;
+	}
+
+	.mobile-field,
+	.otp-field {
+		position: relative;
+	}
+
+	.mobile-prefix {
+		position: absolute;
+		left: 14px;
+		top: 50%;
+		transform: translateY(-50%);
+		color: #666;
+		font-weight: 500;
+	}
+
+	.mobile-input {
+		padding-left: 35px !important;
+	}
+
+	.resend-link {
+		margin-top: 14px;
+		font-size: 13px;
+	}
+
+	.change-number {
+		margin-top: 10px;
+		font-size: 13px;
+	}
+</style>
+{% endblock %}
+
+{% block page_content %}
+
+<div>
+	<section class="for-login">
+		<div class="page-card-head">
+			<img class="app-logo" src="{{ logo }}">
+			<h4>{{ _('Login with Mobile OTP') }}</h4>
+		</div>
+
+		<div class="login-content page-card otp-wrapper">
+
+			<!-- STEP 1 -->
+			<div id="mobile-step" class="otp-step active">
+
+				<form id="send-otp-form">
+
+					<div class="page-card-body">
+
+						<div class="form-group">
+							<label class="form-label">
+								{{ _("Mobile Number") }}
+							</label>
+
+							<div class="mobile-field">
+								<input
+									type="text"
+									id="mobile_number"
+									class="form-control mobile-input"
+									placeholder="9876543210"
+									maxlength="10"
+									inputmode="numeric"
+									required
+								>
+							<svg class="field-icon email-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"
+								xmlns="http://www.w3.org/2000/svg">
+								<use class="es-lock" href="#es-line-call"></use>
+							</svg>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="page-card-actions">
+						<button
+							type="submit"
+							class="btn btn-sm btn-primary btn-block"
+							id="send-otp-btn"
+						>
+							{{ _("Send OTP") }}
+						</button>
+					</div>
+
+				</form>
+
+			</div>
+
+			<!-- STEP 2 -->
+			<div id="otp-step" class="otp-step">
+
+				<form id="verify-otp-form">
+
+					<div class="page-card-body">
+
+						<p class="text-muted text-center mb-4">
+							{{ _("OTP sent to") }}
+							<span id="display-mobile"></span>
+						</p>
+
+						<div class="form-group">
+
+							<label class="form-label sr-only">
+								{{ _("OTP") }}
+							</label>
+
+							<div class="otp-field">
+								<input
+									type="text"
+									id="otp_code"
+									class="form-control otp-input"
+									placeholder="0000"
+									maxlength="4"
+									inputmode="numeric"
+									autocomplete="one-time-code"
+									required
+								>
+							</div>
+
+						</div>
+
+					</div>
+
+					<div class="page-card-actions">
+
+						<button
+							type="submit"
+							class="btn btn-sm btn-primary btn-block"
+							id="verify-otp-btn"
+						>
+							{{ _("Verify OTP") }}
+						</button>
+
+						<div class="text-center resend-link">
+							<a href="#" id="resend-otp">
+								{{ _("Resend OTP") }}
+							</a>
+
+							<span id="resend-timer" class="text-muted"></span>
+						</div>
+
+						<div class="text-center change-number">
+							<a href="#" id="change-number">
+								{{ _("Change Mobile Number") }}
+							</a>
+						</div>
+
+					</div>
+
+				</form>
+
+			</div>
+
+		</div>
+	</section>
+</div>
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+frappe.ready(function () {
+
+	let current_mobile = "";
+	let resend_cooldown = 60;
+	let resend_timer_interval = null;
+
+	function show_step(step) {
+		document.querySelectorAll(".otp-step").forEach(el => {
+			el.classList.remove("active");
+		});
+
+		document.getElementById(step).classList.add("active");
+	}
+
+	// SEND OTP
+
+	document.getElementById("send-otp-form")
+	.addEventListener("submit", function (e) {
+
+		e.preventDefault();
+
+		const mobile = document
+			.getElementById("mobile_number")
+			.value
+			.trim();
+
+		if (!mobile || mobile.length !== 10) {
+			frappe.msgprint("Enter valid mobile number");
+			return;
+		}
+
+		const btn = document.getElementById("send-otp-btn");
+
+		btn.disabled = true;
+		btn.innerText = "Sending...";
+
+		frappe.call({
+			method: "otp_login.api.otp.send_otp",
+			type: "POST",
+			args: {
+				mobile_number: mobile
+			},
+			callback: function(r) {
+
+				btn.disabled = false;
+				btn.innerText = "Send OTP";
+
+				if (r.exc) {
+					frappe.msgprint("Failed to send OTP");
+					return;
+				}
+
+				current_mobile = mobile;
+
+				document.getElementById("display-mobile").innerText =
+					mobile;
+
+				show_step("otp-step");
+
+				document.getElementById("otp_code").focus();
+				start_resend_timer();
+			}
+		});
+	});
+
+
+	// VERIFY OTP
+
+	document.getElementById("verify-otp-form")
+	.addEventListener("submit", function (e) {
+
+		e.preventDefault();
+
+		const otp = document
+			.getElementById("otp_code")
+			.value
+			.trim();
+		if (!otp || otp.length !== 4) {
+			console.log([otp, "fekekrnfkjern"])
+			frappe.msgprint("Enter valid OTP");
+			return;
+		}
+
+		const btn = document.getElementById("verify-otp-btn");
+
+		btn.disabled = true;
+		btn.innerText = "Verifying...";
+
+		frappe.call({
+			method: "otp_login.api.otp.verify_otp",
+			type: "POST",
+			args: {
+				mobile_number: current_mobile,
+				otp: otp
+			},
+			callback: function(r) {
+				console.log(r)
+				btn.disabled = false;
+				btn.innerText = "Verify OTP";
+
+				if (r.exc) {
+					frappe.msgprint("Invalid OTP");
+					return;
+				}
+
+				if (r.message) {
+					window.location.href = "/jobpro";
+				}
+			}
+		});
+	});
+
+
+	// CHANGE NUMBER
+
+	document.getElementById("change-number")
+	.addEventListener("click", function(e) {
+		e.preventDefault();
+
+		show_step("mobile-step");
+
+		document.getElementById("otp_code").value = "";
+	});
+
+
+	// RESEND OTP
+
+	document.getElementById("resend-otp")
+	.addEventListener("click", function(e) {
+
+		e.preventDefault();
+
+		if (!current_mobile) return;
+
+		frappe.call({
+			method: "otp_login.api.otp.send_otp",
+			type: "POST",
+			args: {
+				mobile_number: current_mobile
+			},
+			callback: function(r) {
+
+				if (!r.exc) {
+					frappe.show_alert({
+						message: __("OTP Resent"),
+						indicator: "green"
+					});
+
+					start_resend_timer();
+				}
+			}
+		});
+	});
+
+	function start_resend_timer() {
+
+	let seconds = resend_cooldown;
+
+	const resendBtn = document.getElementById("resend-otp");
+	const timerText = document.getElementById("resend-timer");
+
+	resendBtn.style.pointerEvents = "none";
+	resendBtn.style.opacity = "0.5";
+
+	timerText.innerText = ` in ${seconds}s`;
+
+	if (resend_timer_interval) {
+		clearInterval(resend_timer_interval);
+	}
+
+	resend_timer_interval = setInterval(() => {
+
+		seconds--;
+
+		timerText.innerText = ` in ${seconds}s`;
+
+		if (seconds <= 0) {
+
+			clearInterval(resend_timer_interval);
+
+			timerText.innerText = "";
+
+			resendBtn.style.pointerEvents = "auto";
+			resendBtn.style.opacity = "1";
+		}
+
+	}, 1000);
+}
+
+});
+</script>
+
+{% endblock %}
+
+{% block sidebar %}{% endblock %}
