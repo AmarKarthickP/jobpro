@@ -51,7 +51,7 @@ frappe.ready(function () {
 
 		var args = {};
 
-		args.cmd = "otp_login.api.auth.custom_signup";
+		args.cmd = "jobpro.api.auth.custom_signup";
 		args.email = ($("#signup_email").val() || "").trim();
 		args.full_name = ($("#signup_fullname").val() || "").trim();
 		args.mobile = ($("#signup_mobile").val() || "").trim();

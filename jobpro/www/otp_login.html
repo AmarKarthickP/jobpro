@@ -222,7 +222,7 @@ frappe.ready(function () {
 		btn.innerText = "Sending...";
 
 		frappe.call({
-			method: "otp_login.api.otp.send_otp",
+			method: "jobpro.api.otp.send_otp",
 			type: "POST",
 			args: {
 				mobile_number: mobile
@@ -274,7 +274,7 @@ frappe.ready(function () {
 		btn.innerText = "Verifying...";
 
 		frappe.call({
-			method: "otp_login.api.otp.verify_otp",
+			method: "jobpro.api.otp.verify_otp",
 			type: "POST",
 			args: {
 				mobile_number: current_mobile,
@@ -320,7 +320,7 @@ frappe.ready(function () {
 		if (!current_mobile) return;
 
 		frappe.call({
-			method: "otp_login.api.otp.send_otp",
+			method: "jobpro.api.otp.send_otp",
 			type: "POST",
 			args: {
 				mobile_number: current_mobile

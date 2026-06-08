@@ -1472,7 +1472,7 @@ function selectOption(model, value, showRef) {
 // Save Dialog
 const saveAboutMe = async () => {
     await handleSave({
-      endpoint: '/api/method/jobpro.api.update_user_details',
+      endpoint: '/api/method/jobpro.api.externalupdate_user_details',
         payload: {
             name: userData.value.email,
             bio: bio.value,
@@ -1506,7 +1506,7 @@ const saveAboutMe = async () => {
 }
 const savePersonalDetails = async () => {
     await handleSave({
-      endpoint: '/api/method/jobpro.api.update_candidate_details',
+      endpoint: '/api/method/jobpro.api.externalupdate_candidate_details',
         payload: {
             given_name: (fullName.value || '').toUpperCase(),
             date_of_birth: dateOfBirth.value,
@@ -1548,7 +1548,7 @@ const savePersonalDetails = async () => {
 }
 const saveContactDetails = async () => {
     await handleSave({
-      endpoint: '/api/method/jobpro.api.update_candidate_details',
+      endpoint: '/api/method/jobpro.api.externalupdate_candidate_details',
         payload: {
             mail_id: email.value,
             mobile_number: mobileNumber.value,
@@ -1585,7 +1585,7 @@ const saveContactDetails = async () => {
 }
 const saveEducationDetails = async () => {
     await handleSave({
-      endpoint: '/api/method/jobpro.api.update_candidate_details',
+      endpoint: '/api/method/jobpro.api.externalupdate_candidate_details',
         payload: {
             highest_degree: highestDegree.value,
             specialization: specialization.value,
@@ -1622,7 +1622,7 @@ const saveEducationDetails = async () => {
 }
 const saveExperienceDetails = async () => {
     await handleSave({
-      endpoint: '/api/method/jobpro.api.update_candidate_details',
+      endpoint: '/api/method/jobpro.api.externalupdate_candidate_details',
         payload: {
             india_experience: indiaExperience.value || 0,
             overseas_experience: overseasExperience.value || 0,
@@ -1664,7 +1664,7 @@ const saveExperienceDetails = async () => {
 }
 const savePassportDetails = async () => {
     await handleSave({
-      endpoint: '/api/method/jobpro.api.update_candidate_details',
+      endpoint: '/api/method/jobpro.api.externalupdate_candidate_details',
         payload: {
             passport_number: passportNumber.value,
             passport_expiry_date: expiryDate.value,
@@ -1708,7 +1708,7 @@ const handlePhotoChange = async (file) => {
     profileImage.value = URL.createObjectURL(file)
 
     await uploadFile({
-        endpoint: '/api/method/jobpro.api.upload_file',
+        endpoint: '/api/method/jobpro.api.externalupload_file',
         file,
         doctype: "Candidate",
         docname: candidate.value.name,
@@ -1746,7 +1746,7 @@ const handlePhotoChange = async (file) => {
 }
 const handleResumeUpload = async (file) => {
     await uploadFile({
-        endpoint: '/api/method/jobpro.api.upload_file',
+        endpoint: '/api/method/jobpro.api.externalupload_file',
         file,
         doctype: "Candidate",
         docname: candidate.value.name,
@@ -1779,7 +1779,7 @@ const handleResumeUpload = async (file) => {
 // Passport Upload
 const handlePassportUpload = async (file) => {
     await uploadFile({
-        endpoint: '/api/method/jobpro.api.upload_file',
+        endpoint: '/api/method/jobpro.api.externalupload_file',
         file,
         doctype: 'Candidate',
         docname: candidate.value.name,
@@ -1819,7 +1819,7 @@ const downloadResume = () => {
 const deleteResume = async () => {
 
     await deleteFile({
-        endpoint: '/api/method/jobpro.api.delete_file',
+        endpoint: '/api/method/jobpro.api.externaldelete_file',
         doctype: "Candidate",
         docname: candidate.value.name,
         fieldname: 'custom_updated__un_masked_cv',
@@ -1857,7 +1857,7 @@ const downloadPassport = () => {
 
 const deletePassport = async () => {
     await deleteFile({
-        endpoint: '/api/method/jobpro.api.delete_file',
+        endpoint: '/api/method/jobpro.api.externaldelete_file',
         doctype: "Candidate",
         docname: candidate.value.name,
         fieldname: 'passport',

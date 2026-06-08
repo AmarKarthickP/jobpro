@@ -6,7 +6,7 @@ export async function getOptions(doctype, fields) {
         })
 
         const response = await fetch(
-            `/api/method/jobpro.api.get_options?${params}`
+            `/api/method/jobpro.api.external.get_options?${params}`
         )
 
         const result = await response.json()

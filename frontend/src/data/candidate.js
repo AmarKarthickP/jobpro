@@ -18,7 +18,7 @@ export async function getCandidate(email) {
     })
 
     const response = await fetch(
-        `/api/method/jobpro.api.get_candidates?${params}`
+        `/api/method/jobpro.api.external.external.get_candidates?${params}`
     )
 
     const result = await response.json()
@@ -75,7 +75,7 @@ export async function getCandidateStatuses({
 
     // API Call
     const response = await fetch(
-      `/api/method/jobpro.api.get_candidate_status?${params}`
+      `/api/method/external.get_candidate_status?${params}`
     )
 
     const result = await response.json()

@@ -46,48 +46,48 @@ async function fetchWithCache(cacheKey, url) {
 export async function getNationality() {
     return fetchWithCache(
         'nationality_cache',
-        '/api/method/jobpro.api.get_nationality'
+        '/api/method/jobpro.api.external.get_nationality'
     )
 }
 
 export async function getDistricts() {
     return fetchWithCache(
         'districts_cache',
-        '/api/method/jobpro.api.get_districts'
+        '/api/method/jobpro.api.external.get_districts'
     )
 }
 
 export async function getState() {
     return fetchWithCache(
         'state_cache',
-        '/api/method/jobpro.api.get_state'
+        '/api/method/jobpro.api.external.get_state'
     )
 }
 
 export async function getCountry() {
     return fetchWithCache(
         'country_cache',
-        '/api/method/jobpro.api.get_country'
+        '/api/method/jobpro.api.external.get_country'
     )
 }
 
 export async function getCurrency() {
     return fetchWithCache(
         'currency_cache',
-        '/api/method/jobpro.api.get_currency'
+        '/api/method/jobpro.api.external.get_currency'
     )
 }
 
 export async function getHighestDegree() {
     return fetchWithCache(
         'highest_degree_cache',
-        '/api/method/jobpro.api.get_highest_degree'
+        '/api/method/jobpro.api.external.get_highest_degree'
     )
 }
 
 export async function getSpecialization() {
     return fetchWithCache(
         'specialization_cache',
-        '/api/method/jobpro.api.get_specialization'
+        '/api/method/jobpro.api.external.get_specialization'
     )
 }

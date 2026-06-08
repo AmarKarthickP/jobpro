@@ -12,7 +12,7 @@ export async function getJobs(additionalFilters = [], candidate = null, start = 
     try {
 
         const response = await fetch(
-            `/api/method/jobpro.api.get_tasks?${params}`
+            `/api/method/jobpro.api.external.get_tasks?${params}`
         )
 
         const result = await response.json()
@@ -56,7 +56,7 @@ export async function getAppliedJobs(candidate) {
     try {
 
         const response = await fetch(
-            `/api/method/jobpro.api.get_applied_jobs?${params}`
+            `/api/method/jobpro.api.external.get_applied_jobs?${params}`
         )
 
         const result = await response.json()
@@ -97,7 +97,7 @@ export async function getFilterValues() {
 
     try {
         const response = await fetch(
-            "/api/method/jobpro.api.get_filter_values"
+            "/api/method/jobpro.api.external.get_filter_values"
         )
 
         const result = await response.json()

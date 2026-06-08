@@ -1005,7 +1005,7 @@ async function handleApplyJob() {
             showAttachCVDialog.value = true
         } else {
             await handleSave({
-                endpoint: '/api/method/jobpro.api.apply_job',
+                endpoint: '/api/method/jobpro.api.externalapply_job',
                 payload: {
                     candidate: props.candidateName,
                     task: props.data.name,
@@ -1041,7 +1041,7 @@ async function handleApplyJob() {
 // Handle file uploads
 const handleResumeUpload = async (file) => {
     await uploadFile({
-        endpoint: '/api/method/jobpro.api.upload_file',
+        endpoint: '/api/method/jobpro.api.externalupload_file',
         file,
         doctype: "Candidate",
         docname: props.candidateName,
