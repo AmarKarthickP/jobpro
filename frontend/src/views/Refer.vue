@@ -2,22 +2,22 @@
     <div class="-mx-16">
     <div class="flex items-center gap-3 mb-5 pl-3">
         <Transition :name="transitionName" mode="out-in">
-    <SidebarIcon
-        v-if="!sidebarOpen"
-        key="open"
-        @click="sidebarOpen = true"
-        class="w-6 h-6 text-primary cursor-pointer"
-        title="open sidebar"
-    />
+            <SidebarIcon
+                v-if="!sidebarOpen"
+                key="open"
+                @click="sidebarOpen = true"
+                class="w-6 h-6 text-primary cursor-pointer"
+                title="open sidebar"
+            />
 
-    <SidebarCloseIcon
-        v-else
-        key="close"
-        @click="sidebarOpen = false"
-        class="w-6 h-6 text-primary cursor-pointer"
-        title="close sidebar"
-    />
-</Transition>
+            <SidebarCloseIcon
+                v-else
+                key="close"
+                @click="sidebarOpen = false"
+                class="w-6 h-6 text-primary cursor-pointer"
+                title="close sidebar"
+            />
+        </Transition>
 
         <h1 class="text-2xl font-medium text-primary">
             {{ pageTitle }}
@@ -27,17 +27,17 @@
     <div class="flex md:gap-5">
         <!-- Sidebar -->
         <aside
-            class="overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
-            :class="sidebarOpen ? 'w-60 opacity-100' : 'w-0 opacity-0'"
+            class="font-medium whitespace-nowrap transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+            :class="sidebarOpen ? 'w-60' : 'w-[48px]'"
         >
-            <div class="w-60 flex flex-col gap-2 text-[14.5px]">
+            <div class="overflow-hidden flex flex-col gap-2 text-[14.5px]">
                 <!-- Dashboard -->
                 <router-link
                     :to="{ name: 'refer-dashboard' }"
                     :class="navClass(route.name === 'refer-dashboard')"
                 >
                     <DashboardIcon class="w-6 h-6" />
-                    <p class="font-medium whitespace-nowrap">Dashboard</p>
+                    <p v-if="sidebarOpen" class="font-medium whitespace-nowrap">Dashboard</p>
                 </router-link>
 
                 <!-- Refer Candidate -->
@@ -46,7 +46,7 @@
                     :class="navClass(route.name === 'refer-candidate')"
                 >
                     <BranchIcon class="w-6 h-5" />
-                    <p class="font-medium whitespace-nowrap">
+                    <p v-if="sidebarOpen" class="font-medium whitespace-nowrap">
                         Refer Candidate
                     </p>
                 </router-link>
@@ -57,7 +57,7 @@
                     :class="navClass(route.name === 'open-vacancy')"
                 >
                     <JobIcon class="w-6 h-6" />
-                    <p class="font-medium whitespace-nowrap">
+                    <p v-if="sidebarOpen" class="font-medium whitespace-nowrap">
                         Open Vacancy
                     </p>
                 </router-link>
@@ -68,7 +68,7 @@
                     :class="navClass(route.name === 'claim-status')"
                 >
                     <InrIcon class="w-6 h-6" />
-                    <p class="font-medium whitespace-nowrap">
+                    <p v-if="sidebarOpen" class="font-medium whitespace-nowrap">
                         Claim Status
                     </p>
                 </router-link>
@@ -79,7 +79,7 @@
                     :class="navClass(route.name === 'bank-details')"
                 >
                     <BankIcon class="w-6 h-5" />
-                    <p class="font-medium whitespace-nowrap">
+                    <p v-if="sidebarOpen" class="font-medium whitespace-nowrap">
                         Bank Details
                     </p>
                 </router-link>
@@ -90,7 +90,7 @@
                     :class="navClass(route.name === 'terms')"
                 >
                     <TermsIcon class="w-6 h-5" />
-                    <p class="font-medium whitespace-nowrap">
+                    <p v-if="sidebarOpen" class="font-medium whitespace-nowrap">
                         Terms & Conditions
                     </p>
                 </router-link>
